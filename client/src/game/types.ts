@@ -7,15 +7,6 @@ export type MonsterId = string;
 
 export type ItemType = "resource" | "bar" | "weapon" | "food" | "misc";
 
-export type DomainId = string;
-
-/** 技術分野（Web / ゲーム / 組み込み / AI…）。スキルをまとめる軸。 */
-export interface Domain {
-  id: DomainId;
-  name: string;
-  icon: string;
-}
-
 export type EquipSlot = "weapon" | "body" | "hair" | "avatar" | "pc";
 
 export interface WeaponStats {
@@ -89,8 +80,6 @@ export interface GameAction {
   inputs?: Partial<Record<ItemId, number>>;
   /** Items produced per completion. */
   outputs: Partial<Record<ItemId, number>>;
-  /** 追加の前提条件: 別スキル(言語)の最低レベル。フレームワークが言語に依存する等。 */
-  requires?: { skill: SkillId; level: number };
 }
 
 export interface LootDrop {
@@ -105,8 +94,6 @@ export interface Monster {
   id: MonsterId;
   name: string;
   icon: string;
-  /** 案件の技術分野（任意）。 */
-  domain?: DomainId;
   hp: number;
   /** Max damage the monster can deal per hit. */
   maxHit: number;

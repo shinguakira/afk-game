@@ -181,5 +181,26 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   if (!ok) failures++;
 }
 
+// 9) Craft bonus now propagates to COOKING (not just frameworks): SRE +35% speed.craft.
+{
+  const base = freshState({
+    active: { kind: "skill", actionId: "cook_onigiri" },
+    bank: { rice: 1_000_000 },
+  });
+  const sre = freshState({
+    active: { kind: "skill", actionId: "cook_onigiri" },
+    bank: { rice: 1_000_000 },
+    jobClass: "sre",
+  });
+  simulateOffline(base, 600_000);
+  simulateOffline(sre, 600_000);
+  const ratio = (sre.bank.onigiri ?? 0) / (base.bank.onigiri ?? 1);
+  const ok = Math.abs(ratio - 1.35) < 0.02;
+  console.log(
+    `${ok ? "PASS" : "FAIL"}  SRE craft bonus reaches 料理: ${base.bank.onigiri} → ${sre.bank.onigiri} (${ratio.toFixed(3)})`,
+  );
+  if (!ok) failures++;
+}
+
 console.log(failures === 0 ? "\nALL PASS" : `\n${failures} FAILURE(S)`);
 process.exit(failures === 0 ? 0 : 1);

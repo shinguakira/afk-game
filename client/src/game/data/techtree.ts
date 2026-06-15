@@ -245,10 +245,10 @@ export function buildActions(): GameAction[] {
       xp: l.baseXp ?? 15,
       outputs: { commit: 1 },
     });
-    // concepts: 概念を理解（コミット産出）
-    for (const [name, level] of l.concepts ?? []) {
+    // concepts: 概念を理解（コミット産出）。名前は日本語でslug化できないので index で一意化。
+    (l.concepts ?? []).forEach(([name, level], i) => {
       out.push({
-        id: `concept_${sk}_${slug(name)}`,
+        id: `concept_${sk}_${i}`,
         skill: sk,
         name: `${name} を理解`,
         category: "concept",
@@ -258,11 +258,11 @@ export function buildActions(): GameAction[] {
         xp: 14 + level * 2,
         outputs: { commit: 1 },
       });
-    }
+    });
     // libraries: ライブラリを使う（コミット多め）
-    for (const [name, level, icon] of l.libraries ?? []) {
+    (l.libraries ?? []).forEach(([name, level, icon], i) => {
       out.push({
-        id: `lib_${sk}_${slug(name)}`,
+        id: `lib_${sk}_${i}`,
         skill: sk,
         name: `${name} を使う`,
         category: "library",
@@ -272,7 +272,7 @@ export function buildActions(): GameAction[] {
         xp: 16 + level * 2,
         outputs: { commit: 2 },
       });
-    }
+    });
     // frameworks: コミットを消費してプロダクトを産む
     for (const [name, level, icon] of l.frameworks ?? []) {
       out.push({

@@ -1,6 +1,7 @@
 import { useGame } from "../game/store";
 import { ITEM_MAP, SKILL_MAP } from "../game/data";
 import { formatDuration, formatNumber } from "../ui/format";
+import { Icon } from "../ui/icons";
 
 export function OfflineModal() {
   const summary = useGame((s) => s.offlineSummary);
@@ -30,7 +31,10 @@ export function OfflineModal() {
             <h3 style={{ marginBottom: 4 }}>経験値</h3>
             {xpEntries.map(([id, v]) => (
               <div className="row-between" key={id}>
-                <span>{SKILL_MAP[id]?.name ?? id}</span>
+                <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <Icon name={SKILL_MAP[id]?.icon} size={14} />
+                  {SKILL_MAP[id]?.name ?? id}
+                </span>
                 <span className="gain">+{formatNumber(v)}</span>
               </div>
             ))}
@@ -42,7 +46,10 @@ export function OfflineModal() {
             <h3 style={{ marginBottom: 4 }}>成果物</h3>
             {itemEntries.map(([id, v]) => (
               <div className="row-between" key={id}>
-                <span>{ITEM_MAP[id]?.name ?? id}</span>
+                <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <Icon name={ITEM_MAP[id]?.icon} size={14} />
+                  {ITEM_MAP[id]?.name ?? id}
+                </span>
                 <span className={v > 0 ? "gain" : "loss"}>
                   {v > 0 ? "+" : ""}
                   {formatNumber(v)}

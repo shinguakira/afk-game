@@ -75,7 +75,6 @@ export const MONSTERS: Monster[] = [
     id: "incident",
     name: "本番障害",
     icon: "incident",
-    domain: "infra",
     hp: 34,
     maxHit: 5,
     attack: 16,

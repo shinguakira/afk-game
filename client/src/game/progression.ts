@@ -1,5 +1,5 @@
 import type { OfflineSummary, SaveState } from "./types";
-import { ACTION_MAP, ITEM_MAP, MONSTER_MAP, SKILL_MAP, STAT } from "./data";
+import { ACTION_MAP, isCraftAction, ITEM_MAP, MONSTER_MAP, STAT } from "./data";
 import { avgEnemyDamage, avgPlayerDamage, getCombatStats } from "./combat";
 import { getEffects } from "./effects";
 import { type Effects, mult } from "./modifiers";
@@ -49,9 +49,9 @@ function simPlayerSkill(
   const action = ACTION_MAP[state.active.actionId];
   if (!action) return;
 
-  const isCraft = action.category === "framework";
-  const effTime = action.time / mult(eff, isCraft ? "speed.craft" : "speed.gather");
-  const xpPer = action.xp * mult(eff, isCraft ? "xp.craft" : "xp.gather");
+  const craft = isCraftAction(action);
+  const effTime = action.time / mult(eff, craft ? "speed.craft" : "speed.gather");
+  const xpPer = action.xp * mult(eff, craft ? "xp.craft" : "xp.gather");
 
   let completions = Math.floor((ms + state.actionProgress) / effTime);
 

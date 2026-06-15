@@ -1,18 +1,23 @@
-import type { Domain, GameAction, Item, Monster, Skill } from "../types";
+import type { GameAction, Item, Monster, Skill } from "../types";
 import type { JobClass } from "./classes";
 import { ITEMS } from "./items";
 import { SKILLS } from "./skills";
 import { ACTIONS } from "./actions";
 import { MONSTERS } from "./monsters";
 import { CLASSES } from "./classes";
-import { DOMAINS } from "./domains";
 import { GROUPS } from "./groups";
 import type { SkillGroup } from "./groups";
 import { PRESTIGE_UPGRADES } from "./prestige";
 import type { PrestigeUpgrade } from "./prestige";
 
-export { ITEMS, SKILLS, ACTIONS, MONSTERS, CLASSES, DOMAINS, GROUPS, PRESTIGE_UPGRADES };
+export { ITEMS, SKILLS, ACTIONS, MONSTERS, CLASSES, GROUPS, PRESTIGE_UPGRADES };
 export type { SkillGroup } from "./groups";
+
+/** 制作(craft)判定: 入力を消費するアクションは制作扱い（フレームワーク/料理/PC組み立て）。
+ *  それ以外（言語の基礎/概念/ライブラリ/OSS/資格）は生産(gather)。職種等の補正分岐に使う。 */
+export function isCraftAction(a: GameAction): boolean {
+  return !!a.inputs;
+}
 export { STAT, COMBAT_STAT_IDS, STARTING_MENTAL_LEVEL } from "./skills";
 export type { JobClass } from "./classes";
 export type { PrestigeUpgrade } from "./prestige";
@@ -37,10 +42,6 @@ export const ACTION_MAP: Record<string, GameAction> = Object.fromEntries(
 );
 export const MONSTER_MAP: Record<string, Monster> = Object.fromEntries(
   MONSTERS.map((m) => [m.id, m]),
-);
-
-export const DOMAIN_MAP: Record<string, Domain> = Object.fromEntries(
-  DOMAINS.map((d) => [d.id, d]),
 );
 
 export const GROUP_MAP: Record<string, SkillGroup> = Object.fromEntries(

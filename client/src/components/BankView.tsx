@@ -1,7 +1,16 @@
 import { useGame } from "../game/store";
 import { ITEM_MAP } from "../game/data";
+import type { ItemType } from "../game/types";
 import { formatNumber } from "../ui/format";
 import { Icon } from "../ui/icons";
+
+const TYPE_LABEL: Record<ItemType, string> = {
+  resource: "資源",
+  bar: "成果物",
+  weapon: "デバイス",
+  food: "飲食物",
+  misc: "アイテム",
+};
 
 export function BankView() {
   const state = useGame();
@@ -33,7 +42,7 @@ export function BankView() {
                 <span className="qty">×{formatNumber(qty)}</span>
               </div>
               <div className="muted" style={{ fontSize: 11 }}>
-                {it.type}
+                {TYPE_LABEL[it.type]}
                 {it.heals ? ` · 回復 ${it.heals}` : ""}
                 {it.equip?.weapon
                   ? ` · 実装+${it.equip.weapon.strengthBonus} / 精度+${it.equip.weapon.attackBonus}`

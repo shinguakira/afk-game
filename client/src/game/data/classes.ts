@@ -54,7 +54,7 @@ export const CLASSES: JobClass[] = [
     icon: "sre",
     requiresRank: 2,
     modifiers: [
-      { key: "speed.craft", pct: 35, note: "環境構築が得意" },
+      { key: "speed.craft", pct: 35, note: "制作が得意" },
       { key: "power.maxHp", pct: 15, note: "障害耐性" },
       { key: "power.maxHit", pct: -10 },
     ],

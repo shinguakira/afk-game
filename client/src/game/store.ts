@@ -10,9 +10,9 @@ import type {
 import {
   ACTION_MAP,
   CLASS_MAP,
+  isCraftAction,
   ITEM_MAP,
   MONSTER_MAP,
-  SKILL_MAP,
   SKILLS,
 } from "./data";
 import { getEffects } from "./effects";
@@ -409,11 +409,11 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
     return;
   }
 
-  // 制作(craft)補正はフレームワーク系アクションに、生産(gather)補正はそれ以外に。
+  // 入力を消費するアクション(framework/料理/PC組み立て)は制作補正、それ以外は生産補正。
   const eff = getEffects(s);
-  const isCraft = action.category === "framework";
-  const speedKey = isCraft ? "speed.craft" : "speed.gather";
-  const xpKey = isCraft ? "xp.craft" : "xp.gather";
+  const craft = isCraftAction(action);
+  const speedKey = craft ? "speed.craft" : "speed.gather";
+  const xpKey = craft ? "xp.craft" : "xp.gather";
   const effTime = action.time / mult(eff, speedKey);
   const xpPer = action.xp * mult(eff, xpKey);
 
