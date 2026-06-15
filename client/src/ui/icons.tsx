@@ -118,6 +118,26 @@ import {
   LuLibrary,
   LuBoxes,
   LuGraduationCap,
+  LuMouse,
+  LuShirt,
+  LuScissors,
+  LuCircleUser,
+  LuMonitor,
+  LuComputer,
+  LuMicrochip,
+  LuMemoryStick,
+  LuHardDrive,
+  LuCookingPot,
+  LuUtensils,
+  LuPizza,
+  LuBeef,
+  LuGlassWater,
+  LuCupSoda,
+  LuZap,
+  LuWheat,
+  LuFish,
+  LuSalad,
+  LuCroissant,
 } from "react-icons/lu";
 
 // Central icon registry. Data files reference these string ids (no JSX in data).
@@ -215,6 +235,41 @@ const ICONS: Record<string, IconType> = {
   framework: LuBoxes,
   oss: SiGithub,
   cert: LuGraduationCap,
+
+  // craft skills
+  cooking: LuCookingPot,
+  pcbuild: LuComputer,
+
+  // equipment slots / gear
+  keyboard: LuKeyboard,
+  mouse: LuMouse,
+  shirt: LuShirt,
+  hair: LuScissors,
+  avatar: LuCircleUser,
+  pc: LuMonitor,
+
+  // PC parts
+  cpu: LuCpu,
+  gpu: LuMicrochip,
+  ram: LuMemoryStick,
+  ssd: LuHardDrive,
+
+  // foods / drinks / ingredients
+  water: LuGlassWater,
+  cola: LuCupSoda,
+  energy: LuZap,
+  onigiri: LuUtensils,
+  bento: LuUtensils,
+  ramen: LuUtensils,
+  pizza: LuPizza,
+  sushi: LuFish,
+  rice: LuWheat,
+  noodles: LuUtensils,
+  meat: LuBeef,
+  fish_food: LuFish,
+  veg: LuSalad,
+  dough: LuCroissant,
+  leave: LuLeaf,
 
   // combat stats
   debug: LuBug,

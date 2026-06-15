@@ -48,9 +48,11 @@ export function SkillView({ skillId }: { skillId: string }) {
   const xp = state.skills[skillId]?.xp ?? 0;
   const level = levelForXp(xp);
 
+  const isLang = skill.tech === "language";
   const byCat = new Map<ActionCategory, GameAction[]>();
   for (const a of actions) {
-    const c = a.category ?? "base";
+    // 言語以外(料理/PC組み立て)は1グループにまとめる。
+    const c = isLang ? a.category ?? "base" : "base";
     if (!byCat.has(c)) byCat.set(c, []);
     byCat.get(c)!.push(a);
   }
@@ -80,9 +82,11 @@ export function SkillView({ skillId }: { skillId: string }) {
 
       {CATEGORY_ORDER.filter((c) => byCat.has(c)).map((cat) => (
         <div key={cat} style={{ marginBottom: 18 }}>
-          <h3 style={{ display: "flex", alignItems: "center", gap: 6, margin: "0 0 10px" }}>
-            <Icon name={CATEGORY_ICON[cat]} size={16} /> {CATEGORY_LABEL[cat]}
-          </h3>
+          {isLang && (
+            <h3 style={{ display: "flex", alignItems: "center", gap: 6, margin: "0 0 10px" }}>
+              <Icon name={CATEGORY_ICON[cat]} size={16} /> {CATEGORY_LABEL[cat]}
+            </h3>
+          )}
           <div className="grid">
             {byCat.get(cat)!.map((a) => {
               const unlocked = level >= a.level;

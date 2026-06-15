@@ -23,9 +23,8 @@ export function getCombatStats(state: SaveState): CombatStats {
   const defenceLevel = levelForXp(state.skills[STAT.defence]?.xp ?? 0);
   const hitpointsLevel = levelForXp(state.skills[STAT.mental]?.xp ?? 0);
 
-  const weapon = state.equippedWeapon
-    ? ITEM_MAP[state.equippedWeapon]?.weapon
-    : undefined;
+  const weaponId = state.equipment?.weapon;
+  const weapon = weaponId ? ITEM_MAP[weaponId]?.equip?.weapon : undefined;
 
   // Job-class (and future) modifiers.
   const eff = getEffects(state);

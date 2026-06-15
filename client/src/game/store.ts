@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import type {
   ActionId,
+  EquipSlot,
   ItemId,
   MonsterId,
   OfflineSummary,
@@ -37,7 +38,7 @@ import {
 
 // Bump whenever the save schema changes incompatibly (e.g. skill ids renamed).
 // On mismatch we discard the old save and start fresh (no migrations yet).
-const SAVE_VERSION = 6;
+const SAVE_VERSION = 7;
 const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
@@ -49,6 +50,11 @@ const LOG_LIMIT = 40;
 
 function randInt(min: number, max: number): number {
   return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+/** ショップの購入価格（売値にマークアップ）。 */
+export function shopPrice(sellPrice: number): number {
+  return Math.max(1, Math.round(sellPrice * 2));
 }
 
 function makeStartingState(): SaveState {
@@ -66,7 +72,7 @@ function makeStartingState(): SaveState {
     prestigePoints: 0,
     prestigeUpgrades: {},
     prestigeCount: 0,
-    equippedWeapon: null,
+    equipment: {},
     selectedFood: "coffee",
     playerHp: maxHp,
     active: null,
@@ -86,7 +92,7 @@ function pickSaveState(s: GameStore): SaveState {
     prestigePoints: s.prestigePoints,
     prestigeUpgrades: s.prestigeUpgrades,
     prestigeCount: s.prestigeCount,
-    equippedWeapon: s.equippedWeapon,
+    equipment: s.equipment,
     selectedFood: s.selectedFood,
     playerHp: s.playerHp,
     active: s.active,
@@ -112,7 +118,7 @@ interface GameStore extends SaveState {
   startCombat: (monsterId: MonsterId) => void;
   stop: () => void;
   equip: (itemId: ItemId) => void;
-  unequip: () => void;
+  unequip: (slot: EquipSlot) => void;
   setFood: (itemId: ItemId | null) => void;
   setClass: (classId: string) => void;
   hireSubordinate: () => void;
@@ -121,8 +127,7 @@ interface GameStore extends SaveState {
   prestige: () => void;
   buyPrestigeUpgrade: (id: string) => void;
   sell: (itemId: ItemId, qty: number) => void;
-  buyFood: (itemId: ItemId, qty: number) => void;
-  buyWeapon: (itemId: ItemId) => void;
+  buyItem: (itemId: ItemId, qty?: number) => void;
   saveNow: () => Promise<void>;
   hardReset: () => Promise<void>;
   dismissOffline: () => void;
@@ -222,25 +227,31 @@ export const useGame = create<GameStore>((set, get) => ({
 
   equip: (itemId) => {
     const it = ITEM_MAP[itemId];
-    if (!it?.weapon) return;
+    if (!it?.equip) return;
     if ((get().bank[itemId] ?? 0) <= 0) return;
-    // return current weapon to bank, take the new one out
+    const slot = it.equip.slot;
     set((s) => {
       const bank = { ...s.bank };
       bank[itemId] = (bank[itemId] ?? 0) - 1;
       if (bank[itemId] <= 0) delete bank[itemId];
-      if (s.equippedWeapon) bank[s.equippedWeapon] = (bank[s.equippedWeapon] ?? 0) + 1;
-      return { bank, equippedWeapon: itemId };
+      const equipment = { ...s.equipment };
+      const prev = equipment[slot];
+      if (prev) bank[prev] = (bank[prev] ?? 0) + 1; // swap old back to bank
+      equipment[slot] = itemId;
+      return { bank, equipment };
     });
     get().pushLog(`${it.name} を装備`);
   },
 
-  unequip: () => {
+  unequip: (slot) => {
     set((s) => {
-      if (!s.equippedWeapon) return {};
+      const cur = s.equipment[slot];
+      if (!cur) return {};
       const bank = { ...s.bank };
-      bank[s.equippedWeapon] = (bank[s.equippedWeapon] ?? 0) + 1;
-      return { bank, equippedWeapon: null };
+      bank[cur] = (bank[cur] ?? 0) + 1;
+      const equipment = { ...s.equipment };
+      delete equipment[slot];
+      return { bank, equipment };
     });
   },
 
@@ -347,32 +358,17 @@ export const useGame = create<GameStore>((set, get) => ({
     });
   },
 
-  buyFood: (itemId, qty) => {
+  buyItem: (itemId, qty = 1) => {
     const it = ITEM_MAP[itemId];
-    if (!it || it.type !== "food") return;
-    const price = it.sellPrice * 3; // buy markup
+    if (!it) return;
+    const price = shopPrice(it.sellPrice);
     set((s) => {
-      const affordable = Math.min(qty, Math.floor(s.gold / price));
-      if (affordable <= 0) return {};
+      const n = Math.min(qty, Math.floor(s.gold / price));
+      if (n <= 0) return {};
       const bank = { ...s.bank };
-      bank[itemId] = (bank[itemId] ?? 0) + affordable;
-      return { bank, gold: s.gold - affordable * price };
+      bank[itemId] = (bank[itemId] ?? 0) + n;
+      return { bank, gold: s.gold - n * price };
     });
-  },
-
-  buyWeapon: (itemId) => {
-    const it = ITEM_MAP[itemId];
-    if (!it || it.type !== "weapon") return;
-    const price = it.sellPrice * 3;
-    const s = get();
-    if (s.gold < price) {
-      get().pushLog(`¥${price} 足りません`);
-      return;
-    }
-    const bank = { ...s.bank };
-    bank[itemId] = (bank[itemId] ?? 0) + 1;
-    set({ bank, gold: s.gold - price });
-    get().pushLog(`${it.name} を購入`);
   },
 
   saveNow: async () => {

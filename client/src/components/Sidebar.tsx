@@ -14,6 +14,7 @@ interface SidebarProps {
 export function Sidebar({ tab, setTab }: SidebarProps) {
   const skills = useGame((s) => s.skills);
   const combatStats = SKILLS.filter((s) => s.kind === "combat");
+  const craftSkills = SKILLS.filter((s) => s.kind === "craft");
 
   // 折りたたみ状態。初期はアクティブなスキルのグループだけ開く。
   const activeGroup = SKILL_MAP[tab]?.group;
@@ -65,6 +66,9 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
       <div className="nav-section">言語スタック</div>
       {GROUPS.map(renderGroup)}
 
+      <div className="nav-section">クラフト</div>
+      {craftSkills.map((s) => navSkill(s.id, s.name, s.icon))}
+
       <div className="nav-section">現場力</div>
       <button
         className={`nav-item ${tab === "combat" ? "selected" : ""}`}
@@ -86,6 +90,7 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
         [
           ["career", "career", "キャリア"],
           ["team", "team", "チーム"],
+          ["equip", "company", "装備"],
           ["prestige", "prestige", "起業"],
           ["bank", "bank", "成果物"],
           ["shop", "shop", "購買"],

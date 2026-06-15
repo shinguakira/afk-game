@@ -1,5 +1,5 @@
 import type { SaveState } from "./types";
-import { CLASS_MAP, PRESTIGE_MAP } from "./data";
+import { CLASS_MAP, ITEM_MAP, PRESTIGE_MAP } from "./data";
 import { type Effects, type Modifier, resolveModifiers } from "./modifiers";
 
 /**
@@ -15,6 +15,11 @@ export function activeModifiers(state: SaveState): Modifier[] {
   for (const [id, level] of Object.entries(state.prestigeUpgrades ?? {})) {
     const up = PRESTIGE_MAP[id];
     if (up && level > 0) mods.push(...up.modifiers(level));
+  }
+  // 装備の補正（服/髪/アイコン/PC、武器の付加効果）。
+  for (const itemId of Object.values(state.equipment ?? {})) {
+    const eq = itemId ? ITEM_MAP[itemId]?.equip : undefined;
+    if (eq?.modifiers) mods.push(...eq.modifiers);
   }
   return mods;
 }

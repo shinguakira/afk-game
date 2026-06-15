@@ -1,12 +1,39 @@
-import { useGame } from "../game/store";
-import { ITEMS } from "../game/data";
+import { useGame, shopPrice } from "../game/store";
+import { ITEM_MAP } from "../game/data";
 import { formatNumber } from "../ui/format";
 import { Icon } from "../ui/icons";
 
+// ショップの品揃え（id を直接指定）。
+const SECTIONS: { title: string; icon: string; items: string[] }[] = [
+  {
+    title: "飲食物",
+    icon: "coffee",
+    items: ["water", "coffee", "cola", "onigiri", "cupramen", "energy_drink", "bento", "paid_leave"],
+  },
+  {
+    title: "食材（料理用）",
+    icon: "cooking",
+    items: ["rice", "noodles", "meat", "fish_ing", "veg", "dough"],
+  },
+  {
+    title: "PCパーツ（組み立て用）",
+    icon: "cpu",
+    items: ["cpu_celeron", "cpu_i5", "cpu_i9", "gpu_igpu", "gpu_rtx4060", "gpu_rtx4090", "ram_8", "ram_32", "ssd_512", "ssd_2tb"],
+  },
+  {
+    title: "デバイス（武器）",
+    icon: "keyboard",
+    items: ["membrane_kb", "mechanical_kb", "gaming_mouse", "hhkb", "realforce"],
+  },
+  {
+    title: "服・髪・アイコン",
+    icon: "shirt",
+    items: ["tshirt", "hoodie", "workwear", "suit", "neat_hair", "afro", "ponytail", "av_cat", "av_pixel", "av_anime"],
+  },
+];
+
 export function ShopView() {
   const state = useGame();
-  const foods = ITEMS.filter((i) => i.type === "food");
-  const weapons = ITEMS.filter((i) => i.type === "weapon");
 
   return (
     <div>
@@ -16,74 +43,54 @@ export function ShopView() {
       <p className="section-sub">
         所持{" "}
         <span style={{ color: "var(--gold)" }}>¥{formatNumber(state.gold)}</span>。
-        カフェインでメンタルを保ち、エディタで案件を速く片付けよう。
+        食事でメンタル回復、パーツでPC自作、デバイス/服で強化。
       </p>
 
-      <h3 style={{ margin: "0 0 8px" }}>カフェイン</h3>
-      <div className="grid" style={{ marginBottom: 20 }}>
-        {foods.map((f) => {
-          const price = f.sellPrice * 3;
-          return (
-            <div className="card" key={f.id}>
-              <h3>
-                <Icon name={f.icon} size={16} /> {f.name}
-              </h3>
-              <div className="meta">
-                メンタル+{f.heals} · ¥{price}
-              </div>
-              <div className="row" style={{ display: "flex", gap: 6 }}>
-                <button
-                  className="primary"
-                  disabled={state.gold < price}
-                  onClick={() => state.buyFood(f.id, 1)}
-                >
-                  1個
-                </button>
-                <button
-                  disabled={state.gold < price * 10}
-                  onClick={() => state.buyFood(f.id, 10)}
-                >
-                  10個
-                </button>
-                <button
-                  disabled={state.gold < price}
-                  onClick={() => state.buyFood(f.id, 100)}
-                >
-                  100個
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <h3 style={{ margin: "0 0 8px" }}>エディタ</h3>
-      <div className="grid">
-        {weapons.map((w) => {
-          const price = w.sellPrice * 3;
-          const owned = state.bank[w.id] ?? 0;
-          return (
-            <div className="card" key={w.id}>
-              <h3>
-                <Icon name={w.icon} size={16} /> {w.name}
-              </h3>
-              <div className="meta">
-                実装+{w.weapon?.strengthBonus} · 精度+{w.weapon?.attackBonus} ·{" "}
-                {((w.weapon?.speed ?? 0) / 1000).toFixed(1)}s · ¥{price}
-                {owned > 0 ? ` · 所持${owned}` : ""}
-              </div>
-              <button
-                className="primary"
-                style={{ width: "100%" }}
-                disabled={state.gold < price}
-                onClick={() => state.buyWeapon(w.id)}
-              >
-                購入
-              </button>
-            </div>
-          );
-        })}
-      </div>
+      {SECTIONS.map((sec) => (
+        <div key={sec.title} style={{ marginBottom: 20 }}>
+          <h3 style={{ display: "flex", alignItems: "center", gap: 6, margin: "0 0 8px" }}>
+            <Icon name={sec.icon} size={16} /> {sec.title}
+          </h3>
+          <div className="grid">
+            {sec.items.map((id) => {
+              const it = ITEM_MAP[id];
+              if (!it) return null;
+              const price = shopPrice(it.sellPrice);
+              return (
+                <div className="card" key={id}>
+                  <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <Icon name={it.icon} size={16} /> {it.name}
+                  </h3>
+                  <div className="meta">
+                    {it.heals ? `メンタル+${it.heals} · ` : ""}
+                    {it.equip?.weapon
+                      ? `実装+${it.equip.weapon.strengthBonus} 精度+${it.equip.weapon.attackBonus} · `
+                      : ""}
+                    ¥{price}
+                    {(state.bank[id] ?? 0) > 0 ? ` · 所持${state.bank[id]}` : ""}
+                  </div>
+                  <div style={{ display: "flex", gap: 6 }}>
+                    <button
+                      className="primary"
+                      style={{ flex: 1 }}
+                      disabled={state.gold < price}
+                      onClick={() => state.buyItem(id, 1)}
+                    >
+                      購入
+                    </button>
+                    <button
+                      disabled={state.gold < price * 10}
+                      onClick={() => state.buyItem(id, 10)}
+                    >
+                      ×10
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

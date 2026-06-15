@@ -15,10 +15,8 @@ export function CombatView() {
   const foods = ITEMS.filter(
     (i) => i.type === "food" && (state.bank[i.id] ?? 0) > 0,
   );
-  const weapons = ITEMS.filter(
-    (i) => i.type === "weapon" && (state.bank[i.id] ?? 0) > 0,
-  );
-  const equipped = state.equippedWeapon ? ITEM_MAP[state.equippedWeapon] : null;
+  const weaponId = state.equipment.weapon;
+  const equipped = weaponId ? ITEM_MAP[weaponId] : null;
 
   return (
     <div>
@@ -26,22 +24,20 @@ export function CombatView() {
         <Icon name="projects" size={22} /> 案件遂行
       </h2>
       <p className="section-sub">
-        自動で対応。メンタル50%以下で選択中のカフェインを自動で飲みます。
+        自動で対応。メンタル50%以下で選択中の食事を自動でとります。デバイス/装備は「装備」タブで。
       </p>
 
       {/* Player loadout */}
       <div className="card" style={{ marginBottom: 16 }}>
         <div className="row-between" style={{ flexWrap: "wrap", gap: 12 }}>
-          <div>
-            <strong>エディタ:</strong>{" "}
-            {equipped ? equipped.name : <span className="muted">ベタ打ち</span>}{" "}
-            {equipped && (
-              <button
-                style={{ padding: "2px 8px", marginLeft: 6 }}
-                onClick={() => state.unequip()}
-              >
-                外す
-              </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <strong>デバイス:</strong>{" "}
+            {equipped ? (
+              <>
+                <Icon name={equipped.icon} size={14} /> {equipped.name}
+              </>
+            ) : (
+              <span className="muted">素手（ベタ打ち）</span>
             )}
           </div>
           <div className="muted">
@@ -51,24 +47,7 @@ export function CombatView() {
         </div>
 
         <div style={{ marginTop: 10 }}>
-          <span className="muted">装備: </span>
-          {weapons.length === 0 && (
-            <span className="muted">— 環境構築でエディタを作成 —</span>
-          )}
-          {weapons.map((w) => (
-            <button
-              key={w.id}
-              style={{ padding: "3px 8px", marginRight: 6 }}
-              className={state.equippedWeapon === w.id ? "active" : ""}
-              onClick={() => state.equip(w.id)}
-            >
-              {w.name} ×{state.bank[w.id]}
-            </button>
-          ))}
-        </div>
-
-        <div style={{ marginTop: 10 }}>
-          <span className="muted">カフェイン: </span>
+          <span className="muted">食事: </span>
           <button
             className={state.selectedFood == null ? "active" : ""}
             style={{ padding: "3px 8px", marginRight: 6 }}
@@ -80,10 +59,10 @@ export function CombatView() {
             <button
               key={f.id}
               className={state.selectedFood === f.id ? "active" : ""}
-              style={{ padding: "3px 8px", marginRight: 6 }}
+              style={{ padding: "3px 8px", marginRight: 6, marginBottom: 4 }}
               onClick={() => state.setFood(f.id)}
             >
-              {f.name} ×{state.bank[f.id]} (+{f.heals})
+              <Icon name={f.icon} size={13} /> {f.name} ×{state.bank[f.id]} (+{f.heals})
             </button>
           ))}
         </div>

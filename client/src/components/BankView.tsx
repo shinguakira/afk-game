@@ -24,7 +24,7 @@ export function BankView() {
         {entries.map(([id, qty]) => {
           const it = ITEM_MAP[id];
           if (!it) return null;
-          const isWeapon = it.type === "weapon";
+          const equippable = !!it.equip;
           return (
             <div className="bank-item" key={id}>
               <div>
@@ -35,13 +35,13 @@ export function BankView() {
               <div className="muted" style={{ fontSize: 11 }}>
                 {it.type}
                 {it.heals ? ` · 回復 ${it.heals}` : ""}
-                {it.weapon
-                  ? ` · 実装+${it.weapon.strengthBonus} / 精度+${it.weapon.attackBonus}`
+                {it.equip?.weapon
+                  ? ` · 実装+${it.equip.weapon.strengthBonus} / 精度+${it.equip.weapon.attackBonus}`
                   : ""}{" "}
                 · ¥{it.sellPrice}
               </div>
               <div className="row">
-                {isWeapon && (
+                {equippable && (
                   <button onClick={() => state.equip(id)}>装備</button>
                 )}
                 <button onClick={() => state.sell(id, 1)}>1売却</button>

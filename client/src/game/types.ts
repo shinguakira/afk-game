@@ -16,6 +16,24 @@ export interface Domain {
   icon: string;
 }
 
+export type EquipSlot = "weapon" | "body" | "hair" | "avatar" | "pc";
+
+export interface WeaponStats {
+  /** Added to attack rating (accuracy). */
+  attackBonus: number;
+  /** Added to max hit (damage). */
+  strengthBonus: number;
+  /** Attack interval in ms (lower = faster). */
+  speed: number;
+}
+
+/** 装備の定義。weapon スロットは戦闘ステ、その他は永続補正(modifiers)。 */
+export interface EquipDef {
+  slot: EquipSlot;
+  weapon?: WeaponStats;
+  modifiers?: import("./modifiers").Modifier[];
+}
+
 export interface Item {
   id: ItemId;
   name: string;
@@ -25,17 +43,8 @@ export interface Item {
   sellPrice: number;
   /** Food only: hit points restored when eaten. */
   heals?: number;
-  /** Weapon only: combat bonuses. */
-  weapon?: WeaponStats;
-}
-
-export interface WeaponStats {
-  /** Added to attack rating (accuracy). */
-  attackBonus: number;
-  /** Added to max hit (damage). */
-  strengthBonus: number;
-  /** Attack interval in ms (lower = faster). */
-  speed: number;
+  /** Equippable gear. */
+  equip?: EquipDef;
 }
 
 export type SkillKind = "gather" | "craft" | "combat";
@@ -152,7 +161,8 @@ export interface SaveState {
   prestigeUpgrades: Record<string, number>;
   /** 起業した回数。 */
   prestigeCount: number;
-  equippedWeapon: ItemId | null;
+  /** スロット → 装備中アイテム id。 */
+  equipment: Partial<Record<EquipSlot, ItemId>>;
   selectedFood: ItemId | null;
   playerHp: number;
   active: ActiveAction;

@@ -31,7 +31,7 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
     prestigePoints: 0,
     prestigeUpgrades: {},
     prestigeCount: 0,
-    equippedWeapon: null,
+    equipment: {},
     selectedFood: null,
     playerHp: 100,
     active: null,
@@ -160,6 +160,23 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   const ok = Math.abs(ratio - 1.6) < 0.03;
   console.log(
     `${ok ? "PASS" : "FAIL"}  funding Lv5 gold ×1.6: ${a.gold} → ${b.gold} (${ratio.toFixed(3)})`,
+  );
+  if (!ok) failures++;
+}
+
+// 8) Equipment modifiers flow: エントリーPC gives +10% gather speed => +10% commits.
+{
+  const base = freshState({ active: { kind: "skill", actionId: "code_js" } });
+  const withPc = freshState({
+    active: { kind: "skill", actionId: "code_js" },
+    equipment: { pc: "pc_low" },
+  });
+  simulateOffline(base, 600_000);
+  simulateOffline(withPc, 600_000);
+  const ratio = (withPc.bank.commit ?? 0) / (base.bank.commit ?? 1);
+  const ok = Math.abs(ratio - 1.1) < 0.02;
+  console.log(
+    `${ok ? "PASS" : "FAIL"}  PC +10% gather: ${base.bank.commit} → ${withPc.bank.commit} (${ratio.toFixed(3)})`,
   );
   if (!ok) failures++;
 }
