@@ -46,8 +46,8 @@ export interface Skill {
   /** gather=言語, craft=フレームワーク, combat=現場力(戦闘ステ)。 */
   kind: SkillKind;
   icon: string;
-  /** 所属する技術分野（combat ステは無し）。 */
-  domain?: DomainId;
+  /** サイドバーの所属グループ id（groups.ts）。combat ステは無し。 */
+  group?: string;
   /** 技術の種別（表示・グルーピング用）。 */
   tech?: "language" | "framework";
 }

@@ -6,10 +6,13 @@ import { ACTIONS } from "./actions";
 import { MONSTERS } from "./monsters";
 import { CLASSES } from "./classes";
 import { DOMAINS } from "./domains";
+import { GROUPS } from "./groups";
+import type { SkillGroup } from "./groups";
 import { PRESTIGE_UPGRADES } from "./prestige";
 import type { PrestigeUpgrade } from "./prestige";
 
-export { ITEMS, SKILLS, ACTIONS, MONSTERS, CLASSES, DOMAINS, PRESTIGE_UPGRADES };
+export { ITEMS, SKILLS, ACTIONS, MONSTERS, CLASSES, DOMAINS, GROUPS, PRESTIGE_UPGRADES };
+export type { SkillGroup } from "./groups";
 export { STAT, COMBAT_STAT_IDS, STARTING_MENTAL_LEVEL } from "./skills";
 export type { JobClass } from "./classes";
 export type { PrestigeUpgrade } from "./prestige";
@@ -40,17 +43,16 @@ export const DOMAIN_MAP: Record<string, Domain> = Object.fromEntries(
   DOMAINS.map((d) => [d.id, d]),
 );
 
-/** 分野 → スキル一覧（言語が先、フレームワークが後）。combatステは含まない。 */
-export const SKILLS_BY_DOMAIN: Record<string, Skill[]> = (() => {
+export const GROUP_MAP: Record<string, SkillGroup> = Object.fromEntries(
+  GROUPS.map((g) => [g.id, g]),
+);
+
+/** グループ id → スキル一覧（サイドバーの折りたたみ用）。 */
+export const SKILLS_BY_GROUP: Record<string, Skill[]> = (() => {
   const acc: Record<string, Skill[]> = {};
-  for (const d of DOMAINS) acc[d.id] = [];
+  for (const g of GROUPS) acc[g.id] = [];
   for (const s of SKILLS) {
-    if (s.domain && acc[s.domain]) acc[s.domain].push(s);
-  }
-  for (const d of DOMAINS) {
-    acc[d.id].sort((a, b) =>
-      a.tech === b.tech ? 0 : a.tech === "language" ? -1 : 1,
-    );
+    if (s.group && acc[s.group]) acc[s.group].push(s);
   }
   return acc;
 })();

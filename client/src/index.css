@@ -121,6 +121,48 @@ button.active {
   color: var(--muted);
   margin: 12px 6px 6px;
 }
+
+/* Section label (言語 / フレームワーク / 現場力 / その他) */
+.nav-section {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--accent);
+  margin: 14px 6px 4px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+
+/* Collapsible group header */
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text);
+  font-size: 12px;
+  padding: 6px 6px;
+  margin-bottom: 2px;
+  border-radius: 6px;
+}
+.nav-group:hover {
+  background: var(--panel-2);
+}
+.nav-group .cnt {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0 6px;
+}
+.nav-item.sub {
+  padding-left: 18px;
+}
 .nav-item {
   display: flex;
   align-items: center;

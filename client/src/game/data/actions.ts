@@ -1,55 +1,63 @@
 import type { GameAction } from "../types";
+import { SKILLS } from "./skills";
 
-// 言語(gather): コードを書いて コミット を産み、その言語レベルを上げる。
-// フレームワーク(craft): 対応言語のレベルを要求し、コミットを消費して
-// プロダクトを産む。フレームワークのレベルも上がる。
-const lang = (
-  id: string,
-  skill: string,
-  name: string,
-  time: number,
-  xp: number,
-): GameAction => ({ id, skill, name, level: 1, time, xp, outputs: { commit: 1 } });
+// 表示名はスキルから引く（DRY）。
+const NAME: Record<string, string> = Object.fromEntries(
+  SKILLS.map((s) => [s.id, s.name]),
+);
 
-const framework = (
-  id: string,
-  skill: string,
-  name: string,
-  reqSkill: string,
-  reqLevel: number,
-  commits: number,
-  time: number,
-  xp: number,
-): GameAction => ({
-  id,
-  skill,
-  name,
-  level: 1,
-  time,
-  xp,
-  inputs: { commit: commits },
-  outputs: { product: 1 },
-  requires: { skill: reqSkill, level: reqLevel },
-});
+// 言語: [id, time(ms), xp]。コードを書いて コミット を産む。
+const LANGS: [string, number, number][] = [
+  ["js", 3000, 15], ["ts", 3100, 16], ["python", 3000, 15], ["ruby", 3100, 16],
+  ["php", 3100, 16], ["lua", 3000, 14], ["perl", 3200, 16],
+  ["c", 3300, 18], ["cpp", 3300, 18], ["rust", 3400, 19], ["go", 3100, 16], ["zig", 3400, 19],
+  ["java", 3100, 16], ["kotlin", 3100, 16], ["scala", 3300, 18], ["csharp", 3100, 16],
+  ["swift", 3100, 16], ["dart", 3000, 15], ["objc", 3300, 18],
+  ["haskell", 3500, 21], ["elixir", 3300, 18], ["clojure", 3400, 19], ["fsharp", 3300, 18], ["erlang", 3400, 19],
+  ["r", 3000, 15], ["julia", 3100, 16], ["sql", 2800, 13],
+  ["cobol", 3600, 22], ["fortran", 3500, 21], ["asm", 3700, 24],
+];
+
+// フレームワーク: [id, 要求言語, 要求Lv, 消費コミット, time, xp]。
+const FWS: [string, string, number, number, number, number][] = [
+  ["react", "ts", 5, 4, 3200, 26], ["vue", "js", 5, 4, 3200, 24],
+  ["svelte", "js", 8, 4, 3300, 30], ["angular", "ts", 8, 5, 3400, 34],
+  ["nextjs", "react", 5, 5, 3500, 38], ["node", "js", 5, 4, 3200, 24],
+  ["django", "python", 5, 4, 3300, 28], ["rails", "ruby", 5, 4, 3300, 28],
+  ["spring", "java", 5, 5, 3400, 32], ["laravel", "php", 5, 4, 3300, 28],
+  ["flutter", "dart", 5, 4, 3300, 28], ["reactnative", "js", 8, 5, 3400, 34],
+  ["swiftui", "swift", 5, 4, 3300, 28], ["compose", "kotlin", 5, 4, 3300, 28],
+  ["unity", "csharp", 5, 4, 3300, 28], ["unreal", "cpp", 8, 6, 3600, 42],
+  ["godot", "cpp", 5, 5, 3400, 32],
+  ["pytorch", "python", 8, 5, 3500, 40], ["tensorflow", "python", 8, 5, 3500, 40],
+  ["pandas", "python", 4, 3, 3200, 22], ["sklearn", "python", 6, 4, 3300, 30],
+  ["docker", "go", 5, 3, 3100, 22], ["kubernetes", "go", 8, 5, 3500, 38],
+  ["terraform", "go", 5, 3, 3100, 22],
+];
 
 export const ACTIONS: GameAction[] = [
-  // ===== 言語 =====
-  lang("write_js", "js", "JavaScript を書く", 3000, 15),
-  lang("write_ts", "ts", "TypeScript を書く", 3100, 16),
-  lang("write_csharp", "csharp", "C# を書く", 3100, 16),
-  lang("write_cpp", "cpp", "C++ を書く", 3300, 18),
-  lang("write_c", "c", "C を書く", 3300, 18),
-  lang("write_rust", "rust", "Rust を書く", 3400, 19),
-  lang("write_python", "python", "Python を書く", 3000, 15),
-
-  // ===== フレームワーク =====
-  framework("build_react", "react", "React で実装", "ts", 5, 4, 3200, 26),
-  framework("build_node", "node", "Node.js で API 実装", "js", 5, 4, 3200, 24),
-  framework("build_unity", "unity", "Unity で開発", "csharp", 5, 4, 3300, 28),
-  framework("build_unreal", "unreal", "Unreal で開発", "cpp", 8, 6, 3600, 40),
-  framework("build_arduino", "arduino", "Arduino で実装", "c", 4, 3, 3200, 22),
-  framework("build_embassy", "embassy", "Embassy で実装", "rust", 8, 5, 3500, 38),
-  framework("build_pandas", "pandas", "pandas で分析", "python", 4, 3, 3200, 22),
-  framework("build_pytorch", "pytorch", "PyTorch で学習", "python", 8, 5, 3500, 40),
-  framework("build_tensorflow", "tensorflow", "TensorFlow で学習", "python", 8, 5, 3500, 40),
+  ...LANGS.map(
+    ([id, time, xp]): GameAction => ({
+      id: `write_${id}`,
+      skill: id,
+      name: `${NAME[id]} を書く`,
+      level: 1,
+      time,
+      xp,
+      outputs: { commit: 1 },
+    }),
+  ),
+  ...FWS.map(
+    ([id, reqSkill, reqLevel, commits, time, xp]): GameAction => ({
+      id: `build_${id}`,
+      skill: id,
+      name: `${NAME[id]} で実装`,
+      level: 1,
+      time,
+      xp,
+      inputs: { commit: commits },
+      outputs: { product: 1 },
+      requires: { skill: reqSkill, level: reqLevel },
+    }),
+  ),
 ];

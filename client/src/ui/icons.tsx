@@ -22,6 +22,32 @@ import {
   SiFlutter,
   SiSwift,
   SiKotlin,
+  SiRuby,
+  SiPhp,
+  SiLua,
+  SiPerl,
+  SiZig,
+  SiOpenjdk,
+  SiScala,
+  SiHaskell,
+  SiElixir,
+  SiClojure,
+  SiFsharp,
+  SiErlang,
+  SiR,
+  SiJulia,
+  SiFortran,
+  SiVuedotjs,
+  SiSvelte,
+  SiAngular,
+  SiDjango,
+  SiRubyonrails,
+  SiSpring,
+  SiLaravel,
+  SiScikitlearn,
+  SiDocker,
+  SiKubernetes,
+  SiTerraform,
 } from "react-icons/si";
 import {
   LuGlobe,
@@ -68,11 +94,19 @@ import {
   LuKeyboard,
   LuSearch,
   LuTriangleAlert,
+  LuBraces,
+  LuSigma,
+  LuDatabase,
+  LuScroll,
+  LuBinary,
+  LuFileCode2,
+  LuChevronRight,
+  LuChevronDown,
 } from "react-icons/lu";
 
 // Central icon registry. Data files reference these string ids (no JSX in data).
 const ICONS: Record<string, IconType> = {
-  // domains
+  // domains / framework groups
   web: LuGlobe,
   game: LuGamepad2,
   embedded: LuCpu,
@@ -80,17 +114,62 @@ const ICONS: Record<string, IconType> = {
   infra: LuServer,
   mobile: LuSmartphone,
 
-  // languages & frameworks (brand logos)
+  // language-family group headers
+  g_script: LuBraces,
+  g_systems: LuCpu,
+  g_enterprise: LuCoffee,
+  g_native: LuSmartphone,
+  g_func: LuSigma,
+  g_data: LuDatabase,
+  g_legacy: LuScroll,
+
+  // languages (brand)
   javascript: SiJavascript,
   typescript: SiTypescript,
-  react: SiReact,
-  node: SiNodedotjs,
-  nextjs: SiNextdotjs,
-  csharp: SiSharp,
-  cpp: SiCplusplus,
-  c: SiC,
-  rust: SiRust,
   python: SiPython,
+  ruby: SiRuby,
+  php: SiPhp,
+  lua: SiLua,
+  perl: SiPerl,
+  c: SiC,
+  cpp: SiCplusplus,
+  rust: SiRust,
+  go: SiGo,
+  zig: SiZig,
+  java: SiOpenjdk,
+  kotlin: SiKotlin,
+  scala: SiScala,
+  csharp: SiSharp,
+  swift: SiSwift,
+  dart: SiDart,
+  objc: LuFileCode2,
+  haskell: SiHaskell,
+  elixir: SiElixir,
+  clojure: SiClojure,
+  fsharp: SiFsharp,
+  erlang: SiErlang,
+  r: SiR,
+  julia: SiJulia,
+  sql: LuDatabase,
+  cobol: LuScroll,
+  fortran: SiFortran,
+  asm: LuBinary,
+
+  // frameworks (brand)
+  react: SiReact,
+  vue: SiVuedotjs,
+  svelte: SiSvelte,
+  angular: SiAngular,
+  nextjs: SiNextdotjs,
+  node: SiNodedotjs,
+  django: SiDjango,
+  rails: SiRubyonrails,
+  spring: SiSpring,
+  laravel: SiLaravel,
+  flutter: SiFlutter,
+  reactnative: SiReact,
+  swiftui: SiSwift,
+  compose: SiKotlin,
   unity: SiUnity,
   unreal: SiUnrealengine,
   godot: SiGodotengine,
@@ -98,11 +177,10 @@ const ICONS: Record<string, IconType> = {
   pytorch: SiPytorch,
   tensorflow: SiTensorflow,
   pandas: SiPandas,
-  go: SiGo,
-  dart: SiDart,
-  flutter: SiFlutter,
-  swift: SiSwift,
-  kotlin: SiKotlin,
+  sklearn: SiScikitlearn,
+  docker: SiDocker,
+  kubernetes: SiKubernetes,
+  terraform: SiTerraform,
 
   // combat stats
   debug: LuBug,
@@ -132,6 +210,8 @@ const ICONS: Record<string, IconType> = {
   save: LuSave,
   fire: LuTrash2,
   hire: LuUserPlus,
+  chevronRight: LuChevronRight,
+  chevronDown: LuChevronDown,
 
   // job classes
   none: LuBriefcase,
@@ -171,7 +251,7 @@ export interface IconProps {
 }
 
 export function Icon({ name, size = 18, className, color, title }: IconProps) {
-  const C = (name && ICONS[name]) || LuBox;
+  const C = (name && ICONS[name]) || LuFileCode2;
   return (
     <C
       size={size}

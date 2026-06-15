@@ -1,32 +1,102 @@
 import type { Skill } from "../types";
 
-// スキル = 実際の技術スタック。分野(domain)ごとに 言語(language) と
-// フレームワーク(framework) を個別にレベリングする。フレームワークは
-// アクション側で対応言語のレベルを要求する（actions.ts の requires）。
+const lang = (id: string, name: string, group: string, icon = id): Skill => ({
+  id,
+  name,
+  kind: "gather",
+  tech: "language",
+  group,
+  icon,
+});
+const fw = (id: string, name: string, group: string, icon = id): Skill => ({
+  id,
+  name,
+  kind: "craft",
+  tech: "framework",
+  group,
+  icon,
+});
+
+// スキル = 実在の技術スタック。言語(系統別) と フレームワーク(分野別) を個別にレベリング。
+// フレームワークは actions.ts の `requires` で対応言語の最低レベルを要求する。
 export const SKILLS: Skill[] = [
-  // ===== Web =====
-  { id: "js", name: "JavaScript", kind: "gather", tech: "language", domain: "web", icon: "javascript" },
-  { id: "ts", name: "TypeScript", kind: "gather", tech: "language", domain: "web", icon: "typescript" },
-  { id: "react", name: "React", kind: "craft", tech: "framework", domain: "web", icon: "react" },
-  { id: "node", name: "Node.js", kind: "craft", tech: "framework", domain: "web", icon: "node" },
+  // ===== 言語: スクリプト系 =====
+  lang("js", "JavaScript", "g_script", "javascript"),
+  lang("ts", "TypeScript", "g_script", "typescript"),
+  lang("python", "Python", "g_script"),
+  lang("ruby", "Ruby", "g_script"),
+  lang("php", "PHP", "g_script"),
+  lang("lua", "Lua", "g_script"),
+  lang("perl", "Perl", "g_script"),
 
-  // ===== ゲーム =====
-  { id: "csharp", name: "C#", kind: "gather", tech: "language", domain: "game", icon: "csharp" },
-  { id: "cpp", name: "C++", kind: "gather", tech: "language", domain: "game", icon: "cpp" },
-  { id: "unity", name: "Unity", kind: "craft", tech: "framework", domain: "game", icon: "unity" },
-  { id: "unreal", name: "Unreal Engine", kind: "craft", tech: "framework", domain: "game", icon: "unreal" },
+  // ===== 言語: システム系 =====
+  lang("c", "C", "g_systems"),
+  lang("cpp", "C++", "g_systems"),
+  lang("rust", "Rust", "g_systems"),
+  lang("go", "Go", "g_systems"),
+  lang("zig", "Zig", "g_systems"),
 
-  // ===== 組み込み =====
-  { id: "c", name: "C", kind: "gather", tech: "language", domain: "embedded", icon: "c" },
-  { id: "rust", name: "Rust", kind: "gather", tech: "language", domain: "embedded", icon: "rust" },
-  { id: "arduino", name: "Arduino", kind: "craft", tech: "framework", domain: "embedded", icon: "arduino" },
-  { id: "embassy", name: "Embassy (Rust)", kind: "craft", tech: "framework", domain: "embedded", icon: "rust" },
+  // ===== 言語: JVM / .NET 系 =====
+  lang("java", "Java", "g_enterprise"),
+  lang("kotlin", "Kotlin", "g_enterprise"),
+  lang("scala", "Scala", "g_enterprise"),
+  lang("csharp", "C#", "g_enterprise"),
 
-  // ===== AI・データ =====
-  { id: "python", name: "Python", kind: "gather", tech: "language", domain: "ai", icon: "python" },
-  { id: "pandas", name: "pandas", kind: "craft", tech: "framework", domain: "ai", icon: "pandas" },
-  { id: "pytorch", name: "PyTorch", kind: "craft", tech: "framework", domain: "ai", icon: "pytorch" },
-  { id: "tensorflow", name: "TensorFlow", kind: "craft", tech: "framework", domain: "ai", icon: "tensorflow" },
+  // ===== 言語: ネイティブ / モバイル =====
+  lang("swift", "Swift", "g_native"),
+  lang("dart", "Dart", "g_native"),
+  lang("objc", "Objective-C", "g_native"),
+
+  // ===== 言語: 関数型 =====
+  lang("haskell", "Haskell", "g_func"),
+  lang("elixir", "Elixir", "g_func"),
+  lang("clojure", "Clojure", "g_func"),
+  lang("fsharp", "F#", "g_func"),
+  lang("erlang", "Erlang", "g_func"),
+
+  // ===== 言語: データ / 科学 =====
+  lang("r", "R", "g_data"),
+  lang("julia", "Julia", "g_data"),
+  lang("sql", "SQL", "g_data"),
+
+  // ===== 言語: レガシー =====
+  lang("cobol", "COBOL", "g_legacy"),
+  lang("fortran", "Fortran", "g_legacy"),
+  lang("asm", "Assembly", "g_legacy"),
+
+  // ===== フレームワーク: Web =====
+  fw("react", "React", "fw_web"),
+  fw("vue", "Vue", "fw_web"),
+  fw("svelte", "Svelte", "fw_web"),
+  fw("angular", "Angular", "fw_web"),
+  fw("nextjs", "Next.js", "fw_web"),
+  fw("node", "Node.js", "fw_web"),
+  fw("django", "Django", "fw_web"),
+  fw("rails", "Ruby on Rails", "fw_web"),
+  fw("spring", "Spring", "fw_web"),
+  fw("laravel", "Laravel", "fw_web"),
+
+  // ===== フレームワーク: モバイル =====
+  fw("flutter", "Flutter", "fw_mobile"),
+  fw("reactnative", "React Native", "fw_mobile"),
+  fw("swiftui", "SwiftUI", "fw_mobile"),
+  fw("compose", "Jetpack Compose", "fw_mobile"),
+
+  // ===== フレームワーク: ゲーム =====
+  fw("unity", "Unity", "fw_game"),
+  fw("unreal", "Unreal Engine", "fw_game"),
+  fw("godot", "Godot", "fw_game"),
+
+  // ===== フレームワーク: AI・データ =====
+  fw("pytorch", "PyTorch", "fw_ai"),
+  fw("tensorflow", "TensorFlow", "fw_ai"),
+  fw("pandas", "pandas", "fw_ai"),
+  fw("sklearn", "scikit-learn", "fw_ai"),
+
+  // ===== フレームワーク: インフラ =====
+  fw("docker", "Docker", "fw_infra"),
+  fw("kubernetes", "Kubernetes", "fw_infra"),
+  fw("terraform", "Terraform", "fw_infra"),
 
   // ===== 現場力 (combat stats) =====
   { id: "debug", name: "デバッグ力", kind: "combat", icon: "debug" },
@@ -35,10 +105,7 @@ export const SKILLS: Skill[] = [
   { id: "mental", name: "メンタル", kind: "combat", icon: "mental" },
 ];
 
-/**
- * Single source of truth mapping combat *mechanics* to themed skill ids.
- *   accuracy → hit chance, damage → max hit, defence → mitigation, mental → max HP
- */
+/** Combat mechanics → themed skill ids. */
 export const STAT = {
   accuracy: "debug",
   damage: "impl",
@@ -53,5 +120,4 @@ export const COMBAT_STAT_IDS = [
   STAT.mental,
 ] as const;
 
-/** メンタルは初期 Lv10（いきなり燃え尽きないように）。 */
 export const STARTING_MENTAL_LEVEL = 10;
