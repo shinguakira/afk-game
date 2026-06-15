@@ -8,6 +8,7 @@ import { CombatView } from "./components/CombatView";
 import { BankView } from "./components/BankView";
 import { ShopView } from "./components/ShopView";
 import { CareerView } from "./components/CareerView";
+import { TeamView } from "./components/TeamView";
 import { LogPanel } from "./components/LogPanel";
 import { OfflineModal } from "./components/OfflineModal";
 
@@ -31,6 +32,7 @@ export default function App() {
   let main;
   if (tab === "combat") main = <CombatView />;
   else if (tab === "career") main = <CareerView />;
+  else if (tab === "team") main = <TeamView />;
   else if (tab === "bank") main = <BankView />;
   else if (tab === "shop") main = <ShopView />;
   else if (SKILL_MAP[tab]) main = <SkillView skillId={tab} />;

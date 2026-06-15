@@ -2,7 +2,9 @@ import type { OfflineSummary, SaveState } from "./types";
 import { ACTION_MAP, ITEM_MAP, MONSTER_MAP, SKILL_MAP, STAT } from "./data";
 import { avgEnemyDamage, avgPlayerDamage, getCombatStats } from "./combat";
 import { getEffects } from "./effects";
-import { mult } from "./modifiers";
+import { type Effects, mult } from "./modifiers";
+import { subSpeedMult } from "./team";
+import { levelForXp } from "./xp";
 
 /** Combat XP split: accuracy/damage/defence each get 1/3, mental 1/3 on top. */
 export function grantCombatXp(
@@ -25,19 +27,80 @@ export function grantCombatXp(
  */
 export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
   const summary: OfflineSummary = { ms, xp: {}, items: {}, gold: 0 };
-  if (!state.active) return summary;
-
   const eff = getEffects(state);
 
-  if (state.active.kind === "skill") {
-    const action = ACTION_MAP[state.active.actionId];
-    if (!action) return summary;
+  // プレイヤー自身の作業（生産/制作 or 案件）。
+  if (state.active?.kind === "skill") simPlayerSkill(state, ms, summary, eff);
+  else if (state.active?.kind === "combat") simPlayerCombat(state, ms, summary, eff);
 
-    const kind = SKILL_MAP[action.skill]?.kind;
-    const effTime = action.time / mult(eff, kind === "craft" ? "speed.craft" : "speed.gather");
-    const xpPer = action.xp * mult(eff, kind === "craft" ? "xp.craft" : "xp.gather");
+  // 部下の並行作業（プレイヤーの後に共有バンクを処理）。
+  simSubordinates(state, ms, summary, eff);
 
-    let completions = Math.floor((ms + state.actionProgress) / effTime);
+  return summary;
+}
+
+function simPlayerSkill(
+  state: SaveState,
+  ms: number,
+  summary: OfflineSummary,
+  eff: Effects,
+): void {
+  if (state.active?.kind !== "skill") return;
+  const action = ACTION_MAP[state.active.actionId];
+  if (!action) return;
+
+  const kind = SKILL_MAP[action.skill]?.kind;
+  const effTime = action.time / mult(eff, kind === "craft" ? "speed.craft" : "speed.gather");
+  const xpPer = action.xp * mult(eff, kind === "craft" ? "xp.craft" : "xp.gather");
+
+  let completions = Math.floor((ms + state.actionProgress) / effTime);
+
+  if (action.inputs) {
+    const maxByInputs = Math.min(
+      ...Object.entries(action.inputs).map(([id, q]) =>
+        Math.floor((state.bank[id] ?? 0) / (q as number)),
+      ),
+    );
+    completions = Math.min(completions, maxByInputs);
+    state.actionProgress = 0; // can't precisely track partial when input-limited
+  } else {
+    state.actionProgress = ms + state.actionProgress - completions * effTime;
+  }
+
+  if (completions <= 0) return;
+
+  if (action.inputs) {
+    for (const [id, q] of Object.entries(action.inputs)) {
+      state.bank[id] = (state.bank[id] ?? 0) - (q as number) * completions;
+      if (state.bank[id] <= 0) delete state.bank[id];
+      summary.items[id] = (summary.items[id] ?? 0) - (q as number) * completions;
+    }
+  }
+  for (const [id, q] of Object.entries(action.outputs)) {
+    state.bank[id] = (state.bank[id] ?? 0) + (q as number) * completions;
+    summary.items[id] = (summary.items[id] ?? 0) + (q as number) * completions;
+  }
+  const xp = xpPer * completions;
+  state.skills[action.skill] = {
+    xp: (state.skills[action.skill]?.xp ?? 0) + xp,
+  };
+  summary.xp[action.skill] = (summary.xp[action.skill] ?? 0) + xp;
+}
+
+/** 部下の並行生産をオフライン分まとめて適用（解析的）。 */
+function simSubordinates(
+  state: SaveState,
+  ms: number,
+  summary: OfflineSummary,
+  eff: Effects,
+): void {
+  for (const sub of state.subordinates) {
+    if (!sub.assignment) continue;
+    const action = ACTION_MAP[sub.assignment];
+    if (!action || levelForXp(sub.xp) < action.level) continue;
+
+    const effTime = action.time / subSpeedMult(sub, eff);
+    let completions = Math.floor((ms + sub.progress) / effTime);
 
     if (action.inputs) {
       const maxByInputs = Math.min(
@@ -46,12 +109,11 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
         ),
       );
       completions = Math.min(completions, maxByInputs);
-      state.actionProgress = 0; // can't precisely track partial when input-limited
+      sub.progress = 0;
     } else {
-      state.actionProgress = ms + state.actionProgress - completions * effTime;
+      sub.progress = ms + sub.progress - completions * effTime;
     }
-
-    if (completions <= 0) return summary;
+    if (completions <= 0) continue;
 
     if (action.inputs) {
       for (const [id, q] of Object.entries(action.inputs)) {
@@ -64,24 +126,31 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
       state.bank[id] = (state.bank[id] ?? 0) + (q as number) * completions;
       summary.items[id] = (summary.items[id] ?? 0) + (q as number) * completions;
     }
-    const xp = xpPer * completions;
-    state.skills[action.skill] = {
-      xp: (state.skills[action.skill]?.xp ?? 0) + xp,
-    };
-    summary.xp[action.skill] = (summary.xp[action.skill] ?? 0) + xp;
-    return summary;
+    sub.xp += action.xp * completions;
   }
+}
 
-  // Combat (analytic average estimate).
+function simPlayerCombat(
+  state: SaveState,
+  ms: number,
+  summary: OfflineSummary,
+  eff: Effects,
+): void {
+  if (state.active?.kind !== "combat") return;
   const monster = MONSTER_MAP[state.active.monsterId];
-  if (!monster) return summary;
+  if (!monster) return;
   const stats = getCombatStats(state);
 
   const dmgPerSwing = avgPlayerDamage(stats, monster);
-  if (dmgPerSwing <= 0) return summary;
-  const killTime = (monster.hp / dmgPerSwing) * stats.weaponSpeed;
+  if (dmgPerSwing <= 0) return;
+  // regen は実効DPSを削る（倒しきれないと kills≈0）。
+  const dpsPerMs = dmgPerSwing / stats.weaponSpeed;
+  const effDpsPerMs = Math.max(0.00001, dpsPerMs - (monster.regen ?? 0) / 1000);
+  const killTime = monster.hp / effDpsPerMs;
+  // 被ダメ = 敵の通常攻撃 + DoT。
   const dmgTakenPerKill =
-    avgEnemyDamage(stats, monster) * (killTime / monster.speed);
+    avgEnemyDamage(stats, monster) * (killTime / monster.speed) +
+    (monster.dot ?? 0) * (killTime / 1000);
 
   const food = state.selectedFood ? ITEM_MAP[state.selectedFood] : undefined;
   const foodCount = state.selectedFood ? state.bank[state.selectedFood] ?? 0 : 0;
@@ -92,7 +161,7 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
   const killsByHp =
     dmgTakenPerKill > 0 ? Math.floor(hpPool / dmgTakenPerKill) : killsByTime;
   const kills = Math.max(0, Math.min(killsByTime, killsByHp));
-  if (kills <= 0) return summary;
+  if (kills <= 0) return;
 
   const totalDamage = kills * dmgTakenPerKill;
   let foodUsed = 0;
@@ -136,6 +205,4 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
   for (const id of [STAT.accuracy, STAT.damage, STAT.defence, STAT.mental]) {
     summary.xp[id] = (summary.xp[id] ?? 0) + share;
   }
-
-  return summary;
 }

@@ -17,7 +17,9 @@ export type EffectKey =
   | "power.maxHp"
   // 経済
   | "gold"
-  | "dropRate";
+  | "dropRate"
+  // 部下の作業効率
+  | "subEfficiency";
 
 export interface Modifier {
   key: EffectKey;

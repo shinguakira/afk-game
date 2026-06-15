@@ -80,6 +80,22 @@ export interface Monster {
   goldMin: number;
   goldMax: number;
   loot: LootDrop[];
+  /** メンタルへの継続ダメージ (毎秒)。本番障害など。 */
+  dot?: number;
+  /** 自己回復 (HP毎秒)。仕様変更など「倒しきれない」案件。 */
+  regen?: number;
+}
+
+/** 部下。プレイヤーとは別に生産/制作アクションを1つ並行で回せる。 */
+export interface Subordinate {
+  id: string;
+  name: string;
+  /** 自身の経験値（levelForXp で熟練度に変換）。 */
+  xp: number;
+  /** 割り当て中のアクション id（生産/制作のみ）。null = 待機。 */
+  assignment: ActionId | null;
+  /** 進捗(ms)。 */
+  progress: number;
 }
 
 // ---- Runtime save state ----
@@ -96,6 +112,8 @@ export interface SaveState {
   gold: number;
   /** 選択中の職種クラス id（null = 無所属）。補正の源。 */
   jobClass: string | null;
+  /** 部下。生産/制作を並行で回す。 */
+  subordinates: Subordinate[];
   equippedWeapon: ItemId | null;
   selectedFood: ItemId | null;
   playerHp: number;

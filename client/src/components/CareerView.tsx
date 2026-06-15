@@ -17,6 +17,7 @@ const EFFECT_LABEL: Record<EffectKey, string> = {
   "power.maxHp": "メンタル上限",
   gold: "給料",
   dropRate: "ドロップ率",
+  subEfficiency: "部下効率",
 };
 
 export function CareerView() {

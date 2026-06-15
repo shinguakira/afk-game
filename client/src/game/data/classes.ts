@@ -92,8 +92,9 @@ export const CLASSES: JobClass[] = [
       { key: "xp.craft", pct: 10 },
       { key: "xp.combat", pct: 10 },
       { key: "gold", pct: 15 },
+      { key: "subEfficiency", pct: 30 },
     ],
-    passive: "全XP＋給料↑。尖りはないが万能。部下効率↑(将来)。",
+    passive: "全XP＋給料↑。部下効率+30%。尖りはないが万能。",
   },
 
   // --- 上位職 (rank4 / テックリード) ---

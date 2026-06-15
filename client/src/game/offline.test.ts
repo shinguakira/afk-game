@@ -27,6 +27,7 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
     bank: {},
     gold: 0,
     jobClass: null,
+    subordinates: [],
     equippedWeapon: null,
     selectedFood: null,
     playerHp: 100,
@@ -102,6 +103,25 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   const ok = Math.abs(ratio - 1.35) < 0.02;
   console.log(
     `${ok ? "PASS" : "FAIL"}  SRE craft-speed ratio ≈1.35: base ${base.bank.design_doc}, sre ${withSre.bank.design_doc} (${ratio.toFixed(3)})`,
+  );
+  if (!ok) failures++;
+}
+
+// 5b) Subordinates produce in parallel offline (independent of player action).
+{
+  const s = freshState({
+    active: { kind: "skill", actionId: "study" }, // player studies
+    subordinates: [
+      { id: "x", name: "新人", xp: 0, assignment: "write_code", progress: 0 },
+    ],
+  });
+  simulateOffline(s, 600_000); // 10 min
+  // player made knowledge; subordinate made code in parallel
+  const knowledge = s.bank.knowledge ?? 0;
+  const code = s.bank.code ?? 0;
+  const ok = knowledge > 0 && code > 0;
+  console.log(
+    `${ok ? "PASS" : "FAIL"}  parallel offline: player knowledge ${knowledge}, sub code ${code}`,
   );
   if (!ok) failures++;
 }

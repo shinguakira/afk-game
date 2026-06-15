@@ -48,6 +48,7 @@ export const MONSTERS: Monster[] = [
     xp: 30,
     goldMin: 3,
     goldMax: 8,
+    regen: 1.2, // 「仕様が変わりました」じわじわ巻き戻る
     loot: [
       { item: "tech_debt", chance: 1, min: 1, max: 4 },
       { item: "knowledge", chance: 0.3, min: 1, max: 2 },
@@ -82,6 +83,7 @@ export const MONSTERS: Monster[] = [
     xp: 72,
     goldMin: 8,
     goldMax: 25,
+    dot: 1.5, // 障害対応中はメンタルがゴリゴリ削れる
     loot: [
       { item: "energy_drink", chance: 0.35, min: 1, max: 2 },
       { item: "tool_parts", chance: 0.3, min: 1, max: 2 },

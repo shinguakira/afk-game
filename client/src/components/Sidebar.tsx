@@ -60,6 +60,13 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
         <span>キャリア</span>
       </button>
       <button
+        className={`nav-item ${tab === "team" ? "selected" : ""}`}
+        onClick={() => setTab("team")}
+      >
+        <span className="ic">👥</span>
+        <span>チーム</span>
+      </button>
+      <button
         className={`nav-item ${tab === "bank" ? "selected" : ""}`}
         onClick={() => setTab("bank")}
       >

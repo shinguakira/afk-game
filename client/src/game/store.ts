@@ -16,6 +16,8 @@ import {
 } from "./data";
 import { getEffects } from "./effects";
 import { mult } from "./modifiers";
+import { advanceSubordinates, hireCost, SUB_NAMES } from "./team";
+import { currentRank, maxSubordinates } from "./rank";
 import { xpForLevel } from "./xp";
 import { STARTING_MENTAL_LEVEL, STAT } from "./data/skills";
 import {
@@ -33,7 +35,7 @@ import {
 
 // Bump whenever the save schema changes incompatibly (e.g. skill ids renamed).
 // On mismatch we discard the old save and start fresh (no migrations yet).
-const SAVE_VERSION = 3;
+const SAVE_VERSION = 4;
 const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
@@ -58,6 +60,7 @@ function makeStartingState(): SaveState {
     bank: { coffee: 10 },
     gold: 25,
     jobClass: null,
+    subordinates: [],
     equippedWeapon: null,
     selectedFood: "coffee",
     playerHp: maxHp,
@@ -74,6 +77,7 @@ function pickSaveState(s: GameStore): SaveState {
     bank: s.bank,
     gold: s.gold,
     jobClass: s.jobClass,
+    subordinates: s.subordinates,
     equippedWeapon: s.equippedWeapon,
     selectedFood: s.selectedFood,
     playerHp: s.playerHp,
@@ -103,6 +107,9 @@ interface GameStore extends SaveState {
   unequip: () => void;
   setFood: (itemId: ItemId | null) => void;
   setClass: (classId: string) => void;
+  hireSubordinate: () => void;
+  assignSubordinate: (id: string, actionId: ActionId | null) => void;
+  fireSubordinate: (id: string) => void;
   sell: (itemId: ItemId, qty: number) => void;
   buyFood: (itemId: ItemId, qty: number) => void;
   saveNow: () => Promise<void>;
@@ -165,9 +172,12 @@ export const useGame = create<GameStore>((set, get) => ({
 
   tick: (dt) => {
     const s = get();
-    if (!s.ready || !s.active) return;
-    if (s.active.kind === "skill") runSkillTick(set, get, dt);
-    else runCombatTick(set, get, dt);
+    if (!s.ready) return;
+    // Player's own action.
+    if (s.active?.kind === "skill") runSkillTick(set, get, dt);
+    else if (s.active?.kind === "combat") runCombatTick(set, get, dt);
+    // Subordinates work in parallel (independent of the player's action).
+    if (s.subordinates.length) runSubordinatesTick(set, get, dt);
   },
 
   startAction: (actionId) => {
@@ -228,6 +238,48 @@ export const useGame = create<GameStore>((set, get) => ({
   setClass: (classId) => {
     set({ jobClass: classId });
     get().pushLog(`職種を変更: ${CLASS_MAP[classId]?.name ?? classId}`);
+  },
+
+  hireSubordinate: () => {
+    const s = get();
+    const cap = maxSubordinates(currentRank(s).index);
+    if (s.subordinates.length >= cap) {
+      get().pushLog(
+        cap === 0 ? "ミドル昇進で部下を採用できます" : "採用枠が一杯です",
+      );
+      return;
+    }
+    const cost = hireCost(s.subordinates.length);
+    if (s.gold < cost) {
+      get().pushLog(`採用費 ¥${cost} が足りません`);
+      return;
+    }
+    const name = SUB_NAMES[s.subordinates.length % SUB_NAMES.length];
+    const id =
+      (globalThis.crypto?.randomUUID?.() ?? `sub_${s.subordinates.length}`) +
+      `_${s.subordinates.length}`;
+    set({
+      gold: s.gold - cost,
+      subordinates: [
+        ...s.subordinates,
+        { id, name, xp: 0, assignment: null, progress: 0 },
+      ],
+    });
+    get().pushLog(`${name} を採用 (¥${cost})`);
+  },
+
+  assignSubordinate: (id, actionId) => {
+    set((st) => ({
+      subordinates: st.subordinates.map((sub) =>
+        sub.id === id ? { ...sub, assignment: actionId, progress: 0 } : sub,
+      ),
+    }));
+  },
+
+  fireSubordinate: (id) => {
+    set((st) => ({
+      subordinates: st.subordinates.filter((sub) => sub.id !== id),
+    }));
   },
 
   sell: (itemId, qty) => {
@@ -346,6 +398,18 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
   if (stopped) get().pushLog(`素材切れ: ${action.name}`);
 }
 
+function runSubordinatesTick(set: SetFn, get: GetFn, dt: number): void {
+  const s = get();
+  const eff = getEffects(s);
+  const { bank, subordinates } = advanceSubordinates(
+    s.subordinates,
+    s.bank,
+    dt,
+    eff,
+  );
+  set({ bank, subordinates });
+}
+
 function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
   const s = get();
   if (s.active?.kind !== "combat") return;
@@ -364,6 +428,12 @@ function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
   let playerHp = s.playerHp > 0 ? s.playerHp : stats.maxHp;
   let playerTimer = s.playerTimer + dt;
   let enemyTimer = s.enemyTimer + dt;
+
+  // 継続効果: 案件のメンタル継続ダメージ(DoT) と 自己回復(regen) を dt 分適用。
+  if (monster.dot) playerHp -= monster.dot * (dt / 1000);
+  if (monster.regen && enemyHp > 0 && enemyHp < monster.hp) {
+    enemyHp = Math.min(monster.hp, enemyHp + monster.regen * (dt / 1000));
+  }
   let bank = { ...s.bank };
   let gold = s.gold;
   let skills = s.skills;
@@ -426,6 +496,13 @@ function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
     } else {
       break;
     }
+  }
+
+  // DoT などで0以下になったら燃え尽き（攻撃の合間でも確実に処理）。
+  if (!stopped && playerHp <= 0) {
+    playerHp = stats.maxHp;
+    stopped = true;
+    logs.push(`燃え尽きた…！案件から離脱。`);
   }
 
   set({
