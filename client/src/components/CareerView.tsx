@@ -3,6 +3,7 @@ import { CLASSES } from "../game/data";
 import { currentRank, nextRank, totalLevel, RANKS } from "../game/rank";
 import type { EffectKey } from "../game/modifiers";
 import { Bar } from "./Bar";
+import { Icon } from "../ui/icons";
 
 const EFFECT_LABEL: Record<EffectKey, string> = {
   "speed.gather": "生産速度",
@@ -32,7 +33,9 @@ export function CareerView() {
 
   return (
     <div>
-      <h2 className="section-title">📈 キャリア</h2>
+      <h2 className="section-title">
+        <Icon name="career" size={22} /> キャリア
+      </h2>
       <p className="section-sub">
         総合熟練度で昇進。ミドル(rank3)で職種を選べ、テックリードで上位職へ。
       </p>
@@ -70,7 +73,7 @@ export function CareerView() {
               className={`card ${!unlocked ? "locked" : ""} ${isCurrent ? "selected" : ""}`}
             >
               <h3>
-                {c.icon} {c.name}
+                <Icon name={c.icon} size={18} /> {c.name}
               </h3>
               {c.upgradesFrom && (
                 <div className="meta">上位職 · 要 {RANKS[c.requiresRank].name}</div>

@@ -7,10 +7,20 @@ export type MonsterId = string;
 
 export type ItemType = "resource" | "bar" | "weapon" | "food" | "misc";
 
+export type DomainId = string;
+
+/** 技術分野（Web / ゲーム / 組み込み / AI…）。スキルをまとめる軸。 */
+export interface Domain {
+  id: DomainId;
+  name: string;
+  icon: string;
+}
+
 export interface Item {
   id: ItemId;
   name: string;
   type: ItemType;
+  icon?: string;
   /** Base value when selling to the shop (gold). */
   sellPrice: number;
   /** Food only: hit points restored when eaten. */
@@ -33,8 +43,13 @@ export type SkillKind = "gather" | "craft" | "combat";
 export interface Skill {
   id: SkillId;
   name: string;
+  /** gather=言語, craft=フレームワーク, combat=現場力(戦闘ステ)。 */
   kind: SkillKind;
   icon: string;
+  /** 所属する技術分野（combat ステは無し）。 */
+  domain?: DomainId;
+  /** 技術の種別（表示・グルーピング用）。 */
+  tech?: "language" | "framework";
 }
 
 /** A repeatable training action: gather a resource or craft an item. */
@@ -52,6 +67,8 @@ export interface GameAction {
   inputs?: Partial<Record<ItemId, number>>;
   /** Items produced per completion. */
   outputs: Partial<Record<ItemId, number>>;
+  /** 追加の前提条件: 別スキル(言語)の最低レベル。フレームワークが言語に依存する等。 */
+  requires?: { skill: SkillId; level: number };
 }
 
 export interface LootDrop {
@@ -66,6 +83,8 @@ export interface Monster {
   id: MonsterId;
   name: string;
   icon: string;
+  /** 案件の技術分野（任意）。 */
+  domain?: DomainId;
   hp: number;
   /** Max damage the monster can deal per hit. */
   maxHit: number;
@@ -114,6 +133,12 @@ export interface SaveState {
   jobClass: string | null;
   /** 部下。生産/制作を並行で回す。 */
   subordinates: Subordinate[];
+  /** 起業(プレステージ)で得る永続通貨「ストック」。 */
+  prestigePoints: number;
+  /** 永続アップグレード id → 取得レベル。 */
+  prestigeUpgrades: Record<string, number>;
+  /** 起業した回数。 */
+  prestigeCount: number;
   equippedWeapon: ItemId | null;
   selectedFood: ItemId | null;
   playerHp: number;

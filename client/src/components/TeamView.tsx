@@ -5,6 +5,7 @@ import { hireCost } from "../game/team";
 import { levelForXp, levelProgress } from "../game/xp";
 import { formatNumber } from "../ui/format";
 import { Bar } from "./Bar";
+import { Icon } from "../ui/icons";
 
 // 部下に割り当てられるのは生産/制作のみ。
 const ASSIGNABLE = ACTIONS.filter((a) => {
@@ -22,7 +23,9 @@ export function TeamView() {
 
   return (
     <div>
-      <h2 className="section-title">👥 チーム</h2>
+      <h2 className="section-title">
+        <Icon name="team" size={22} /> チーム
+      </h2>
       <p className="section-sub">
         部下はあなたとは別に生産/制作を1つ並行で回します。放置中も働きます。
       </p>
@@ -57,7 +60,9 @@ export function TeamView() {
           return (
             <div className="card" key={sub.id}>
               <div className="row-between">
-                <h3 style={{ margin: 0 }}>🧑‍💻 {sub.name}</h3>
+                <h3 style={{ margin: 0 }}>
+                  <Icon name="team" size={16} /> {sub.name}
+                </h3>
                 <span className="muted">Lv {lvl}</span>
               </div>
               <div style={{ margin: "8px 0" }}>
@@ -85,7 +90,7 @@ export function TeamView() {
                     const locked = lvl < a.level;
                     return (
                       <option key={a.id} value={a.id} disabled={locked}>
-                        {SKILL_MAP[a.skill]?.icon} {a.name}
+                        {a.name}
                         {locked ? `（Lv${a.level}必要）` : ""}
                       </option>
                     );

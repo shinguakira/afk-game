@@ -1,8 +1,9 @@
 import { useGame } from "../game/store";
-import { SKILLS } from "../game/data";
+import { DOMAINS, SKILLS, SKILLS_BY_DOMAIN } from "../game/data";
 import { levelForXp } from "../game/xp";
+import { Icon } from "../ui/icons";
 
-export type Tab = string; // skillId | "combat" | "bank" | "shop"
+export type Tab = string; // skillId | "combat" | "career" | "team" | "prestige" | "bank" | "shop"
 
 interface SidebarProps {
   tab: Tab;
@@ -11,9 +12,7 @@ interface SidebarProps {
 
 export function Sidebar({ tab, setTab }: SidebarProps) {
   const skills = useGame((s) => s.skills);
-  const gather = SKILLS.filter((s) => s.kind === "gather");
-  const craft = SKILLS.filter((s) => s.kind === "craft");
-  const combat = SKILLS.filter((s) => s.kind === "combat");
+  const combatStats = SKILLS.filter((s) => s.kind === "combat");
 
   const navSkill = (id: string, name: string, icon: string) => (
     <button
@@ -21,7 +20,7 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
       className={`nav-item ${tab === id ? "selected" : ""}`}
       onClick={() => setTab(id)}
     >
-      <span className="ic">{icon}</span>
+      <Icon name={icon} />
       <span>{name}</span>
       <span className="lvl">Lv {levelForXp(skills[id]?.xp ?? 0)}</span>
     </button>
@@ -29,57 +28,51 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
 
   return (
     <div className="sidebar">
-      <div className="nav-group-title">生産</div>
-      {gather.map((s) => navSkill(s.id, s.name, s.icon))}
+      {/* 分野ごとに 言語 → フレームワーク */}
+      {DOMAINS.map((d) => (
+        <div key={d.id}>
+          <div className="nav-group-title">
+            <Icon name={d.icon} size={13} /> {d.name}
+          </div>
+          {SKILLS_BY_DOMAIN[d.id]?.map((s) => navSkill(s.id, s.name, s.icon))}
+        </div>
+      ))}
 
-      <div className="nav-group-title">制作</div>
-      {craft.map((s) => navSkill(s.id, s.name, s.icon))}
-
-      <div className="nav-group-title">遂行能力</div>
+      <div className="nav-group-title">現場力</div>
       <button
         className={`nav-item ${tab === "combat" ? "selected" : ""}`}
         onClick={() => setTab("combat")}
       >
-        <span className="ic">🗂️</span>
+        <Icon name="projects" />
         <span>案件</span>
       </button>
-      {combat.map((s) => (
+      {combatStats.map((s) => (
         <div key={s.id} className="nav-item" style={{ cursor: "default" }}>
-          <span className="ic">{s.icon}</span>
+          <Icon name={s.icon} />
           <span>{s.name}</span>
           <span className="lvl">Lv {levelForXp(skills[s.id]?.xp ?? 0)}</span>
         </div>
       ))}
 
       <div className="nav-group-title">その他</div>
-      <button
-        className={`nav-item ${tab === "career" ? "selected" : ""}`}
-        onClick={() => setTab("career")}
-      >
-        <span className="ic">📈</span>
-        <span>キャリア</span>
-      </button>
-      <button
-        className={`nav-item ${tab === "team" ? "selected" : ""}`}
-        onClick={() => setTab("team")}
-      >
-        <span className="ic">👥</span>
-        <span>チーム</span>
-      </button>
-      <button
-        className={`nav-item ${tab === "bank" ? "selected" : ""}`}
-        onClick={() => setTab("bank")}
-      >
-        <span className="ic">🗄️</span>
-        <span>成果物</span>
-      </button>
-      <button
-        className={`nav-item ${tab === "shop" ? "selected" : ""}`}
-        onClick={() => setTab("shop")}
-      >
-        <span className="ic">🛒</span>
-        <span>購買</span>
-      </button>
+      {(
+        [
+          ["career", "career", "キャリア"],
+          ["team", "team", "チーム"],
+          ["prestige", "prestige", "起業"],
+          ["bank", "bank", "成果物"],
+          ["shop", "shop", "購買"],
+        ] as const
+      ).map(([id, icon, label]) => (
+        <button
+          key={id}
+          className={`nav-item ${tab === id ? "selected" : ""}`}
+          onClick={() => setTab(id)}
+        >
+          <Icon name={icon} />
+          <span>{label}</span>
+        </button>
+      ))}
     </div>
   );
 }

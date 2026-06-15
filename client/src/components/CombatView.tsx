@@ -3,6 +3,7 @@ import { ITEM_MAP, ITEMS, MONSTERS, MONSTER_MAP } from "../game/data";
 import { getCombatStats } from "../game/combat";
 import { Bar } from "./Bar";
 import { TimerBar } from "./TimerBar";
+import { Icon } from "../ui/icons";
 
 export function CombatView() {
   const state = useGame();
@@ -21,7 +22,9 @@ export function CombatView() {
 
   return (
     <div>
-      <h2 className="section-title">🗂️ 案件遂行</h2>
+      <h2 className="section-title">
+        <Icon name="projects" size={22} /> 案件遂行
+      </h2>
       <p className="section-sub">
         自動で対応。メンタル50%以下で選択中のカフェインを自動で飲みます。
       </p>
@@ -90,7 +93,9 @@ export function CombatView() {
       {inCombat && monster && (
         <div className="combat-arena">
           <div className="fighter">
-            <div className="big-ic">🧑‍💻</div>
+            <div className="big-ic">
+              <Icon name="company" size={44} />
+            </div>
             <h3>あなた</h3>
             <Bar
               kind="hp"
@@ -106,7 +111,9 @@ export function CombatView() {
             </div>
           </div>
           <div className="fighter">
-            <div className="big-ic">{monster.icon}</div>
+            <div className="big-ic">
+              <Icon name={monster.icon} size={44} />
+            </div>
             <h3>{monster.name}</h3>
             <Bar
               kind="enemy"
@@ -132,7 +139,7 @@ export function CombatView() {
           return (
             <div key={m.id} className={`card ${isActive ? "selected" : ""}`}>
               <h3>
-                {m.icon} {m.name}
+                <Icon name={m.icon} size={18} /> {m.name}
               </h3>
               <div className="meta">
                 規模 {m.hp} · 圧 {m.maxHit} · {m.xp} xp

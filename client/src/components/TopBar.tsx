@@ -3,6 +3,7 @@ import { getCombatStats } from "../game/combat";
 import { ACTION_MAP, MONSTER_MAP } from "../game/data";
 import { formatNumber } from "../ui/format";
 import { Bar } from "./Bar";
+import { Icon } from "../ui/icons";
 
 export function TopBar() {
   const state = useGame();
@@ -17,15 +18,17 @@ export function TopBar() {
 
   return (
     <div className="topbar">
-      <span className="title">💻 Idle Engineer</span>
+      <span className="title">
+        <Icon name="company" size={18} /> Idle Engineer
+      </span>
 
       <div className="stat">
-        <span>¥</span>
+        <span className="gold" style={{ fontWeight: 700 }}>¥</span>
         <span className="gold">{formatNumber(state.gold)}</span>
       </div>
 
       <div className="stat" style={{ minWidth: 160 }}>
-        <span title="メンタル">🧠</span>
+        <Icon name="mental" title="メンタル" />
         <Bar
           kind="hp"
           value={state.playerHp / stats.maxHp}
@@ -42,10 +45,12 @@ export function TopBar() {
 
       {state.active && (
         <button className="danger" onClick={() => state.stop()}>
-          ⏹ 中断
+          <Icon name="stop" size={14} /> 中断
         </button>
       )}
-      <button onClick={() => void state.saveNow()}>💾 保存</button>
+      <button onClick={() => void state.saveNow()}>
+        <Icon name="save" size={14} /> 保存
+      </button>
       <button
         className="danger"
         onClick={() => {

@@ -5,7 +5,7 @@ export const MONSTERS: Monster[] = [
   {
     id: "bug",
     name: "バグ",
-    icon: "🐞",
+    icon: "bug_m",
     hp: 6,
     maxHit: 1,
     attack: 2,
@@ -22,7 +22,7 @@ export const MONSTERS: Monster[] = [
   {
     id: "newbie",
     name: "新人教育",
-    icon: "🐤",
+    icon: "newbie",
     hp: 10,
     maxHit: 1,
     attack: 2,
@@ -32,14 +32,14 @@ export const MONSTERS: Monster[] = [
     goldMin: 2,
     goldMax: 5,
     loot: [
-      { item: "code", chance: 0.5, min: 1, max: 2 },
+      { item: "commit", chance: 0.6, min: 1, max: 2 },
       { item: "kudos", chance: 0.6, min: 1, max: 2 },
     ],
   },
   {
     id: "spec_change",
     name: "仕様変更",
-    icon: "📝",
+    icon: "spec_change",
     hp: 16,
     maxHit: 2,
     attack: 6,
@@ -51,13 +51,13 @@ export const MONSTERS: Monster[] = [
     regen: 1.2, // 「仕様が変わりました」じわじわ巻き戻る
     loot: [
       { item: "tech_debt", chance: 1, min: 1, max: 4 },
-      { item: "knowledge", chance: 0.3, min: 1, max: 2 },
+      { item: "commit", chance: 0.3, min: 1, max: 2 },
     ],
   },
   {
     id: "review",
     name: "レビュー指摘",
-    icon: "🔍",
+    icon: "review",
     hp: 22,
     maxHit: 3,
     attack: 9,
@@ -67,14 +67,15 @@ export const MONSTERS: Monster[] = [
     goldMin: 4,
     goldMax: 12,
     loot: [
-      { item: "knowledge", chance: 0.5, min: 1, max: 2 },
-      { item: "design_doc", chance: 0.2, min: 1, max: 1 },
+      { item: "commit", chance: 0.5, min: 1, max: 2 },
+      { item: "product", chance: 0.15, min: 1, max: 1 },
     ],
   },
   {
     id: "incident",
     name: "本番障害",
-    icon: "🔥",
+    icon: "incident",
+    domain: "infra",
     hp: 34,
     maxHit: 5,
     attack: 16,
@@ -86,13 +87,13 @@ export const MONSTERS: Monster[] = [
     dot: 1.5, // 障害対応中はメンタルがゴリゴリ削れる
     loot: [
       { item: "energy_drink", chance: 0.35, min: 1, max: 2 },
-      { item: "tool_parts", chance: 0.3, min: 1, max: 2 },
+      { item: "commit", chance: 0.4, min: 1, max: 3 },
     ],
   },
   {
     id: "kacho",
     name: "課長",
-    icon: "👔",
+    icon: "boss",
     hp: 60,
     maxHit: 6,
     attack: 22,

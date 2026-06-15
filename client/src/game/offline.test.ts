@@ -15,11 +15,11 @@ function check(label: string, actual: number, expected: number, tol = 0) {
 
 function freshState(over: Partial<SaveState> = {}): SaveState {
   return {
-    version: 1,
+    version: 6,
     skills: {
-      learning: { xp: 0 },
-      design: { xp: 0 },
-      debug: { xp: 0 },
+      js: { xp: 0 },
+      ts: { xp: 0 },
+      react: { xp: 0 },
       impl: { xp: 0 },
       robust: { xp: 0 },
       mental: { xp: xpForLevel(10) },
@@ -28,6 +28,9 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
     gold: 0,
     jobClass: null,
     subordinates: [],
+    prestigePoints: 0,
+    prestigeUpgrades: {},
+    prestigeCount: 0,
     equippedWeapon: null,
     selectedFood: null,
     playerHp: 100,
@@ -38,25 +41,25 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   };
 }
 
-// 1) Gathering: 1 hour of study (3s, 15xp) => 1200 knowledge, 18000 xp.
+// 1) Language coding: 1h of write_js (3s, 15xp) => 1200 commits, 18000 xp.
 {
-  const s = freshState({ active: { kind: "skill", actionId: "study" } });
+  const s = freshState({ active: { kind: "skill", actionId: "write_js" } });
   const sum = simulateOffline(s, 3_600_000);
-  check("study 1h knowledge", s.bank.knowledge ?? 0, 1200);
-  check("study 1h xp", s.skills.learning.xp, 1200 * 15);
-  check("summary knowledge", sum.items.knowledge ?? 0, 1200);
+  check("write_js 1h commits", s.bank.commit ?? 0, 1200);
+  check("write_js 1h xp", s.skills.js.xp, 1200 * 15);
+  check("summary commits", sum.items.commit ?? 0, 1200);
 }
 
-// 2) Crafting is input-limited: 90 knowledge => only 30 design docs (3 each) over 1h.
+// 2) Framework build is input-limited: 120 commits / 4 => 30 products over 1h.
 {
   const s = freshState({
-    active: { kind: "skill", actionId: "write_design" },
-    bank: { knowledge: 90 },
+    active: { kind: "skill", actionId: "build_react" },
+    bank: { commit: 120 },
   });
   simulateOffline(s, 3_600_000);
-  check("design limited docs", s.bank.design_doc ?? 0, 30);
-  check("design consumed knowledge", s.bank.knowledge ?? 0, 0);
-  check("design xp", s.skills.design.xp, 30 * 16);
+  check("build_react products", s.bank.product ?? 0, 30);
+  check("build_react consumed commits", s.bank.commit ?? 0, 0);
+  check("build_react xp", s.skills.react.xp, 30 * 26);
 }
 
 // 3) Combat: 1h on bugs yields a positive, capped amount with rewards.
@@ -66,9 +69,8 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
     selectedFood: "coffee",
     bank: { coffee: 100 },
   });
-  const before = s.skills.impl.xp;
   const sum = simulateOffline(s, 3_600_000);
-  const gotXp = s.skills.impl.xp > before;
+  const gotXp = s.skills.impl.xp > 0;
   console.log(
     `${gotXp ? "PASS" : "FAIL"}  combat 1h gained 実装力 xp: ${s.skills.impl.xp}`,
   );
@@ -86,23 +88,23 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   check("idle items", Object.keys(sum.items).length, 0);
 }
 
-// 5) Class modifier (v2): SRE gives +35% craft speed => 35% more design docs.
+// 5) Class modifier: SRE gives +35% craft speed => 35% more products.
 {
   const base = freshState({
-    active: { kind: "skill", actionId: "write_design" },
-    bank: { knowledge: 100000 },
+    active: { kind: "skill", actionId: "build_react" },
+    bank: { commit: 1_000_000 },
   });
   const withSre = freshState({
-    active: { kind: "skill", actionId: "write_design" },
-    bank: { knowledge: 100000 },
+    active: { kind: "skill", actionId: "build_react" },
+    bank: { commit: 1_000_000 },
     jobClass: "sre",
   });
   simulateOffline(base, 600_000);
   simulateOffline(withSre, 600_000);
-  const ratio = (withSre.bank.design_doc ?? 0) / (base.bank.design_doc ?? 1);
+  const ratio = (withSre.bank.product ?? 0) / (base.bank.product ?? 1);
   const ok = Math.abs(ratio - 1.35) < 0.02;
   console.log(
-    `${ok ? "PASS" : "FAIL"}  SRE craft-speed ratio ≈1.35: base ${base.bank.design_doc}, sre ${withSre.bank.design_doc} (${ratio.toFixed(3)})`,
+    `${ok ? "PASS" : "FAIL"}  SRE craft-speed ratio ≈1.35: base ${base.bank.product}, sre ${withSre.bank.product} (${ratio.toFixed(3)})`,
   );
   if (!ok) failures++;
 }
@@ -110,30 +112,57 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
 // 5b) Subordinates produce in parallel offline (independent of player action).
 {
   const s = freshState({
-    active: { kind: "skill", actionId: "study" }, // player studies
+    active: { kind: "skill", actionId: "write_js" }, // player codes JS
     subordinates: [
-      { id: "x", name: "新人", xp: 0, assignment: "write_code", progress: 0 },
+      { id: "x", name: "新人", xp: 0, assignment: "write_python", progress: 0 },
     ],
   });
   simulateOffline(s, 600_000); // 10 min
-  // player made knowledge; subordinate made code in parallel
-  const knowledge = s.bank.knowledge ?? 0;
-  const code = s.bank.code ?? 0;
-  const ok = knowledge > 0 && code > 0;
+  const commit = s.bank.commit ?? 0;
+  const subXp = s.subordinates[0].xp;
+  // player makes ~200 commits in 10min; subordinate adds more on top + gains xp
+  const ok = commit > 250 && subXp > 0;
   console.log(
-    `${ok ? "PASS" : "FAIL"}  parallel offline: player knowledge ${knowledge}, sub code ${code}`,
+    `${ok ? "PASS" : "FAIL"}  parallel offline: total commits ${commit}, sub xp ${subXp}`,
   );
   if (!ok) failures++;
 }
 
-// 6) Class modifiers flow into combat stats: QA +40% 堅牢性, security +50%/+20% HP.
+// 6) Class modifiers flow into combat stats: QA +40% 堅牢性, security +20% HP.
 {
-  const none = getCombatStats(freshState({ skills: { robust: { xp: xpForLevel(20) }, mental: { xp: xpForLevel(20) } } as any }));
-  const qa = getCombatStats(freshState({ jobClass: "qa", skills: { robust: { xp: xpForLevel(20) }, mental: { xp: xpForLevel(20) } } as any }));
+  const none = getCombatStats(
+    freshState({ skills: { robust: { xp: xpForLevel(20) }, mental: { xp: xpForLevel(20) } } as any }),
+  );
+  const qa = getCombatStats(
+    freshState({ jobClass: "qa", skills: { robust: { xp: xpForLevel(20) }, mental: { xp: xpForLevel(20) } } as any }),
+  );
   check("QA defence +40%", qa.defenceRating, Math.round(none.defenceRating * 1.4));
   const sec = getCombatStats(freshState({ jobClass: "security", skills: { mental: { xp: xpForLevel(20) } } as any }));
   const plain = getCombatStats(freshState({ skills: { mental: { xp: xpForLevel(20) } } as any }));
   check("Security maxHp +20%", sec.maxHp, Math.floor(plain.maxHp * 1.2));
+}
+
+// 7) Prestige upgrade stacks: funding Lv5 = +60% gold.
+{
+  const plain = freshState({
+    active: { kind: "combat", monsterId: "bug" },
+    selectedFood: "coffee",
+    bank: { coffee: 100 },
+  });
+  const funded = freshState({
+    active: { kind: "combat", monsterId: "bug" },
+    selectedFood: "coffee",
+    bank: { coffee: 100 },
+    prestigeUpgrades: { funding: 5 },
+  });
+  const a = simulateOffline(plain, 600_000);
+  const b = simulateOffline(funded, 600_000);
+  const ratio = b.gold / a.gold;
+  const ok = Math.abs(ratio - 1.6) < 0.03;
+  console.log(
+    `${ok ? "PASS" : "FAIL"}  funding Lv5 gold ×1.6: ${a.gold} → ${b.gold} (${ratio.toFixed(3)})`,
+  );
+  if (!ok) failures++;
 }
 
 console.log(failures === 0 ? "\nALL PASS" : `\n${failures} FAILURE(S)`);

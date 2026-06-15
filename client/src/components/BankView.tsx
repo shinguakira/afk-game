@@ -1,6 +1,7 @@
 import { useGame } from "../game/store";
 import { ITEM_MAP } from "../game/data";
 import { formatNumber } from "../ui/format";
+import { Icon } from "../ui/icons";
 
 export function BankView() {
   const state = useGame();
@@ -8,7 +9,9 @@ export function BankView() {
 
   return (
     <div>
-      <h2 className="section-title">🗄️ 成果物</h2>
+      <h2 className="section-title">
+        <Icon name="bank" size={22} /> 成果物
+      </h2>
       <p className="section-sub">
         {entries.length} 種類。エディタは装備、不要なものは売却して円に。
       </p>
@@ -25,6 +28,7 @@ export function BankView() {
           return (
             <div className="bank-item" key={id}>
               <div>
+                <Icon name={it.icon} size={14} />{" "}
                 <span className="name">{it.name}</span>{" "}
                 <span className="qty">×{formatNumber(qty)}</span>
               </div>

@@ -4,6 +4,7 @@ import { levelForXp, levelProgress, MAX_LEVEL, xpForLevel } from "../game/xp";
 import { formatNumber } from "../ui/format";
 import { Bar } from "./Bar";
 import { TimerBar } from "./TimerBar";
+import { Icon } from "../ui/icons";
 
 function ioTags(io: Partial<Record<string, number>> | undefined) {
   if (!io) return null;
@@ -24,7 +25,12 @@ export function SkillView({ skillId }: { skillId: string }) {
   return (
     <div>
       <h2 className="section-title">
-        {skill.icon} {skill.name}
+        <Icon name={skill.icon} size={22} /> {skill.name}
+        {skill.tech && (
+          <span className="muted" style={{ fontSize: 13, marginLeft: 8 }}>
+            {skill.tech === "language" ? "言語" : "フレームワーク"}
+          </span>
+        )}
       </h2>
       <div style={{ maxWidth: 420, marginBottom: 18 }}>
         <Bar
@@ -41,9 +47,13 @@ export function SkillView({ skillId }: { skillId: string }) {
 
       <div className="grid">
         {actions.map((a) => {
-          const unlocked = level >= a.level;
           const isActive =
             state.active?.kind === "skill" && state.active.actionId === a.id;
+          // フレームワークは対応言語のレベルが前提。
+          const req = a.requires;
+          const reqLevel = req ? levelForXp(state.skills[req.skill]?.xp ?? 0) : 0;
+          const reqMet = !req || reqLevel >= req.level;
+          const unlocked = level >= a.level && reqMet;
           // can we afford one craft cycle?
           const canCraft =
             !a.inputs ||
@@ -60,7 +70,14 @@ export function SkillView({ skillId }: { skillId: string }) {
             >
               <h3>{a.name}</h3>
               <div className="meta">
-                Lv {a.level} · {(a.time / 1000).toFixed(1)}s · {a.xp} xp
+                {(a.time / 1000).toFixed(1)}s · {a.xp} xp
+                {req && (
+                  <>
+                    {" · 要 "}
+                    <Icon name={SKILL_MAP[req.skill]?.icon} size={12} />{" "}
+                    {SKILL_MAP[req.skill]?.name} Lv{req.level}
+                  </>
+                )}
               </div>
               <div className="io">
                 {a.inputs && (
@@ -93,11 +110,13 @@ export function SkillView({ skillId }: { skillId: string }) {
                   disabled={!unlocked || !canCraft}
                   onClick={() => state.startAction(a.id)}
                 >
-                  {!unlocked
-                    ? `Lv ${a.level} で解禁`
-                    : !canCraft
-                      ? "素材不足"
-                      : "開始"}
+                  {!reqMet
+                    ? `${SKILL_MAP[req!.skill]?.name} Lv${req!.level} が必要`
+                    : level < a.level
+                      ? `Lv ${a.level} で解禁`
+                      : !canCraft
+                        ? "コミット不足"
+                        : "開始"}
                 </button>
               )}
             </div>

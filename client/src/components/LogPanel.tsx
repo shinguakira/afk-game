@@ -19,6 +19,7 @@ export function LogPanel() {
   const bankCount = Object.values(bank).filter((q) => q > 0).length;
   const rank = currentRank(useGame.getState());
   const className = CLASS_MAP[jobClass ?? "none"]?.name ?? "無所属";
+  const stock = useGame((s) => s.prestigePoints);
 
   return (
     <div>
@@ -40,6 +41,12 @@ export function LogPanel() {
           <span>成果物の種類</span>
           <strong style={{ color: "var(--text)" }}>{bankCount}</strong>
         </div>
+        {stock > 0 && (
+          <div className="row-between">
+            <span>ストック</span>
+            <strong style={{ color: "var(--gold)" }}>{stock}</strong>
+          </div>
+        )}
       </div>
 
       <h3>ログ</h3>

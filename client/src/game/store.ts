@@ -18,6 +18,8 @@ import { getEffects } from "./effects";
 import { mult } from "./modifiers";
 import { advanceSubordinates, hireCost, SUB_NAMES } from "./team";
 import { currentRank, maxSubordinates } from "./rank";
+import { prestigeGain } from "./prestige";
+import { PRESTIGE_MAP } from "./data";
 import { xpForLevel } from "./xp";
 import { STARTING_MENTAL_LEVEL, STAT } from "./data/skills";
 import {
@@ -35,7 +37,7 @@ import {
 
 // Bump whenever the save schema changes incompatibly (e.g. skill ids renamed).
 // On mismatch we discard the old save and start fresh (no migrations yet).
-const SAVE_VERSION = 4;
+const SAVE_VERSION = 6;
 const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
@@ -61,6 +63,9 @@ function makeStartingState(): SaveState {
     gold: 25,
     jobClass: null,
     subordinates: [],
+    prestigePoints: 0,
+    prestigeUpgrades: {},
+    prestigeCount: 0,
     equippedWeapon: null,
     selectedFood: "coffee",
     playerHp: maxHp,
@@ -78,6 +83,9 @@ function pickSaveState(s: GameStore): SaveState {
     gold: s.gold,
     jobClass: s.jobClass,
     subordinates: s.subordinates,
+    prestigePoints: s.prestigePoints,
+    prestigeUpgrades: s.prestigeUpgrades,
+    prestigeCount: s.prestigeCount,
     equippedWeapon: s.equippedWeapon,
     selectedFood: s.selectedFood,
     playerHp: s.playerHp,
@@ -110,8 +118,11 @@ interface GameStore extends SaveState {
   hireSubordinate: () => void;
   assignSubordinate: (id: string, actionId: ActionId | null) => void;
   fireSubordinate: (id: string) => void;
+  prestige: () => void;
+  buyPrestigeUpgrade: (id: string) => void;
   sell: (itemId: ItemId, qty: number) => void;
   buyFood: (itemId: ItemId, qty: number) => void;
+  buyWeapon: (itemId: ItemId) => void;
   saveNow: () => Promise<void>;
   hardReset: () => Promise<void>;
   dismissOffline: () => void;
@@ -282,6 +293,46 @@ export const useGame = create<GameStore>((set, get) => ({
     }));
   },
 
+  prestige: () => {
+    const s = get();
+    const gain = prestigeGain(s);
+    if (gain <= 0) {
+      get().pushLog("起業にはシニア以上の役職が必要です");
+      return;
+    }
+    // Reset run progress; keep永続(ストック/アップグレード/回数).
+    set({
+      ...makeStartingState(),
+      prestigePoints: s.prestigePoints + gain,
+      prestigeUpgrades: s.prestigeUpgrades,
+      prestigeCount: s.prestigeCount + 1,
+      enemyHp: 0,
+      playerTimer: 0,
+      enemyTimer: 0,
+    });
+    get().pushLog(
+      `🚀 独立して起業！ ストック +${gain}（通算 ${s.prestigeCount + 1} 回）`,
+    );
+  },
+
+  buyPrestigeUpgrade: (id) => {
+    const s = get();
+    const up = PRESTIGE_MAP[id];
+    if (!up) return;
+    const cur = s.prestigeUpgrades[id] ?? 0;
+    if (cur >= up.maxLevel) return;
+    const cost = up.cost(cur + 1);
+    if (s.prestigePoints < cost) {
+      get().pushLog("ストックが足りません");
+      return;
+    }
+    set({
+      prestigePoints: s.prestigePoints - cost,
+      prestigeUpgrades: { ...s.prestigeUpgrades, [id]: cur + 1 },
+    });
+    get().pushLog(`${up.name} Lv${cur + 1} を取得`);
+  },
+
   sell: (itemId, qty) => {
     const it = ITEM_MAP[itemId];
     if (!it) return;
@@ -307,6 +358,21 @@ export const useGame = create<GameStore>((set, get) => ({
       bank[itemId] = (bank[itemId] ?? 0) + affordable;
       return { bank, gold: s.gold - affordable * price };
     });
+  },
+
+  buyWeapon: (itemId) => {
+    const it = ITEM_MAP[itemId];
+    if (!it || it.type !== "weapon") return;
+    const price = it.sellPrice * 3;
+    const s = get();
+    if (s.gold < price) {
+      get().pushLog(`¥${price} 足りません`);
+      return;
+    }
+    const bank = { ...s.bank };
+    bank[itemId] = (bank[itemId] ?? 0) + 1;
+    set({ bank, gold: s.gold - price });
+    get().pushLog(`${it.name} を購入`);
   },
 
   saveNow: async () => {

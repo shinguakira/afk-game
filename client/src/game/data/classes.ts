@@ -17,7 +17,7 @@ export const CLASSES: JobClass[] = [
   {
     id: "none",
     name: "無所属",
-    icon: "🧑‍💼",
+    icon: "none",
     requiresRank: 0,
     modifiers: [],
     passive: "補正なし。ミドル昇進で職種を選べる。",
@@ -27,7 +27,7 @@ export const CLASSES: JobClass[] = [
   {
     id: "frontend",
     name: "フロントエンド",
-    icon: "🎨",
+    icon: "frontend",
     requiresRank: 2,
     modifiers: [
       { key: "speed.craft", pct: 20, note: "UI実装が速い" },
@@ -39,7 +39,7 @@ export const CLASSES: JobClass[] = [
   {
     id: "backend",
     name: "バックエンド",
-    icon: "⚙️",
+    icon: "backend",
     requiresRank: 2,
     modifiers: [
       { key: "power.maxHit", pct: 25, note: "ロジック火力" },
@@ -51,7 +51,7 @@ export const CLASSES: JobClass[] = [
   {
     id: "sre",
     name: "インフラ / SRE",
-    icon: "🛠️",
+    icon: "sre",
     requiresRank: 2,
     modifiers: [
       { key: "speed.craft", pct: 35, note: "環境構築が得意" },
@@ -63,7 +63,7 @@ export const CLASSES: JobClass[] = [
   {
     id: "data",
     name: "データサイエンティスト",
-    icon: "📊",
+    icon: "data",
     requiresRank: 2,
     modifiers: [
       { key: "dropRate", pct: 35, note: "分析で良い素材を引く" },
@@ -74,7 +74,7 @@ export const CLASSES: JobClass[] = [
   {
     id: "qa",
     name: "QA",
-    icon: "🔬",
+    icon: "qa",
     requiresRank: 2,
     modifiers: [
       { key: "power.defence", pct: 40, note: "品質で受け流す" },
@@ -85,7 +85,7 @@ export const CLASSES: JobClass[] = [
   {
     id: "pm",
     name: "PM",
-    icon: "📋",
+    icon: "pm",
     requiresRank: 2,
     modifiers: [
       { key: "xp.gather", pct: 10 },
@@ -101,7 +101,7 @@ export const CLASSES: JobClass[] = [
   {
     id: "fullstack",
     name: "フルスタック",
-    icon: "🦄",
+    icon: "fullstack",
     requiresRank: 4,
     upgradesFrom: ["frontend", "backend"],
     modifiers: [
@@ -115,7 +115,7 @@ export const CLASSES: JobClass[] = [
   {
     id: "security",
     name: "セキュリティ",
-    icon: "🛡️",
+    icon: "security",
     requiresRank: 4,
     upgradesFrom: ["backend", "sre"],
     modifiers: [
