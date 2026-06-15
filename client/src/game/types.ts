@@ -52,11 +52,24 @@ export interface Skill {
   tech?: "language" | "framework";
 }
 
+/** アクションの種別（言語スキル内の表示グループ）。 */
+export type ActionCategory =
+  | "base"
+  | "concept"
+  | "library"
+  | "framework"
+  | "oss"
+  | "cert";
+
 /** A repeatable training action: gather a resource or craft an item. */
 export interface GameAction {
   id: ActionId;
   skill: SkillId;
   name: string;
+  /** 言語スキル内での表示分類。 */
+  category?: ActionCategory;
+  /** アクション固有アイコン（未指定なら category から決定）。 */
+  icon?: string;
   /** Skill level required to perform this action. */
   level: number;
   /** Time per completion in ms. */

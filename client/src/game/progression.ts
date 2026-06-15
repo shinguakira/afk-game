@@ -49,9 +49,9 @@ function simPlayerSkill(
   const action = ACTION_MAP[state.active.actionId];
   if (!action) return;
 
-  const kind = SKILL_MAP[action.skill]?.kind;
-  const effTime = action.time / mult(eff, kind === "craft" ? "speed.craft" : "speed.gather");
-  const xpPer = action.xp * mult(eff, kind === "craft" ? "xp.craft" : "xp.gather");
+  const isCraft = action.category === "framework";
+  const effTime = action.time / mult(eff, isCraft ? "speed.craft" : "speed.gather");
+  const xpPer = action.xp * mult(eff, isCraft ? "xp.craft" : "xp.gather");
 
   let completions = Math.floor((ms + state.actionProgress) / effTime);
 

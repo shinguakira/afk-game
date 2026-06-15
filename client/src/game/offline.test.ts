@@ -19,7 +19,7 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
     skills: {
       js: { xp: 0 },
       ts: { xp: 0 },
-      react: { xp: 0 },
+      python: { xp: 0 },
       impl: { xp: 0 },
       robust: { xp: 0 },
       mental: { xp: xpForLevel(10) },
@@ -41,25 +41,24 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   };
 }
 
-// 1) Language coding: 1h of write_js (3s, 15xp) => 1200 commits, 18000 xp.
+// 1) Language coding: 1h of code_js (3s, 15xp) => 1200 commits, 18000 xp.
 {
-  const s = freshState({ active: { kind: "skill", actionId: "write_js" } });
+  const s = freshState({ active: { kind: "skill", actionId: "code_js" } });
   const sum = simulateOffline(s, 3_600_000);
-  check("write_js 1h commits", s.bank.commit ?? 0, 1200);
-  check("write_js 1h xp", s.skills.js.xp, 1200 * 15);
+  check("code_js 1h commits", s.bank.commit ?? 0, 1200);
+  check("code_js 1h xp", s.skills.js.xp, 1200 * 15);
   check("summary commits", sum.items.commit ?? 0, 1200);
 }
 
-// 2) Framework build is input-limited: 120 commits / 4 => 30 products over 1h.
+// 2) Framework action (React, under TypeScript) is commit-limited: 120/4 => 30 products.
 {
   const s = freshState({
-    active: { kind: "skill", actionId: "build_react" },
+    active: { kind: "skill", actionId: "fw_ts_react" },
     bank: { commit: 120 },
   });
   simulateOffline(s, 3_600_000);
-  check("build_react products", s.bank.product ?? 0, 30);
-  check("build_react consumed commits", s.bank.commit ?? 0, 0);
-  check("build_react xp", s.skills.react.xp, 30 * 26);
+  check("fw_ts_react products", s.bank.product ?? 0, 30);
+  check("fw_ts_react consumed commits", s.bank.commit ?? 0, 0);
 }
 
 // 3) Combat: 1h on bugs yields a positive, capped amount with rewards.
@@ -91,11 +90,11 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
 // 5) Class modifier: SRE gives +35% craft speed => 35% more products.
 {
   const base = freshState({
-    active: { kind: "skill", actionId: "build_react" },
+    active: { kind: "skill", actionId: "fw_ts_react" },
     bank: { commit: 1_000_000 },
   });
   const withSre = freshState({
-    active: { kind: "skill", actionId: "build_react" },
+    active: { kind: "skill", actionId: "fw_ts_react" },
     bank: { commit: 1_000_000 },
     jobClass: "sre",
   });
@@ -112,9 +111,9 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
 // 5b) Subordinates produce in parallel offline (independent of player action).
 {
   const s = freshState({
-    active: { kind: "skill", actionId: "write_js" }, // player codes JS
+    active: { kind: "skill", actionId: "code_js" }, // player codes JS
     subordinates: [
-      { id: "x", name: "新人", xp: 0, assignment: "write_python", progress: 0 },
+      { id: "x", name: "新人", xp: 0, assignment: "code_python", progress: 0 },
     ],
   });
   simulateOffline(s, 600_000); // 10 min

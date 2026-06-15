@@ -97,21 +97,26 @@ interface JobClass {
 | データ/科学 | R, Julia, SQL |
 | レガシー | COBOL, Fortran, Assembly |
 
-**フレームワーク(24) — 分野別グループ（要求言語付き）:**
-| グループ | フレームワーク → 要求 |
-|---|---|
-| Web | React(要TS5), Vue(要JS5), Svelte(要JS8), Angular(要TS8), Next.js(要React5), Node.js, Django(要Py5), Rails(要Ruby5), Spring(要Java5), Laravel(要PHP5) |
-| モバイル | Flutter(要Dart5), React Native(要JS8), SwiftUI(要Swift5), Jetpack Compose(要Kotlin5) |
-| ゲーム | Unity(要C#5), Unreal(要C++8), Godot(要C++5) |
-| AI・データ | PyTorch(要Py8), TensorFlow(要Py8), pandas(要Py4), scikit-learn(要Py6) |
-| インフラ | Docker(要Go5), Kubernetes(要Go8), Terraform(要Go5) |
+**フレームワークは独立スキルではなく「言語スキル配下のアクション」**（`data/techtree.ts`）。
+1つの言語スキルが Melvor 的に多数のアクションを持ち、レベルで段階的に解禁される:
 
-> さらに追加は `data/groups.ts` + `data/skills.ts`(+`actions.ts`) に足すだけ。アイコンは `ui/icons.tsx` に1行。
+| カテゴリ | 例（JavaScript） | 産出 |
+|---|---|---|
+| 基礎 | JavaScript を書く (Lv1) | コミット |
+| 概念 | クロージャ / 非同期・Promise / イベントループ | コミット |
+| ライブラリ | jQuery / Lodash / Axios | コミット×2 |
+| フレームワーク | Node.js / Express / Vue / Svelte | コミット消費→プロダクト |
+| OSS | OSS にコミット (高Lv) | 感謝 |
+| 資格 | JavaScript 認定 (JSNAD) (Lv35) | 資格 |
+
+> 全30言語が同様の配下ツリーを持つ（`techtree.ts` の `LANG_SPECS` に concepts/libraries/frameworks/oss/cert を書くと自動生成）。**解禁前のアクションも一覧表示し、ボタンは「Lv○○ で解禁（開始不可）」で無効化**。
 
 ### 4.2 ループ
-- **言語を書く**（例「JavaScript を書く」）→ **コミット** を産み、その言語Lvが上がる。
-- **フレームワークで実装**（例「React で実装」）→ 対応言語が一定Lv必要(`requires`)、**コミットを消費**して **プロダクト** を産み、FrameworkのLvが上がる。
-- 言語→フレームワークの**依存ツリー**が育成計画の核。
+- **言語を書く** → コミット産出、言語Lv↑。
+- 概念/ライブラリ → さらにコミット、言語Lv↑（高効率だが高Lv解禁）。
+- **フレームワークで実装** → コミット消費して **プロダクト**（高価）、言語Lv↑。
+- OSS・資格 = 高Lvの到達目標（感謝・資格アイテム）。
+- フレームワーク系アクションだけ「制作(craft)」補正、それ以外は「生産(gather)」補正（職種補正の対象が分岐）。
 
 ### 4.3 現場力（combat ステ）
 | id | 表示 | 意味 |
@@ -240,7 +245,8 @@ interface Subordinate {
 | v3 | 部下システム（`team.ts`: 並行作業tick・採用費・部下効率）。役職で採用枠解禁。部下に生産/制作を割り当て→放置でも並行生産・部下も育つ。PM職に部下効率+30%。案件ギミック: DoT(本番障害=メンタル継続削り)・regen(仕様変更=自己回復)。チーム画面。offline並行シミュ。save v4。 | ✅ 完了 |
 | v4 | 起業プレステージ(転生)＋経営ツリー(`data/prestige.ts`)。シニア以上で起業→ストック獲得→永続強化7種(資金調達/自動化/技術力/ブランド/メンタルケア/採用力/開発力)。`effects.ts`に合流。save v5。 | ✅ 完了 |
 | **改訂1** | **tech-stack化**: 粗い生産/制作スキルを廃し、言語→フレームワーク(依存`requires`付き)へ。**絵文字を全廃し react-icons へ**(`ui/icons.tsx`)。エディタはショップ購入に。save v6。 | ✅ 完了 |
-| **改訂2** | **大量化＋Melvor風グルーピング**: 言語30(系統別7グループ)＋フレームワーク24(分野別5グループ)。サイドバーを**折りたたみ式**(`data/groups.ts`)に。各技術に実ブランドロゴ。 | ✅ 完了 |
+| **改訂2** | **大量化＋Melvor風グルーピング**: 言語30(系統別7グループ)。サイドバーを**折りたたみ式**(`data/groups.ts`)に。各技術に実ブランドロゴ。 | ✅ 完了 |
+| **改訂3** | **フレームワークを言語の傘下へ**: 独立スキルを廃し、各言語スキル配下に base/概念/ライブラリ/フレームワーク/OSS/資格 のアクション(パターン)を生成(`data/techtree.ts`)。SkillView はカテゴリ別表示＋**解禁前も表示して開始不可**。craft補正は framework アクションのみ対象に。 | ✅ 完了 |
 | v5+ | 案件ボード/ランダムイベント/資格/オフィス施設/技術スタック相性(案件×分野)… | 未 |
 
 > 実装は `止まるな` 方針で v1 から順に積み上げ中。各 ver 完了時に typecheck + build + offline test を通してコミット。

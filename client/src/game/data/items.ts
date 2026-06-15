@@ -39,4 +39,5 @@ export const ITEMS: Item[] = [
   // --- その他ドロップ ---
   { id: "tech_debt", name: "技術的負債", type: "misc", icon: "techdebt", sellPrice: 1 },
   { id: "kudos", name: "感謝", type: "misc", icon: "kudos", sellPrice: 3 },
+  { id: "cert", name: "資格", type: "misc", icon: "cert", sellPrice: 60 },
 ];

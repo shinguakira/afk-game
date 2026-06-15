@@ -1,5 +1,5 @@
 import { useGame } from "../game/store";
-import { ACTIONS, SKILL_MAP } from "../game/data";
+import { ACTIONS, SKILL_MAP, SKILLS } from "../game/data";
 import { currentRank, maxSubordinates } from "../game/rank";
 import { hireCost } from "../game/team";
 import { levelForXp, levelProgress } from "../game/xp";
@@ -7,11 +7,15 @@ import { formatNumber } from "../ui/format";
 import { Bar } from "./Bar";
 import { Icon } from "../ui/icons";
 
-// 部下に割り当てられるのは生産/制作のみ。
-const ASSIGNABLE = ACTIONS.filter((a) => {
-  const k = SKILL_MAP[a.skill]?.kind;
-  return k === "gather" || k === "craft";
-});
+// 部下に割り当てられるのは生産系アクション（基礎/ライブラリ/フレームワーク）。
+// 言語(スキル)ごとに optgroup でまとめる。
+const ASSIGN_CATEGORIES = new Set(["base", "library", "framework"]);
+const ASSIGNABLE_BY_LANG = SKILLS.filter((s) => s.kind === "gather").map((s) => ({
+  lang: s,
+  actions: ACTIONS.filter(
+    (a) => a.skill === s.id && ASSIGN_CATEGORIES.has(a.category ?? "base"),
+  ),
+}));
 
 export function TeamView() {
   const state = useGame();
@@ -86,15 +90,19 @@ export function TeamView() {
                   }}
                 >
                   <option value="">— 待機 —</option>
-                  {ASSIGNABLE.map((a) => {
-                    const locked = lvl < a.level;
-                    return (
-                      <option key={a.id} value={a.id} disabled={locked}>
-                        {a.name}
-                        {locked ? `（Lv${a.level}必要）` : ""}
-                      </option>
-                    );
-                  })}
+                  {ASSIGNABLE_BY_LANG.map(({ lang, actions }) => (
+                    <optgroup key={lang.id} label={lang.name}>
+                      {actions.map((a) => {
+                        const locked = lvl < a.level;
+                        return (
+                          <option key={a.id} value={a.id} disabled={locked}>
+                            {a.name}
+                            {locked ? `（Lv${a.level}必要）` : ""}
+                          </option>
+                        );
+                      })}
+                    </optgroup>
+                  ))}
                 </select>
               </div>
 

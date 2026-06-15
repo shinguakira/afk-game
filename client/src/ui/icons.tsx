@@ -48,6 +48,18 @@ import {
   SiDocker,
   SiKubernetes,
   SiTerraform,
+  SiGithub,
+  SiNumpy,
+  SiFastapi,
+  SiFlask,
+  SiExpress,
+  SiQt,
+  SiDotnet,
+  SiSymfony,
+  SiPhoenixframework,
+  SiKtor,
+  SiAxios,
+  SiJquery,
 } from "react-icons/si";
 import {
   LuGlobe,
@@ -102,6 +114,10 @@ import {
   LuFileCode2,
   LuChevronRight,
   LuChevronDown,
+  LuLightbulb,
+  LuLibrary,
+  LuBoxes,
+  LuGraduationCap,
 } from "react-icons/lu";
 
 // Central icon registry. Data files reference these string ids (no JSX in data).
@@ -181,6 +197,24 @@ const ICONS: Record<string, IconType> = {
   docker: SiDocker,
   kubernetes: SiKubernetes,
   terraform: SiTerraform,
+  numpy: SiNumpy,
+  fastapi: SiFastapi,
+  flask: SiFlask,
+  express: SiExpress,
+  qt: SiQt,
+  dotnet: SiDotnet,
+  symfony: SiSymfony,
+  phoenix: SiPhoenixframework,
+  ktor: SiKtor,
+  axios: SiAxios,
+  jquery: SiJquery,
+
+  // action categories
+  concept: LuLightbulb,
+  library: LuLibrary,
+  framework: LuBoxes,
+  oss: SiGithub,
+  cert: LuGraduationCap,
 
   // combat stats
   debug: LuBug,

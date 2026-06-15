@@ -62,11 +62,8 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
 
   return (
     <div className="sidebar">
-      <div className="nav-section">言語</div>
-      {GROUPS.filter((g) => g.section === "lang").map(renderGroup)}
-
-      <div className="nav-section">フレームワーク</div>
-      {GROUPS.filter((g) => g.section === "fw").map(renderGroup)}
+      <div className="nav-section">言語スタック</div>
+      {GROUPS.map(renderGroup)}
 
       <div className="nav-section">現場力</div>
       <button

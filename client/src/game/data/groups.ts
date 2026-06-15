@@ -16,11 +16,4 @@ export const GROUPS: SkillGroup[] = [
   { id: "g_func", name: "関数型", icon: "g_func", section: "lang" },
   { id: "g_data", name: "データ / 科学", icon: "g_data", section: "lang" },
   { id: "g_legacy", name: "レガシー", icon: "g_legacy", section: "lang" },
-
-  // --- フレームワーク: 分野別 ---
-  { id: "fw_web", name: "Web", icon: "web", section: "fw" },
-  { id: "fw_mobile", name: "モバイル", icon: "mobile", section: "fw" },
-  { id: "fw_game", name: "ゲーム", icon: "game", section: "fw" },
-  { id: "fw_ai", name: "AI・データ", icon: "ai", section: "fw" },
-  { id: "fw_infra", name: "インフラ", icon: "infra", section: "fw" },
 ];

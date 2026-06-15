@@ -413,11 +413,11 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
     return;
   }
 
-  // Apply job-class speed/xp modifiers for this skill's kind.
+  // 制作(craft)補正はフレームワーク系アクションに、生産(gather)補正はそれ以外に。
   const eff = getEffects(s);
-  const kind = SKILL_MAP[action.skill]?.kind;
-  const speedKey = kind === "craft" ? "speed.craft" : "speed.gather";
-  const xpKey = kind === "craft" ? "xp.craft" : "xp.gather";
+  const isCraft = action.category === "framework";
+  const speedKey = isCraft ? "speed.craft" : "speed.gather";
+  const xpKey = isCraft ? "xp.craft" : "xp.gather";
   const effTime = action.time / mult(eff, speedKey);
   const xpPer = action.xp * mult(eff, xpKey);
 
