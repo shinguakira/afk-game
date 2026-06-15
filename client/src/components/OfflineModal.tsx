@@ -13,22 +13,21 @@ export function OfflineModal() {
   return (
     <div className="modal-backdrop">
       <div className="modal">
-        <h2>Welcome back!</h2>
+        <h2>おかえりなさい</h2>
         <p className="muted">
-          You were away for <strong>{formatDuration(summary.ms)}</strong>. While
-          idle you earned:
+          <strong>{formatDuration(summary.ms)}</strong> ぶん業務が進みました。成果:
         </p>
 
         {summary.gold > 0 && (
           <div className="row-between" style={{ margin: "8px 0" }}>
-            <span>Gold</span>
-            <span className="gain">+{formatNumber(summary.gold)}g</span>
+            <span>給料</span>
+            <span className="gain">+¥{formatNumber(summary.gold)}</span>
           </div>
         )}
 
         {xpEntries.length > 0 && (
           <>
-            <h3 style={{ marginBottom: 4 }}>XP</h3>
+            <h3 style={{ marginBottom: 4 }}>経験値</h3>
             {xpEntries.map(([id, v]) => (
               <div className="row-between" key={id}>
                 <span>{SKILL_MAP[id]?.name ?? id}</span>
@@ -40,7 +39,7 @@ export function OfflineModal() {
 
         {itemEntries.length > 0 && (
           <>
-            <h3 style={{ marginBottom: 4 }}>Items</h3>
+            <h3 style={{ marginBottom: 4 }}>成果物</h3>
             {itemEntries.map(([id, v]) => (
               <div className="row-between" key={id}>
                 <span>{ITEM_MAP[id]?.name ?? id}</span>
@@ -56,7 +55,7 @@ export function OfflineModal() {
         {xpEntries.length === 0 &&
           itemEntries.length === 0 &&
           summary.gold === 0 && (
-            <p className="muted">…not much. Your action stalled (out of materials?).</p>
+            <p className="muted">…ほぼ無し。作業が止まっていたようです（素材切れ？）。</p>
           )}
 
         <button
@@ -64,7 +63,7 @@ export function OfflineModal() {
           style={{ width: "100%", marginTop: 16 }}
           onClick={dismiss}
         >
-          Collect
+          受け取る
         </button>
       </div>
     </div>

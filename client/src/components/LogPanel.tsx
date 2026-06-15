@@ -1,4 +1,5 @@
 import { useGame } from "../game/store";
+import { COMBAT_STAT_IDS } from "../game/data";
 import { levelForXp } from "../game/xp";
 
 export function LogPanel() {
@@ -6,33 +7,32 @@ export function LogPanel() {
   const skills = useGame((s) => s.skills);
   const bank = useGame((s) => s.bank);
 
-  // A few "headline" stats in the side panel.
+  // Engineer level = avg of the four combat stats.
   const combatLevel = Math.floor(
-    (levelForXp(skills.attack?.xp ?? 0) +
-      levelForXp(skills.strength?.xp ?? 0) +
-      levelForXp(skills.defence?.xp ?? 0) +
-      levelForXp(skills.hitpoints?.xp ?? 0)) /
-      4,
+    COMBAT_STAT_IDS.reduce(
+      (sum, id) => sum + levelForXp(skills[id]?.xp ?? 0),
+      0,
+    ) / COMBAT_STAT_IDS.length,
   );
   const bankCount = Object.values(bank).filter((q) => q > 0).length;
 
   return (
     <div>
-      <h3 style={{ marginTop: 0 }}>Overview</h3>
+      <h3 style={{ marginTop: 0 }}>概要</h3>
       <div className="muted" style={{ fontSize: 13, marginBottom: 12 }}>
         <div className="row-between">
-          <span>Combat level</span>
+          <span>エンジニアレベル</span>
           <strong style={{ color: "var(--text)" }}>{combatLevel}</strong>
         </div>
         <div className="row-between">
-          <span>Item types banked</span>
+          <span>成果物の種類</span>
           <strong style={{ color: "var(--text)" }}>{bankCount}</strong>
         </div>
       </div>
 
-      <h3>Activity Log</h3>
+      <h3>ログ</h3>
       <div className="log">
-        {log.length === 0 && <div className="muted">Nothing yet…</div>}
+        {log.length === 0 && <div className="muted">まだありません…</div>}
         {log.map((entry, i) => (
           <div className="entry" key={i}>
             {entry}

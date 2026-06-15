@@ -8,24 +8,24 @@ export function TopBar() {
   const state = useGame();
   const stats = getCombatStats(state);
 
-  let activeLabel = "Idle";
+  let activeLabel = "待機中";
   if (state.active?.kind === "skill") {
-    activeLabel = ACTION_MAP[state.active.actionId]?.name ?? "Working";
+    activeLabel = ACTION_MAP[state.active.actionId]?.name ?? "作業中";
   } else if (state.active?.kind === "combat") {
-    activeLabel = `Fighting ${MONSTER_MAP[state.active.monsterId]?.name ?? ""}`;
+    activeLabel = `案件対応: ${MONSTER_MAP[state.active.monsterId]?.name ?? ""}`;
   }
 
   return (
     <div className="topbar">
-      <span className="title">⚔️ AFK Idle</span>
+      <span className="title">💻 Idle Engineer</span>
 
       <div className="stat">
-        <span>💰</span>
+        <span>¥</span>
         <span className="gold">{formatNumber(state.gold)}</span>
       </div>
 
       <div className="stat" style={{ minWidth: 160 }}>
-        <span>❤️</span>
+        <span title="メンタル">🧠</span>
         <Bar
           kind="hp"
           value={state.playerHp / stats.maxHp}
@@ -34,7 +34,7 @@ export function TopBar() {
       </div>
 
       <div className="stat">
-        <span className="muted">Doing:</span>
+        <span className="muted">業務:</span>
         <strong>{activeLabel}</strong>
       </div>
 
@@ -42,17 +42,17 @@ export function TopBar() {
 
       {state.active && (
         <button className="danger" onClick={() => state.stop()}>
-          ⏹ Stop
+          ⏹ 中断
         </button>
       )}
-      <button onClick={() => void state.saveNow()}>💾 Save</button>
+      <button onClick={() => void state.saveNow()}>💾 保存</button>
       <button
         className="danger"
         onClick={() => {
-          if (confirm("Wipe all progress and start over?")) void state.hardReset();
+          if (confirm("全進捗を消して退職（最初から）しますか？")) void state.hardReset();
         }}
       >
-        Reset
+        退職
       </button>
     </div>
   );

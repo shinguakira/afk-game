@@ -16,12 +16,12 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   return {
     version: 1,
     skills: {
-      mining: { xp: 0 },
-      smithing: { xp: 0 },
-      attack: { xp: 0 },
-      strength: { xp: 0 },
-      defence: { xp: 0 },
-      hitpoints: { xp: xpForLevel(10) },
+      learning: { xp: 0 },
+      design: { xp: 0 },
+      debug: { xp: 0 },
+      impl: { xp: 0 },
+      robust: { xp: 0 },
+      mental: { xp: xpForLevel(10) },
     },
     bank: {},
     gold: 0,
@@ -35,43 +35,43 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   };
 }
 
-// 1) Gathering: 1 hour of Mine Copper (3s, 17xp) => 1200 ore, 20400 xp.
+// 1) Gathering: 1 hour of study (3s, 15xp) => 1200 knowledge, 18000 xp.
 {
-  const s = freshState({ active: { kind: "skill", actionId: "mine_copper" } });
+  const s = freshState({ active: { kind: "skill", actionId: "study" } });
   const sum = simulateOffline(s, 3_600_000);
-  check("mine 1h ore", s.bank.copper_ore ?? 0, 1200);
-  check("mine 1h xp", s.skills.mining.xp, 20400);
-  check("summary ore", sum.items.copper_ore ?? 0, 1200);
+  check("study 1h knowledge", s.bank.knowledge ?? 0, 1200);
+  check("study 1h xp", s.skills.learning.xp, 1200 * 15);
+  check("summary knowledge", sum.items.knowledge ?? 0, 1200);
 }
 
-// 2) Crafting is input-limited: 50 ore each => only 50 bronze bars even over 1h.
+// 2) Crafting is input-limited: 90 knowledge => only 30 design docs (3 each) over 1h.
 {
   const s = freshState({
-    active: { kind: "skill", actionId: "smelt_bronze" },
-    bank: { copper_ore: 50, tin_ore: 50 },
+    active: { kind: "skill", actionId: "write_design" },
+    bank: { knowledge: 90 },
   });
   simulateOffline(s, 3_600_000);
-  check("smelt limited bars", s.bank.bronze_bar ?? 0, 50);
-  check("smelt consumed copper", s.bank.copper_ore ?? 0, 0);
-  check("smelt xp", s.skills.smithing.xp, 50 * 12);
+  check("design limited docs", s.bank.design_doc ?? 0, 30);
+  check("design consumed knowledge", s.bank.knowledge ?? 0, 0);
+  check("design xp", s.skills.design.xp, 30 * 16);
 }
 
-// 3) Combat: 1h on chickens yields a positive, capped amount with rewards.
+// 3) Combat: 1h on bugs yields a positive, capped amount with rewards.
 {
   const s = freshState({
-    active: { kind: "combat", monsterId: "chicken" },
-    selectedFood: "bread",
-    bank: { bread: 100 },
+    active: { kind: "combat", monsterId: "bug" },
+    selectedFood: "coffee",
+    bank: { coffee: 100 },
   });
-  const before = s.skills.attack.xp;
+  const before = s.skills.impl.xp;
   const sum = simulateOffline(s, 3_600_000);
-  const gotXp = s.skills.attack.xp > before;
+  const gotXp = s.skills.impl.xp > before;
   console.log(
-    `${gotXp ? "PASS" : "FAIL"}  combat 1h gained attack xp: ${s.skills.attack.xp}`,
+    `${gotXp ? "PASS" : "FAIL"}  combat 1h gained 実装力 xp: ${s.skills.impl.xp}`,
   );
   if (!gotXp) failures++;
   console.log(
-    `      combat 1h: gold +${sum.gold}, bones +${s.bank.bones ?? 0}, hp ${s.playerHp}`,
+    `      combat 1h: gold +${sum.gold}, tech_debt +${s.bank.tech_debt ?? 0}, mental ${s.playerHp}`,
   );
 }
 

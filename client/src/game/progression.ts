@@ -1,18 +1,18 @@
 import type { OfflineSummary, SaveState } from "./types";
-import { ACTION_MAP, ITEM_MAP, MONSTER_MAP } from "./data";
+import { ACTION_MAP, ITEM_MAP, MONSTER_MAP, STAT } from "./data";
 import { avgEnemyDamage, avgPlayerDamage, getCombatStats } from "./combat";
 
-/** Combat XP split: attack/strength/defence each get 1/3, hitpoints 1/3 on top. */
+/** Combat XP split: accuracy/damage/defence each get 1/3, mental 1/3 on top. */
 export function grantCombatXp(
   skills: SaveState["skills"],
   totalXp: number,
 ): SaveState["skills"] {
   const share = totalXp / 3;
   const next = { ...skills };
-  for (const id of ["attack", "strength", "defence"] as const) {
+  for (const id of [STAT.accuracy, STAT.damage, STAT.defence]) {
     next[id] = { xp: (next[id]?.xp ?? 0) + share };
   }
-  next.hitpoints = { xp: (next.hitpoints?.xp ?? 0) + share };
+  next[STAT.mental] = { xp: (next[STAT.mental]?.xp ?? 0) + share };
   return next;
 }
 
@@ -120,7 +120,7 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
   const totalXp = monster.xp * kills;
   state.skills = grantCombatXp(state.skills, totalXp);
   const share = totalXp / 3;
-  for (const id of ["attack", "strength", "defence", "hitpoints"]) {
+  for (const id of [STAT.accuracy, STAT.damage, STAT.defence, STAT.mental]) {
     summary.xp[id] = (summary.xp[id] ?? 0) + share;
   }
 

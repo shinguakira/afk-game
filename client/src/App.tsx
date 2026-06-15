@@ -13,7 +13,7 @@ import { OfflineModal } from "./components/OfflineModal";
 export default function App() {
   const init = useGame((s) => s.init);
   const ready = useGame((s) => s.ready);
-  const [tab, setTab] = useState<Tab>("mining");
+  const [tab, setTab] = useState<Tab>("learning");
 
   useEffect(() => {
     void init();
@@ -22,7 +22,7 @@ export default function App() {
   if (!ready) {
     return (
       <div style={{ display: "grid", placeItems: "center", height: "100vh" }}>
-        <div className="muted">Loading save…</div>
+        <div className="muted">セーブを読み込み中…</div>
       </div>
     );
   }

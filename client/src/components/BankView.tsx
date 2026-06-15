@@ -8,14 +8,13 @@ export function BankView() {
 
   return (
     <div>
-      <h2 className="section-title">🎒 Bank</h2>
+      <h2 className="section-title">🗄️ 成果物</h2>
       <p className="section-sub">
-        {entries.length} item type{entries.length === 1 ? "" : "s"}. Equip weapons,
-        or sell for gold.
+        {entries.length} 種類。エディタは装備、不要なものは売却して円に。
       </p>
 
       {entries.length === 0 && (
-        <p className="muted">Your bank is empty. Go gather something!</p>
+        <p className="muted">まだ何もありません。生産から始めましょう。</p>
       )}
 
       <div className="bank-grid">
@@ -31,18 +30,18 @@ export function BankView() {
               </div>
               <div className="muted" style={{ fontSize: 11 }}>
                 {it.type}
-                {it.heals ? ` · heals ${it.heals}` : ""}
+                {it.heals ? ` · 回復 ${it.heals}` : ""}
                 {it.weapon
-                  ? ` · +${it.weapon.strengthBonus} str / +${it.weapon.attackBonus} acc`
+                  ? ` · 実装+${it.weapon.strengthBonus} / 精度+${it.weapon.attackBonus}`
                   : ""}{" "}
-                · sells {it.sellPrice}g
+                · ¥{it.sellPrice}
               </div>
               <div className="row">
                 {isWeapon && (
-                  <button onClick={() => state.equip(id)}>Equip</button>
+                  <button onClick={() => state.equip(id)}>装備</button>
                 )}
-                <button onClick={() => state.sell(id, 1)}>Sell 1</button>
-                <button onClick={() => state.sell(id, qty)}>Sell all</button>
+                <button onClick={() => state.sell(id, 1)}>1売却</button>
+                <button onClick={() => state.sell(id, qty)}>全売却</button>
               </div>
             </div>
           );

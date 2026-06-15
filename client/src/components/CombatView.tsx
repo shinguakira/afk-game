@@ -21,35 +21,37 @@ export function CombatView() {
 
   return (
     <div>
-      <h2 className="section-title">🗡️ Combat</h2>
+      <h2 className="section-title">🗂️ 案件遂行</h2>
       <p className="section-sub">
-        Auto-battle. You eat your selected food automatically below 50% HP.
+        自動で対応。メンタル50%以下で選択中のカフェインを自動で飲みます。
       </p>
 
       {/* Player loadout */}
       <div className="card" style={{ marginBottom: 16 }}>
         <div className="row-between" style={{ flexWrap: "wrap", gap: 12 }}>
           <div>
-            <strong>Weapon:</strong>{" "}
-            {equipped ? equipped.name : <span className="muted">Fists</span>}{" "}
+            <strong>エディタ:</strong>{" "}
+            {equipped ? equipped.name : <span className="muted">ベタ打ち</span>}{" "}
             {equipped && (
               <button
                 style={{ padding: "2px 8px", marginLeft: 6 }}
                 onClick={() => state.unequip()}
               >
-                Unequip
+                外す
               </button>
             )}
           </div>
           <div className="muted">
-            Max hit {stats.maxHit} · Acc {stats.attackRating} · Def{" "}
-            {stats.defenceRating} · Speed {(stats.weaponSpeed / 1000).toFixed(1)}s
+            実装力 {stats.maxHit} · 精度 {stats.attackRating} · 堅牢 {stats.defenceRating} ·{" "}
+            {(stats.weaponSpeed / 1000).toFixed(1)}s/手
           </div>
         </div>
 
         <div style={{ marginTop: 10 }}>
-          <span className="muted">Equip: </span>
-          {weapons.length === 0 && <span className="muted">— smith a weapon —</span>}
+          <span className="muted">装備: </span>
+          {weapons.length === 0 && (
+            <span className="muted">— 環境構築でエディタを作成 —</span>
+          )}
           {weapons.map((w) => (
             <button
               key={w.id}
@@ -63,13 +65,13 @@ export function CombatView() {
         </div>
 
         <div style={{ marginTop: 10 }}>
-          <span className="muted">Food: </span>
+          <span className="muted">カフェイン: </span>
           <button
             className={state.selectedFood == null ? "active" : ""}
             style={{ padding: "3px 8px", marginRight: 6 }}
             onClick={() => state.setFood(null)}
           >
-            None
+            なし
           </button>
           {foods.map((f) => (
             <button
@@ -88,8 +90,8 @@ export function CombatView() {
       {inCombat && monster && (
         <div className="combat-arena">
           <div className="fighter">
-            <div className="big-ic">🧍</div>
-            <h3>You</h3>
+            <div className="big-ic">🧑‍💻</div>
+            <h3>あなた</h3>
             <Bar
               kind="hp"
               value={state.playerHp / stats.maxHp}
@@ -133,16 +135,16 @@ export function CombatView() {
                 {m.icon} {m.name}
               </h3>
               <div className="meta">
-                HP {m.hp} · Max hit {m.maxHit} · {m.xp} xp
+                規模 {m.hp} · 圧 {m.maxHit} · {m.xp} xp
               </div>
               <div className="io">
-                <span className="muted">Drops: </span>
+                <span className="muted">報酬: </span>
                 {m.loot.map((d) => (
                   <span className="tag" key={d.item}>
                     {ITEM_MAP[d.item]?.name ?? d.item}
                   </span>
                 ))}
-                <span className="tag">💰 {m.goldMin}-{m.goldMax}</span>
+                <span className="tag">¥{m.goldMin}-{m.goldMax}</span>
               </div>
               {isActive ? (
                 <button
@@ -150,7 +152,7 @@ export function CombatView() {
                   style={{ width: "100%" }}
                   onClick={() => state.stop()}
                 >
-                  Stop
+                  中断
                 </button>
               ) : (
                 <button
@@ -158,7 +160,7 @@ export function CombatView() {
                   style={{ width: "100%" }}
                   onClick={() => state.startCombat(m.id)}
                 >
-                  Fight
+                  着手
                 </button>
               )}
             </div>

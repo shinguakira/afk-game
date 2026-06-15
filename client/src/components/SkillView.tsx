@@ -65,12 +65,12 @@ export function SkillView({ skillId }: { skillId: string }) {
               <div className="io">
                 {a.inputs && (
                   <div>
-                    <span className="muted">In: </span>
+                    <span className="muted">消費: </span>
                     {ioTags(a.inputs)}
                   </div>
                 )}
                 <div>
-                  <span className="muted">Out: </span>
+                  <span className="muted">産出: </span>
                   {ioTags(a.outputs)}
                 </div>
               </div>
@@ -83,7 +83,7 @@ export function SkillView({ skillId }: { skillId: string }) {
                     className="danger"
                     onClick={() => state.stop()}
                   >
-                    Stop
+                    中断
                   </button>
                 </>
               ) : (
@@ -94,10 +94,10 @@ export function SkillView({ skillId }: { skillId: string }) {
                   onClick={() => state.startAction(a.id)}
                 >
                   {!unlocked
-                    ? `Requires Lv ${a.level}`
+                    ? `Lv ${a.level} で解禁`
                     : !canCraft
-                      ? "Need materials"
-                      : "Start"}
+                      ? "素材不足"
+                      : "開始"}
                 </button>
               )}
             </div>

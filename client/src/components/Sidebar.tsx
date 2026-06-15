@@ -29,19 +29,19 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
 
   return (
     <div className="sidebar">
-      <div className="nav-group-title">Gathering</div>
+      <div className="nav-group-title">生産</div>
       {gather.map((s) => navSkill(s.id, s.name, s.icon))}
 
-      <div className="nav-group-title">Crafting</div>
+      <div className="nav-group-title">制作</div>
       {craft.map((s) => navSkill(s.id, s.name, s.icon))}
 
-      <div className="nav-group-title">Combat</div>
+      <div className="nav-group-title">遂行能力</div>
       <button
         className={`nav-item ${tab === "combat" ? "selected" : ""}`}
         onClick={() => setTab("combat")}
       >
-        <span className="ic">🗡️</span>
-        <span>Fight</span>
+        <span className="ic">🗂️</span>
+        <span>案件</span>
       </button>
       {combat.map((s) => (
         <div key={s.id} className="nav-item" style={{ cursor: "default" }}>
@@ -51,20 +51,20 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
         </div>
       ))}
 
-      <div className="nav-group-title">Other</div>
+      <div className="nav-group-title">その他</div>
       <button
         className={`nav-item ${tab === "bank" ? "selected" : ""}`}
         onClick={() => setTab("bank")}
       >
-        <span className="ic">🎒</span>
-        <span>Bank</span>
+        <span className="ic">🗄️</span>
+        <span>成果物</span>
       </button>
       <button
         className={`nav-item ${tab === "shop" ? "selected" : ""}`}
         onClick={() => setTab("shop")}
       >
-        <span className="ic">🏪</span>
-        <span>Shop</span>
+        <span className="ic">🛒</span>
+        <span>購買</span>
       </button>
     </div>
   );

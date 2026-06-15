@@ -1,5 +1,5 @@
 import type { Monster, SaveState } from "./types";
-import { ITEM_MAP } from "./data";
+import { ITEM_MAP, STAT } from "./data";
 import { levelForXp } from "./xp";
 
 export interface CombatStats {
@@ -16,10 +16,10 @@ export interface CombatStats {
 
 /** Derive the player's effective combat stats from skills + equipped weapon. */
 export function getCombatStats(state: SaveState): CombatStats {
-  const attackLevel = levelForXp(state.skills.attack?.xp ?? 0);
-  const strengthLevel = levelForXp(state.skills.strength?.xp ?? 0);
-  const defenceLevel = levelForXp(state.skills.defence?.xp ?? 0);
-  const hitpointsLevel = levelForXp(state.skills.hitpoints?.xp ?? 0);
+  const attackLevel = levelForXp(state.skills[STAT.accuracy]?.xp ?? 0);
+  const strengthLevel = levelForXp(state.skills[STAT.damage]?.xp ?? 0);
+  const defenceLevel = levelForXp(state.skills[STAT.defence]?.xp ?? 0);
+  const hitpointsLevel = levelForXp(state.skills[STAT.mental]?.xp ?? 0);
 
   const weapon = state.equippedWeapon
     ? ITEM_MAP[state.equippedWeapon]?.weapon

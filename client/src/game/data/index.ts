@@ -5,6 +5,7 @@ import { ACTIONS } from "./actions";
 import { MONSTERS } from "./monsters";
 
 export { ITEMS, SKILLS, ACTIONS, MONSTERS };
+export { STAT, COMBAT_STAT_IDS, STARTING_MENTAL_LEVEL } from "./skills";
 
 // Lookup maps for O(1) access by id.
 export const ITEM_MAP: Record<string, Item> = Object.fromEntries(

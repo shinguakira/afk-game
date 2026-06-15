@@ -13,7 +13,7 @@ import {
   SKILLS,
 } from "./data";
 import { xpForLevel } from "./xp";
-import { STARTING_HITPOINTS_XP_LEVEL } from "./data/skills";
+import { STARTING_MENTAL_LEVEL, STAT } from "./data/skills";
 import {
   enemyHitChance,
   getCombatStats,
@@ -27,7 +27,9 @@ import {
   writeSave,
 } from "./persistence";
 
-const SAVE_VERSION = 1;
+// Bump whenever the save schema changes incompatibly (e.g. skill ids renamed).
+// On mismatch we discard the old save and start fresh (no migrations yet).
+const SAVE_VERSION = 2;
 const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
@@ -44,15 +46,15 @@ function randInt(min: number, max: number): number {
 function makeStartingState(): SaveState {
   const skills: SaveState["skills"] = {};
   for (const s of SKILLS) skills[s.id] = { xp: 0 };
-  skills.hitpoints = { xp: xpForLevel(STARTING_HITPOINTS_XP_LEVEL) };
-  const maxHp = STARTING_HITPOINTS_XP_LEVEL * 10;
+  skills[STAT.mental] = { xp: xpForLevel(STARTING_MENTAL_LEVEL) };
+  const maxHp = STARTING_MENTAL_LEVEL * 10;
   return {
     version: SAVE_VERSION,
     skills,
-    bank: { bread: 10 },
+    bank: { coffee: 10 },
     gold: 25,
     equippedWeapon: null,
-    selectedFood: "bread",
+    selectedFood: "coffee",
     playerHp: maxHp,
     active: null,
     actionProgress: 0,
@@ -115,7 +117,14 @@ export const useGame = create<GameStore>((set, get) => ({
     set((s) => ({ log: [msg, ...s.log].slice(0, LOG_LIMIT) })),
 
   init: async () => {
-    const loaded = await loadSave();
+    const raw = await loadSave();
+    // Discard incompatible saves from before a schema change.
+    const loaded = raw && raw.version === SAVE_VERSION ? raw : null;
+    if (raw && !loaded) {
+      console.warn(
+        `[save] discarding incompatible save (v${raw.version} != v${SAVE_VERSION})`,
+      );
+    }
     const base = loaded ?? makeStartingState();
     // Merge in any skills added since the save was written.
     for (const s of SKILLS) base.skills[s.id] ??= { xp: 0 };
@@ -162,7 +171,7 @@ export const useGame = create<GameStore>((set, get) => ({
       actionProgress: 0,
       enemyHp: 0,
     });
-    get().pushLog(`Started: ${action.name}`);
+    get().pushLog(`開始: ${action.name}`);
   },
 
   startCombat: (monsterId) => {
@@ -176,7 +185,7 @@ export const useGame = create<GameStore>((set, get) => ({
       enemyTimer: 0,
       playerHp: get().playerHp > 0 ? get().playerHp : stats.maxHp,
     });
-    get().pushLog(`Fighting: ${m.name}`);
+    get().pushLog(`着手: ${m.name}`);
   },
 
   stop: () => {
@@ -195,7 +204,7 @@ export const useGame = create<GameStore>((set, get) => ({
       if (s.equippedWeapon) bank[s.equippedWeapon] = (bank[s.equippedWeapon] ?? 0) + 1;
       return { bank, equippedWeapon: itemId };
     });
-    get().pushLog(`Equipped ${it.name}`);
+    get().pushLog(`${it.name} を装備`);
   },
 
   unequip: () => {
@@ -309,7 +318,7 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
       : s.skills;
 
   set({ bank, skills, actionProgress: progress, active: stopped ? null : s.active });
-  if (stopped) get().pushLog(`Out of materials for ${action.name}.`);
+  if (stopped) get().pushLog(`素材切れ: ${action.name}`);
 }
 
 function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
@@ -357,7 +366,7 @@ function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
           }
         }
         skills = grantCombatXp(skills, monster.xp);
-        logs.push(`Defeated ${monster.name}! (+${monster.xp} combat xp)`);
+        logs.push(`${monster.name} を解決！ (+${monster.xp} xp)`);
         enemyHp = monster.hp; // respawn next target
       }
     } else if (enemyReady) {
@@ -376,14 +385,14 @@ function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
           bank[s.selectedFood] = (bank[s.selectedFood] ?? 0) - 1;
           if (bank[s.selectedFood] <= 0) delete bank[s.selectedFood];
           playerHp = Math.min(stats.maxHp, playerHp + food.heals);
-          logs.push(`Ate ${food.name} (+${food.heals} HP)`);
+          logs.push(`${food.name} を摂取 (+${food.heals})`);
         }
       }
       if (playerHp <= 0) {
         // Death: stop fighting, revive at full HP, keep loot.
         playerHp = stats.maxHp;
         stopped = true;
-        logs.push(`You died! Combat stopped.`);
+        logs.push(`燃え尽きた…！案件から離脱。`);
       }
     } else {
       break;
