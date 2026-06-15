@@ -2,6 +2,7 @@ import { useGame } from "../game/store";
 import { ITEM_MAP, ITEMS, MONSTERS, MONSTER_MAP } from "../game/data";
 import { getCombatStats } from "../game/combat";
 import { Bar } from "./Bar";
+import { TimerBar } from "./TimerBar";
 
 export function CombatView() {
   const state = useGame();
@@ -95,9 +96,9 @@ export function CombatView() {
               right={`${Math.ceil(state.playerHp)}/${stats.maxHp}`}
             />
             <div style={{ marginTop: 8 }}>
-              <Bar
-                kind="action"
-                value={Math.min(1, state.playerTimer / stats.weaponSpeed)}
+              <TimerBar
+                periodMs={stats.weaponSpeed}
+                running={inCombat}
                 label="Attack"
               />
             </div>
@@ -111,9 +112,9 @@ export function CombatView() {
               right={`${Math.max(0, Math.ceil(state.enemyHp))}/${monster.hp}`}
             />
             <div style={{ marginTop: 8 }}>
-              <Bar
-                kind="action"
-                value={Math.min(1, state.enemyTimer / monster.speed)}
+              <TimerBar
+                periodMs={monster.speed}
+                running={inCombat}
                 label="Attack"
               />
             </div>

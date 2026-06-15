@@ -202,6 +202,21 @@ button.active {
   inset: 0;
   transform-origin: left;
   border-radius: 6px;
+  /* Glide value bars (HP / XP / enemy HP) between 100ms state updates. */
+  transition: transform 0.15s linear;
+}
+/* Time-based bars fill smoothly on a CSS loop, decoupled from the JS tick. */
+@keyframes barFill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.bar > span.timer {
+  transition: none;
+  animation: barFill linear infinite;
 }
 .bar.xp > span {
   background: var(--xp);

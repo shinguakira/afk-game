@@ -3,6 +3,7 @@ import { ACTIONS_BY_SKILL, ITEM_MAP, SKILL_MAP } from "../game/data";
 import { levelForXp, levelProgress, MAX_LEVEL, xpForLevel } from "../game/xp";
 import { formatNumber } from "../ui/format";
 import { Bar } from "./Bar";
+import { TimerBar } from "./TimerBar";
 
 function ioTags(io: Partial<Record<string, number>> | undefined) {
   if (!io) return null;
@@ -43,7 +44,6 @@ export function SkillView({ skillId }: { skillId: string }) {
           const unlocked = level >= a.level;
           const isActive =
             state.active?.kind === "skill" && state.active.actionId === a.id;
-          const progress = isActive ? state.actionProgress / a.time : 0;
           // can we afford one craft cycle?
           const canCraft =
             !a.inputs ||
@@ -77,7 +77,7 @@ export function SkillView({ skillId }: { skillId: string }) {
 
               {isActive ? (
                 <>
-                  <Bar kind="action" value={progress} />
+                  <TimerBar periodMs={a.time} running />
                   <button
                     style={{ marginTop: 8, width: "100%" }}
                     className="danger"
