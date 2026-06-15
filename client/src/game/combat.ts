@@ -1,6 +1,8 @@
 import type { Monster, SaveState } from "./types";
 import { ITEM_MAP, STAT } from "./data";
 import { levelForXp } from "./xp";
+import { getEffects } from "./effects";
+import { mult } from "./modifiers";
 
 export interface CombatStats {
   attackLevel: number;
@@ -25,19 +27,27 @@ export function getCombatStats(state: SaveState): CombatStats {
     ? ITEM_MAP[state.equippedWeapon]?.weapon
     : undefined;
 
+  // Job-class (and future) modifiers.
+  const eff = getEffects(state);
+
   const maxHit = Math.floor(
-    1 + strengthLevel * 0.4 + (weapon?.strengthBonus ?? 0),
+    (1 + strengthLevel * 0.4 + (weapon?.strengthBonus ?? 0)) *
+      mult(eff, "power.maxHit"),
   );
-  const attackRating = 2 + attackLevel * 2 + (weapon?.attackBonus ?? 0);
-  const defenceRating = 5 + defenceLevel * 2;
-  const weaponSpeed = weapon?.speed ?? 3000; // bare fists: slow
+  const attackRating = Math.round(
+    (2 + attackLevel * 2 + (weapon?.attackBonus ?? 0)) *
+      mult(eff, "power.accuracy"),
+  );
+  const defenceRating = Math.round((5 + defenceLevel * 2) * mult(eff, "power.defence"));
+  // 速度補正は大きいほど速い → 攻撃間隔を割る。
+  const weaponSpeed = Math.round((weapon?.speed ?? 3000) / mult(eff, "speed.combat"));
 
   return {
     attackLevel,
     strengthLevel,
     defenceLevel,
     hitpointsLevel,
-    maxHp: hitpointsLevel * 10,
+    maxHp: Math.floor(hitpointsLevel * 10 * mult(eff, "power.maxHp")),
     maxHit,
     attackRating,
     defenceRating,

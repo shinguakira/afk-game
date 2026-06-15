@@ -53,6 +53,13 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
 
       <div className="nav-group-title">その他</div>
       <button
+        className={`nav-item ${tab === "career" ? "selected" : ""}`}
+        onClick={() => setTab("career")}
+      >
+        <span className="ic">📈</span>
+        <span>キャリア</span>
+      </button>
+      <button
         className={`nav-item ${tab === "bank" ? "selected" : ""}`}
         onClick={() => setTab("bank")}
       >

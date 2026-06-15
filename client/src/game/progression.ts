@@ -1,6 +1,8 @@
 import type { OfflineSummary, SaveState } from "./types";
-import { ACTION_MAP, ITEM_MAP, MONSTER_MAP, STAT } from "./data";
+import { ACTION_MAP, ITEM_MAP, MONSTER_MAP, SKILL_MAP, STAT } from "./data";
 import { avgEnemyDamage, avgPlayerDamage, getCombatStats } from "./combat";
+import { getEffects } from "./effects";
+import { mult } from "./modifiers";
 
 /** Combat XP split: accuracy/damage/defence each get 1/3, mental 1/3 on top. */
 export function grantCombatXp(
@@ -25,11 +27,17 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
   const summary: OfflineSummary = { ms, xp: {}, items: {}, gold: 0 };
   if (!state.active) return summary;
 
+  const eff = getEffects(state);
+
   if (state.active.kind === "skill") {
     const action = ACTION_MAP[state.active.actionId];
     if (!action) return summary;
 
-    let completions = Math.floor((ms + state.actionProgress) / action.time);
+    const kind = SKILL_MAP[action.skill]?.kind;
+    const effTime = action.time / mult(eff, kind === "craft" ? "speed.craft" : "speed.gather");
+    const xpPer = action.xp * mult(eff, kind === "craft" ? "xp.craft" : "xp.gather");
+
+    let completions = Math.floor((ms + state.actionProgress) / effTime);
 
     if (action.inputs) {
       const maxByInputs = Math.min(
@@ -40,8 +48,7 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
       completions = Math.min(completions, maxByInputs);
       state.actionProgress = 0; // can't precisely track partial when input-limited
     } else {
-      state.actionProgress =
-        ms + state.actionProgress - completions * action.time;
+      state.actionProgress = ms + state.actionProgress - completions * effTime;
     }
 
     if (completions <= 0) return summary;
@@ -57,7 +64,7 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
       state.bank[id] = (state.bank[id] ?? 0) + (q as number) * completions;
       summary.items[id] = (summary.items[id] ?? 0) + (q as number) * completions;
     }
-    const xp = action.xp * completions;
+    const xp = xpPer * completions;
     state.skills[action.skill] = {
       xp: (state.skills[action.skill]?.xp ?? 0) + xp,
     };
@@ -103,13 +110,19 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
   if (finalHp <= 0) finalHp = stats.maxHp; // died & revived
   state.playerHp = Math.min(stats.maxHp, Math.max(1, finalHp));
 
-  // Rewards (averages).
-  const goldGain = Math.floor(kills * ((monster.goldMin + monster.goldMax) / 2));
+  // Rewards (averages, modifier-adjusted).
+  const goldMult = mult(eff, "gold");
+  const dropMult = mult(eff, "dropRate");
+  const combatXpMult = mult(eff, "xp.combat");
+
+  const goldGain = Math.floor(
+    kills * ((monster.goldMin + monster.goldMax) / 2) * goldMult,
+  );
   state.gold += goldGain;
   summary.gold += goldGain;
 
   for (const drop of monster.loot) {
-    const avgQty = drop.chance * ((drop.min + drop.max) / 2);
+    const avgQty = Math.min(1, drop.chance * dropMult) * ((drop.min + drop.max) / 2);
     const total = Math.floor(avgQty * kills);
     if (total > 0) {
       state.bank[drop.item] = (state.bank[drop.item] ?? 0) + total;
@@ -117,7 +130,7 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
     }
   }
 
-  const totalXp = monster.xp * kills;
+  const totalXp = monster.xp * kills * combatXpMult;
   state.skills = grantCombatXp(state.skills, totalXp);
   const share = totalXp / 3;
   for (const id of [STAT.accuracy, STAT.damage, STAT.defence, STAT.mental]) {

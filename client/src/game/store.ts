@@ -8,10 +8,14 @@ import type {
 } from "./types";
 import {
   ACTION_MAP,
+  CLASS_MAP,
   ITEM_MAP,
   MONSTER_MAP,
+  SKILL_MAP,
   SKILLS,
 } from "./data";
+import { getEffects } from "./effects";
+import { mult } from "./modifiers";
 import { xpForLevel } from "./xp";
 import { STARTING_MENTAL_LEVEL, STAT } from "./data/skills";
 import {
@@ -29,7 +33,7 @@ import {
 
 // Bump whenever the save schema changes incompatibly (e.g. skill ids renamed).
 // On mismatch we discard the old save and start fresh (no migrations yet).
-const SAVE_VERSION = 2;
+const SAVE_VERSION = 3;
 const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
@@ -53,6 +57,7 @@ function makeStartingState(): SaveState {
     skills,
     bank: { coffee: 10 },
     gold: 25,
+    jobClass: null,
     equippedWeapon: null,
     selectedFood: "coffee",
     playerHp: maxHp,
@@ -68,6 +73,7 @@ function pickSaveState(s: GameStore): SaveState {
     skills: s.skills,
     bank: s.bank,
     gold: s.gold,
+    jobClass: s.jobClass,
     equippedWeapon: s.equippedWeapon,
     selectedFood: s.selectedFood,
     playerHp: s.playerHp,
@@ -96,6 +102,7 @@ interface GameStore extends SaveState {
   equip: (itemId: ItemId) => void;
   unequip: () => void;
   setFood: (itemId: ItemId | null) => void;
+  setClass: (classId: string) => void;
   sell: (itemId: ItemId, qty: number) => void;
   buyFood: (itemId: ItemId, qty: number) => void;
   saveNow: () => Promise<void>;
@@ -218,6 +225,11 @@ export const useGame = create<GameStore>((set, get) => ({
 
   setFood: (itemId) => set({ selectedFood: itemId }),
 
+  setClass: (classId) => {
+    set({ jobClass: classId });
+    get().pushLog(`職種を変更: ${CLASS_MAP[classId]?.name ?? classId}`);
+  },
+
   sell: (itemId, qty) => {
     const it = ITEM_MAP[itemId];
     if (!it) return;
@@ -264,6 +276,11 @@ export const useGame = create<GameStore>((set, get) => ({
   dismissOffline: () => set({ offlineSummary: null }),
 }));
 
+// Dev-only debug handle for tinkering from the console.
+if (import.meta.env.DEV) {
+  (window as unknown as { __game: typeof useGame }).__game = useGame;
+}
+
 // ---- tick implementations ----
 
 type SetFn = (partial: Partial<GameStore>) => void;
@@ -278,13 +295,21 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
     return;
   }
 
+  // Apply job-class speed/xp modifiers for this skill's kind.
+  const eff = getEffects(s);
+  const kind = SKILL_MAP[action.skill]?.kind;
+  const speedKey = kind === "craft" ? "speed.craft" : "speed.gather";
+  const xpKey = kind === "craft" ? "xp.craft" : "xp.gather";
+  const effTime = action.time / mult(eff, speedKey);
+  const xpPer = action.xp * mult(eff, xpKey);
+
   let progress = s.actionProgress + dt;
   const bank = { ...s.bank };
   let xpGained = 0;
   let stopped = false;
   let guard = 1000;
 
-  while (progress >= action.time && guard-- > 0) {
+  while (progress >= effTime && guard-- > 0) {
     // Craft actions need their inputs available.
     if (action.inputs) {
       const ok = Object.entries(action.inputs).every(
@@ -303,8 +328,8 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
     for (const [id, q] of Object.entries(action.outputs)) {
       bank[id] = (bank[id] ?? 0) + (q as number);
     }
-    xpGained += action.xp;
-    progress -= action.time;
+    xpGained += xpPer;
+    progress -= effTime;
   }
 
   const skills =
@@ -331,6 +356,10 @@ function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
   }
 
   const stats = getCombatStats(s);
+  const eff = getEffects(s);
+  const goldMult = mult(eff, "gold");
+  const dropMult = mult(eff, "dropRate");
+  const combatXpMult = mult(eff, "xp.combat");
   let enemyHp = s.enemyHp > 0 ? s.enemyHp : monster.hp;
   let playerHp = s.playerHp > 0 ? s.playerHp : stats.maxHp;
   let playerTimer = s.playerTimer + dt;
@@ -357,16 +386,16 @@ function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
         enemyHp -= randInt(1, stats.maxHit);
       }
       if (enemyHp <= 0) {
-        // Kill rewards.
-        gold += randInt(monster.goldMin, monster.goldMax);
+        // Kill rewards (modifier-adjusted).
+        gold += Math.round(randInt(monster.goldMin, monster.goldMax) * goldMult);
         for (const drop of monster.loot) {
-          if (Math.random() < drop.chance) {
+          if (Math.random() < Math.min(1, drop.chance * dropMult)) {
             const qty = randInt(drop.min, drop.max);
             bank[drop.item] = (bank[drop.item] ?? 0) + qty;
           }
         }
-        skills = grantCombatXp(skills, monster.xp);
-        logs.push(`${monster.name} を解決！ (+${monster.xp} xp)`);
+        skills = grantCombatXp(skills, monster.xp * combatXpMult);
+        logs.push(`${monster.name} を解決！ (+${Math.round(monster.xp * combatXpMult)} xp)`);
         enemyHp = monster.hp; // respawn next target
       }
     } else if (enemyReady) {

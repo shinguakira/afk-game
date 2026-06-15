@@ -1,5 +1,6 @@
 // Quick standalone check of offline progression. Run: npx tsx src/game/offline.test.ts
 import { simulateOffline } from "./progression";
+import { getCombatStats } from "./combat";
 import { xpForLevel } from "./xp";
 import type { SaveState } from "./types";
 
@@ -25,6 +26,7 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
     },
     bank: {},
     gold: 0,
+    jobClass: null,
     equippedWeapon: null,
     selectedFood: null,
     playerHp: 100,
@@ -81,6 +83,37 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   const sum = simulateOffline(s, 3_600_000);
   check("idle gold", sum.gold, 0);
   check("idle items", Object.keys(sum.items).length, 0);
+}
+
+// 5) Class modifier (v2): SRE gives +35% craft speed => 35% more design docs.
+{
+  const base = freshState({
+    active: { kind: "skill", actionId: "write_design" },
+    bank: { knowledge: 100000 },
+  });
+  const withSre = freshState({
+    active: { kind: "skill", actionId: "write_design" },
+    bank: { knowledge: 100000 },
+    jobClass: "sre",
+  });
+  simulateOffline(base, 600_000);
+  simulateOffline(withSre, 600_000);
+  const ratio = (withSre.bank.design_doc ?? 0) / (base.bank.design_doc ?? 1);
+  const ok = Math.abs(ratio - 1.35) < 0.02;
+  console.log(
+    `${ok ? "PASS" : "FAIL"}  SRE craft-speed ratio ≈1.35: base ${base.bank.design_doc}, sre ${withSre.bank.design_doc} (${ratio.toFixed(3)})`,
+  );
+  if (!ok) failures++;
+}
+
+// 6) Class modifiers flow into combat stats: QA +40% 堅牢性, security +50%/+20% HP.
+{
+  const none = getCombatStats(freshState({ skills: { robust: { xp: xpForLevel(20) }, mental: { xp: xpForLevel(20) } } as any }));
+  const qa = getCombatStats(freshState({ jobClass: "qa", skills: { robust: { xp: xpForLevel(20) }, mental: { xp: xpForLevel(20) } } as any }));
+  check("QA defence +40%", qa.defenceRating, Math.round(none.defenceRating * 1.4));
+  const sec = getCombatStats(freshState({ jobClass: "security", skills: { mental: { xp: xpForLevel(20) } } as any }));
+  const plain = getCombatStats(freshState({ skills: { mental: { xp: xpForLevel(20) } } as any }));
+  check("Security maxHp +20%", sec.maxHp, Math.floor(plain.maxHp * 1.2));
 }
 
 console.log(failures === 0 ? "\nALL PASS" : `\n${failures} FAILURE(S)`);

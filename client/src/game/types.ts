@@ -94,6 +94,8 @@ export interface SaveState {
   skills: Record<SkillId, { xp: number }>;
   bank: Record<ItemId, number>;
   gold: number;
+  /** 選択中の職種クラス id（null = 無所属）。補正の源。 */
+  jobClass: string | null;
   equippedWeapon: ItemId | null;
   selectedFood: ItemId | null;
   playerHp: number;

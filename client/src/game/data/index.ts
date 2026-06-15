@@ -1,11 +1,18 @@
 import type { GameAction, Item, Monster, Skill } from "../types";
+import type { JobClass } from "./classes";
 import { ITEMS } from "./items";
 import { SKILLS } from "./skills";
 import { ACTIONS } from "./actions";
 import { MONSTERS } from "./monsters";
+import { CLASSES } from "./classes";
 
-export { ITEMS, SKILLS, ACTIONS, MONSTERS };
+export { ITEMS, SKILLS, ACTIONS, MONSTERS, CLASSES };
 export { STAT, COMBAT_STAT_IDS, STARTING_MENTAL_LEVEL } from "./skills";
+export type { JobClass } from "./classes";
+
+export const CLASS_MAP: Record<string, JobClass> = Object.fromEntries(
+  CLASSES.map((c) => [c.id, c]),
+);
 
 // Lookup maps for O(1) access by id.
 export const ITEM_MAP: Record<string, Item> = Object.fromEntries(
