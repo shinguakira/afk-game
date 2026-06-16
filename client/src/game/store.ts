@@ -44,7 +44,7 @@ const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
 let toastSeq = 0;
-const TOAST_MS = 2800;
+const TOAST_MS = 4200;
 
 export interface Toast {
   id: number;
