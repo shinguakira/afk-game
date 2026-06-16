@@ -64,7 +64,7 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
 // 3) Combat: 1h on bugs yields a positive, capped amount with rewards.
 {
   const s = freshState({
-    active: { kind: "combat", monsterId: "bug" },
+    active: { kind: "combat", monsterId: "bugfix" },
     selectedFood: "coffee",
     bank: { coffee: 100 },
   });
@@ -125,12 +125,12 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
 // 7) Prestige upgrade stacks: funding Lv5 = +60% gold.
 {
   const plain = freshState({
-    active: { kind: "combat", monsterId: "bug" },
+    active: { kind: "combat", monsterId: "bugfix" },
     selectedFood: "coffee",
     bank: { coffee: 100 },
   });
   const funded = freshState({
-    active: { kind: "combat", monsterId: "bug" },
+    active: { kind: "combat", monsterId: "bugfix" },
     selectedFood: "coffee",
     bank: { coffee: 100 },
     prestigeUpgrades: { funding: 5 },

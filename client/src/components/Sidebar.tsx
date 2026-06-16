@@ -20,7 +20,7 @@ const MENU: [tab: string, icon: string, label: string][] = [
   ["combat", "projects", "案件"],
   ["roadmap", "roadmap", "ロードマップ"],
   ["bank", "bank", "ストレージ"],
-  ["shop", "shop", "購買"],
+  ["shop", "shop", "ショップ"],
   ["equip", "company", "装備"],
   ["career", "career", "キャリア"],
   ["prestige", "prestige", "起業"],

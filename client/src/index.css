@@ -367,6 +367,80 @@ button.active {
   border-radius: 4px;
   padding: 0 3px;
 }
+.store-tile .price {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--gold);
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 0 0 7px 7px;
+  padding: 1px 0;
+}
+
+/* ---- equipment paper-doll ---- */
+.equip-doll {
+  display: grid;
+  grid-template-columns: 84px 1fr 84px;
+  grid-template-rows: auto repeat(3, 84px);
+  gap: 10px;
+  max-width: 460px;
+  margin-top: 8px;
+  grid-template-areas:
+    ".      hair   ."
+    "weapon figure body"
+    "bag    figure pc"
+    "avatar figure food";
+}
+.equip-figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.equip-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  cursor: pointer;
+}
+.equip-slot:hover {
+  border-color: var(--accent);
+}
+.equip-slot.filled {
+  border-color: var(--accent-2);
+}
+.equip-slot .eslot-label {
+  font-size: 10px;
+  color: var(--muted);
+}
+.equip-slot .eslot-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+}
+.equip-slot.filled .eslot-icon {
+  opacity: 1;
+}
+.equip-slot:not(.filled) .eslot-icon {
+  opacity: 0.4;
+}
+.equip-slot .eslot-name {
+  font-size: 10px;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 /* ---- combat ---- */
 .combat-arena {

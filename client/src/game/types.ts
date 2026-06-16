@@ -7,7 +7,7 @@ export type MonsterId = string;
 
 export type ItemType = "resource" | "product" | "weapon" | "food" | "misc";
 
-export type EquipSlot = "weapon" | "body" | "hair" | "avatar" | "pc";
+export type EquipSlot = "weapon" | "body" | "bag" | "hair" | "avatar" | "pc";
 
 export interface WeaponStats {
   /** Added to attack rating (accuracy). */

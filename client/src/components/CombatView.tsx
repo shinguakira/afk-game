@@ -1,5 +1,5 @@
 import { useGame } from "../game/store";
-import { ITEM_MAP, ITEMS, MONSTERS, MONSTER_MAP } from "../game/data";
+import { ITEM_MAP, MONSTERS, MONSTER_MAP } from "../game/data";
 import { getCombatStats } from "../game/combat";
 import { Bar } from "./Bar";
 import { TimerBar } from "./TimerBar";
@@ -12,61 +12,15 @@ export function CombatView() {
   const inCombat = active?.kind === "combat";
   const monster = active?.kind === "combat" ? MONSTER_MAP[active.monsterId] : null;
 
-  const foods = ITEMS.filter(
-    (i) => i.type === "food" && (state.bank[i.id] ?? 0) > 0,
-  );
-  const weaponId = state.equipment.weapon;
-  const equipped = weaponId ? ITEM_MAP[weaponId] : null;
-
   return (
     <div>
       <h2 className="section-title">
-        <Icon name="projects" size={22} /> 案件遂行
+        <Icon name="projects" size={22} /> 案件（フリーランス）
       </h2>
       <p className="section-sub">
-        自動で対応。メンタル50%以下で選択中の食事を自動でとります。デバイス/装備は「装備」タブで。
+        無所属で受けられる単発案件。自動で対応し、メンタル50%以下で装備中の食事を自動でとります。
+        装備・食事は「装備」タブで設定。会社の案件は所属で解禁（予定）。
       </p>
-
-      {/* Player loadout */}
-      <div className="card" style={{ marginBottom: 16 }}>
-        <div className="row-between" style={{ flexWrap: "wrap", gap: 12 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <strong>デバイス:</strong>{" "}
-            {equipped ? (
-              <>
-                <Icon name={equipped.icon} size={14} /> {equipped.name}
-              </>
-            ) : (
-              <span className="muted">素手（ベタ打ち）</span>
-            )}
-          </div>
-          <div className="muted">
-            実装力 {stats.maxHit} · 精度 {stats.attackRating} · 堅牢 {stats.defenceRating} ·{" "}
-            {(stats.weaponSpeed / 1000).toFixed(1)}s/手
-          </div>
-        </div>
-
-        <div style={{ marginTop: 10 }}>
-          <span className="muted">食事: </span>
-          <button
-            className={state.selectedFood == null ? "active" : ""}
-            style={{ padding: "3px 8px", marginRight: 6 }}
-            onClick={() => state.setFood(null)}
-          >
-            なし
-          </button>
-          {foods.map((f) => (
-            <button
-              key={f.id}
-              className={state.selectedFood === f.id ? "active" : ""}
-              style={{ padding: "3px 8px", marginRight: 6, marginBottom: 4 }}
-              onClick={() => state.setFood(f.id)}
-            >
-              <Icon name={f.icon} size={13} /> {f.name} ×{state.bank[f.id]} (+{f.heals})
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* Arena */}
       {inCombat && monster && (

@@ -45,6 +45,20 @@ export const ITEMS: Item[] = [
     equip: { slot: "body", modifiers: [{ key: "speed.craft", pct: 12 }] },
   },
 
+  // ===== 装備: かばん (bag) =====
+  {
+    id: "backpack", name: "リュックサック", type: "misc", icon: "bag", sellPrice: 30,
+    equip: { slot: "bag", modifiers: [{ key: "dropRate", pct: 10 }] },
+  },
+  {
+    id: "tote", name: "トートバッグ", type: "misc", icon: "tote", sellPrice: 25,
+    equip: { slot: "bag", modifiers: [{ key: "gold", pct: 8 }] },
+  },
+  {
+    id: "bizbag", name: "ビジネスバッグ", type: "misc", icon: "bizbag", sellPrice: 90,
+    equip: { slot: "bag", modifiers: [{ key: "power.maxHp", pct: 10 }, { key: "gold", pct: 5 }] },
+  },
+
   // ===== 装備: 髪型 (hair) =====
   {
     id: "bedhair", name: "寝癖ヘア", type: "misc", icon: "hair", sellPrice: 1,

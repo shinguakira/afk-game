@@ -136,6 +136,12 @@ import {
   LuSalad,
   LuCroissant,
   LuRoute,
+  LuBackpack,
+  LuShoppingBag,
+  LuBriefcaseBusiness,
+  LuLayoutTemplate,
+  LuBlocks,
+  LuGlobe,
 } from "react-icons/lu";
 
 // Central icon registry. Data files reference these string ids (no JSX in data).
@@ -312,13 +318,21 @@ const ICONS: Record<string, IconType> = {
   wellness: LuLeaf,
   delivery: LuFlame,
 
-  // 案件 (monsters)
+  // 装備: かばん
+  bag: LuBackpack,
+  tote: LuShoppingBag,
+  bizbag: LuBriefcaseBusiness,
+
+  // 案件 (monsters / freelance gigs)
   bug_m: LuBug,
   newbie: LuBird,
   spec_change: LuFileText,
   review: LuSearch,
   incident: LuFlame,
   boss: LuBriefcase,
+  lp: LuLayoutTemplate,
+  feature: LuBlocks,
+  webapp: LuGlobe,
 };
 
 export interface IconProps {
