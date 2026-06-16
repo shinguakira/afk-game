@@ -337,6 +337,18 @@ button.active {
   border-radius: 8px;
   padding: 0;
 }
+/* アイコン（Iconのラッパーspan）をタイルの約80%まで拡大して埋める */
+.store-tile > span:not(.qty) {
+  width: 80%;
+  height: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.store-tile > span:not(.qty) > svg {
+  width: 100%;
+  height: 100%;
+}
 .store-tile:hover {
   border-color: var(--accent);
 }
