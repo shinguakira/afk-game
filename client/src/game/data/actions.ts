@@ -1,5 +1,6 @@
 import type { GameAction } from "../types";
 import { buildActions } from "./techtree";
+import { SECTOR_ACTIONS } from "./sectors";
 
 // 料理: 食材を消費して飲食物(回復アイテム)を作る。
 const COOKING: GameAction[] = [
@@ -19,5 +20,10 @@ const PCBUILD: GameAction[] = [
   { id: "assemble_pc_high", skill: "pcbuild", name: "ハイエンドPCを組む", level: 16, time: 5000, xp: 150, inputs: { cpu_i9: 1, gpu_rtx4090: 1, ram_32: 1, ssd_2tb: 1 }, outputs: { pc_high: 1 } },
 ];
 
-// 全アクション = 言語ツリー(techtree) + 料理 + PC組み立て。
-export const ACTIONS: GameAction[] = [...buildActions(), ...COOKING, ...PCBUILD];
+// 全アクション = 言語ツリー(techtree) + インフラ/ドメイン/はんだづけ(sectors) + 料理 + PC組み立て。
+export const ACTIONS: GameAction[] = [
+  ...buildActions(),
+  ...SECTOR_ACTIONS,
+  ...COOKING,
+  ...PCBUILD,
+];

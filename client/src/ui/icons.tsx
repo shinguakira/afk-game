@@ -49,6 +49,9 @@ import {
   SiDocker,
   SiKubernetes,
   SiTerraform,
+  SiLinux,
+  SiGooglecloud,
+  SiNginx,
   SiGithub,
   SiNumpy,
   SiFastapi,
@@ -142,6 +145,13 @@ import {
   LuLayoutTemplate,
   LuBlocks,
   LuGlobe,
+  LuServer,
+  LuGamepad2,
+  LuFactory,
+  LuCloud,
+  LuLandmark,
+  LuHeartPulse,
+  LuCircuitBoard,
 } from "react-icons/lu";
 
 // Central icon registry. Data files reference these string ids (no JSX in data).
@@ -318,6 +328,23 @@ const ICONS: Record<string, IconType> = {
   wellness: LuLeaf,
   delivery: LuFlame,
 
+  // カテゴリ / インフラ / ドメイン
+  infra: LuServer,
+  domain: LuFactory,
+  linux: SiLinux,
+  aws: LuCloud,
+  gcp: SiGooglecloud,
+  nginx: SiNginx,
+  web: LuGlobe,
+  game: LuGamepad2,
+  mobile: LuSmartphone,
+  embedded: LuCpu,
+  ai_data: LuBrain,
+  fintech: LuLandmark,
+  ec: LuShoppingCart,
+  healthcare: LuHeartPulse,
+  soldering: LuCircuitBoard,
+
   // 装備: かばん
   bag: LuBackpack,
   tote: LuShoppingBag,
@@ -355,6 +382,8 @@ const BRAND_COLOR: Record<string, string> = {
   express: "#BBBBBB", qt: "#41CD52", dotnet: "#7B5BD4", symfony: "#CCCCCC",
   phoenix: "#FD4F00", ktor: "#3B8CFA", numpy: "#4DABCF", fastapi: "#10AA98",
   flask: "#CCCCCC", axios: "#7A52E8", jquery: "#2780B8",
+  // infra/cloud
+  linux: "#F5C542", aws: "#FF9900", gcp: "#4285F4", nginx: "#2DA53F",
 };
 
 export interface IconProps {

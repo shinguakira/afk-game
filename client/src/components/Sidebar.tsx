@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useGame } from "../game/store";
-import { GROUPS, SKILL_MAP, SKILLS, SKILLS_BY_GROUP, CLASS_MAP, COMBAT_STAT_IDS } from "../game/data";
+import { CATEGORIES, SKILL_MAP, SKILLS_BY_CATEGORY, CLASS_MAP, COMBAT_STAT_IDS } from "../game/data";
 import { levelForXp } from "../game/xp";
 import { currentRank } from "../game/rank";
 import { getCombatStats } from "../game/combat";
@@ -15,7 +15,6 @@ interface SidebarProps {
   setTab: (t: Tab) => void;
 }
 
-// 上部メニュー（ストレージ/購買を上に）
 const MENU: [tab: string, icon: string, label: string][] = [
   ["combat", "projects", "案件"],
   ["roadmap", "roadmap", "ロードマップ"],
@@ -35,7 +34,6 @@ function StatusBlock() {
     COMBAT_STAT_IDS.reduce((s, id) => s + levelForXp(state.skills[id]?.xp ?? 0), 0) /
       COMBAT_STAT_IDS.length,
   );
-
   return (
     <div className="status">
       <div className="srow">
@@ -64,14 +62,15 @@ function StatusBlock() {
 export function Sidebar({ tab, setTab }: SidebarProps) {
   const skills = useGame((s) => s.skills);
 
-  const activeGroup = SKILL_MAP[tab]?.group;
+  // アクティブスキルの所属カテゴリを初期展開。
+  const activeCat = SKILL_MAP[tab]?.category;
   const [open, setOpen] = useState<Set<string>>(
-    () => new Set(activeGroup ? [activeGroup] : ["g_script"]),
+    () => new Set(activeCat ? [activeCat] : ["language"]),
   );
   useEffect(() => {
-    if (activeGroup)
-      setOpen((s) => (s.has(activeGroup) ? s : new Set(s).add(activeGroup)));
-  }, [activeGroup]);
+    if (activeCat)
+      setOpen((s) => (s.has(activeCat) ? s : new Set(s).add(activeCat)));
+  }, [activeCat]);
 
   const toggle = (id: string) =>
     setOpen((s) => {
@@ -92,8 +91,6 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
     </button>
   );
 
-  const craftSkills = SKILLS.filter((s) => s.kind === "craft");
-
   return (
     <div className="sidebar">
       <StatusBlock />
@@ -110,25 +107,23 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
         </button>
       ))}
 
-      <div className="nav-section">言語スタック</div>
-      {GROUPS.map((g) => {
-        const list = SKILLS_BY_GROUP[g.id] ?? [];
-        const expanded = open.has(g.id);
+      <div className="nav-section">スキル</div>
+      {CATEGORIES.map((cat) => {
+        const list = SKILLS_BY_CATEGORY[cat.id] ?? [];
+        if (list.length === 0) return null;
+        const expanded = open.has(cat.id);
         return (
-          <div key={g.id}>
-            <button className="nav-group" onClick={() => toggle(g.id)}>
+          <div key={cat.id}>
+            <button className="nav-group" onClick={() => toggle(cat.id)}>
               <Icon name={expanded ? "chevronDown" : "chevronRight"} size={13} />
-              <Icon name={g.icon} size={14} />
-              <span>{g.name}</span>
+              <Icon name={cat.icon} size={14} />
+              <span>{cat.name}</span>
               <span className="cnt">{list.length}</span>
             </button>
             {expanded && list.map((s) => navSkill(s.id, s.name, s.icon))}
           </div>
         );
       })}
-
-      <div className="nav-section">クラフト</div>
-      {craftSkills.map((s) => navSkill(s.id, s.name, s.icon))}
     </div>
   );
 }

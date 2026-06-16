@@ -16,9 +16,9 @@ const SECTIONS: { title: string; icon: string; items: string[] }[] = [
     items: ["rice", "noodles", "meat", "fish_ing", "veg", "dough"],
   },
   {
-    title: "PCパーツ（組み立て用）",
+    title: "PCパーツ・電子部品",
     icon: "cpu",
-    items: ["cpu_celeron", "cpu_i5", "cpu_i9", "gpu_igpu", "gpu_rtx4060", "gpu_rtx4090", "ram_8", "ram_32", "ssd_512", "ssd_2tb"],
+    items: ["cpu_celeron", "cpu_i5", "cpu_i9", "gpu_igpu", "gpu_rtx4060", "gpu_rtx4090", "ram_8", "ram_32", "ssd_512", "ssd_2tb", "components"],
   },
   {
     title: "デバイス",

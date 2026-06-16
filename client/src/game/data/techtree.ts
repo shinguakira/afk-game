@@ -89,8 +89,8 @@ const LANGS: LangSpec[] = [
   {
     id: "go", name: "Go", group: "g_systems",
     concepts: [["defer", 4], ["goroutine", 6], ["channel", 8]],
-    frameworks: [["Gin", 8], ["Docker", 10, "docker"], ["Terraform", 12, "terraform"], ["Kubernetes", 16, "kubernetes"]],
-    oss: 16, cert: ["CKA (Kubernetes 認定)", 38],
+    frameworks: [["Gin", 8], ["Echo", 12]],
+    oss: 16, cert: ["Go 認定", 36],
   },
   {
     id: "zig", name: "Zig", group: "g_systems",
@@ -223,7 +223,7 @@ export function buildLangSkills(): Skill[] {
     name: l.name,
     kind: "gather",
     tech: "language",
-    group: l.group,
+    category: "language",
     icon: l.icon ?? l.id,
   }));
 }

@@ -5,13 +5,13 @@ import { SKILLS } from "./skills";
 import { ACTIONS } from "./actions";
 import { MONSTERS } from "./monsters";
 import { CLASSES } from "./classes";
-import { GROUPS } from "./groups";
-import type { SkillGroup } from "./groups";
+import { CATEGORIES } from "./categories";
+import type { SkillCategoryDef } from "./categories";
 import { PRESTIGE_UPGRADES } from "./prestige";
 import type { PrestigeUpgrade } from "./prestige";
 
-export { ITEMS, SKILLS, ACTIONS, MONSTERS, CLASSES, GROUPS, PRESTIGE_UPGRADES };
-export type { SkillGroup } from "./groups";
+export { ITEMS, SKILLS, ACTIONS, MONSTERS, CLASSES, CATEGORIES, PRESTIGE_UPGRADES };
+export type { SkillCategoryDef } from "./categories";
 
 /** 制作(craft)判定: 入力を消費するアクションは制作扱い（フレームワーク/料理/PC組み立て）。
  *  それ以外（言語の基礎/概念/ライブラリ/OSS/資格）は生産(gather)。職種等の補正分岐に使う。 */
@@ -44,16 +44,16 @@ export const MONSTER_MAP: Record<string, Monster> = Object.fromEntries(
   MONSTERS.map((m) => [m.id, m]),
 );
 
-export const GROUP_MAP: Record<string, SkillGroup> = Object.fromEntries(
-  GROUPS.map((g) => [g.id, g]),
+export const CATEGORY_MAP: Record<string, SkillCategoryDef> = Object.fromEntries(
+  CATEGORIES.map((c) => [c.id, c]),
 );
 
-/** グループ id → スキル一覧（サイドバーの折りたたみ用）。 */
-export const SKILLS_BY_GROUP: Record<string, Skill[]> = (() => {
+/** 大分類 id → スキル一覧（サイドバーの折りたたみ用）。 */
+export const SKILLS_BY_CATEGORY: Record<string, Skill[]> = (() => {
   const acc: Record<string, Skill[]> = {};
-  for (const g of GROUPS) acc[g.id] = [];
+  for (const c of CATEGORIES) acc[c.id] = [];
   for (const s of SKILLS) {
-    if (s.group && acc[s.group]) acc[s.group].push(s);
+    if (acc[s.category]) acc[s.category].push(s);
   }
   return acc;
 })();

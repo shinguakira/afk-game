@@ -121,6 +121,12 @@ export const ITEMS: Item[] = [
   { id: "ssd_512", name: "512GB SSD", type: "misc", icon: "ssd", sellPrice: 18 },
   { id: "ssd_2tb", name: "2TB SSD", type: "misc", icon: "ssd", sellPrice: 70 },
 
+  // ===== 電子部品 / 基板（はんだづけ） =====
+  { id: "components", name: "電子部品", type: "misc", icon: "components", sellPrice: 4 },
+  { id: "board_proto", name: "試作基板", type: "product", icon: "board", sellPrice: 22 },
+  { id: "board_main", name: "メイン基板", type: "product", icon: "board", sellPrice: 60 },
+  { id: "board_hd", name: "高密度基板", type: "product", icon: "board", sellPrice: 130 },
+
   // ===== 食材 (ショップ購入 → 料理) =====
   { id: "rice", name: "米", type: "misc", icon: "rice", sellPrice: 2 },
   { id: "noodles", name: "麺", type: "misc", icon: "noodles", sellPrice: 2 },

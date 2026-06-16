@@ -40,15 +40,18 @@ export interface Item {
 
 export type SkillKind = "gather" | "craft" | "combat";
 
+/** サイドバーの大分類。 */
+export type SkillCategory = "language" | "infra" | "domain" | "craft" | "combat";
+
 export interface Skill {
   id: SkillId;
   name: string;
-  /** gather=言語, craft=フレームワーク, combat=現場力(戦闘ステ)。 */
+  /** gather=生産系, craft=制作系, combat=現場力(戦闘ステ)。エンジンの速度/XP補正に使用。 */
   kind: SkillKind;
   icon: string;
-  /** サイドバーの所属グループ id（groups.ts）。combat ステは無し。 */
-  group?: string;
-  /** 技術の種別（表示・グルーピング用）。 */
+  /** サイドバーの大分類。 */
+  category: SkillCategory;
+  /** 技術の種別（言語スキル内の表示用）。 */
   tech?: "language" | "framework";
 }
 

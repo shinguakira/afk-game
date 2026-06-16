@@ -256,6 +256,29 @@ export const ITEM_ICONS: Record<string, R> = {
     </g>,
   ),
 
+  // ===== 電子部品 / 基板 =====
+  components: svg(
+    <g>
+      {/* 抵抗器 */}
+      <line x1="1" y1="12" x2="6" y2="12" stroke="#9aa3ad" strokeWidth="1.8" />
+      <line x1="18" y1="12" x2="23" y2="12" stroke="#9aa3ad" strokeWidth="1.8" />
+      <rect x="6" y="8.5" width="12" height="7" rx="1.5" fill="#d8b48a" stroke="#a07c4f" strokeWidth="1" />
+      <rect x="8.5" y="8.5" width="1.6" height="7" fill="#c0563f" />
+      <rect x="11.2" y="8.5" width="1.6" height="7" fill="#7d3325" />
+      <rect x="13.9" y="8.5" width="1.6" height="7" fill="#f2c14e" />
+    </g>,
+  ),
+  board: svg(
+    <g>
+      <rect x="2" y="3" width="20" height="18" rx="2" fill="#1f5c3c" stroke="#123f29" strokeWidth="1.2" />
+      <rect x="9" y="9" width="6" height="6" rx="0.8" fill="#2a2f36" />
+      <g stroke="#7ddca8" strokeWidth="1" fill="none">
+        <path d="M5 6h6M5 9v6M19 6h-6M19 18h-7M9 18H5" />
+      </g>
+      <circle cx="5.5" cy="6" r="1" fill="#f2c14e" /><circle cx="18.5" cy="18" r="1" fill="#f2c14e" /><circle cx="18.5" cy="6" r="1" fill="#cfd6dd" /><circle cx="5.5" cy="18" r="1" fill="#cfd6dd" />
+    </g>,
+  ),
+
   // ===== その他 =====
   cert: svg(
     <g>
