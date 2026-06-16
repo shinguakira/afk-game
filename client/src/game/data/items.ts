@@ -3,7 +3,7 @@ import type { Item } from "../types";
 export const ITEMS: Item[] = [
   // ===== 資源 / 成果物 =====
   { id: "commit", name: "コミット", type: "resource", icon: "commit", sellPrice: 2 },
-  { id: "product", name: "プロダクト", type: "bar", icon: "product", sellPrice: 30 },
+  { id: "product", name: "プロダクト", type: "product", icon: "product", sellPrice: 30 },
 
   // ===== 装備: 武器 (キーボード / マウス) =====
   {

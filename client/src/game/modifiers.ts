@@ -46,3 +46,20 @@ export function resolveModifiers(mods: Modifier[]): Effects {
 export function mult(eff: Effects, key: EffectKey): number {
   return eff[key] ?? 1;
 }
+
+/** 表示用ラベル（職種/装備/起業ツリーの補正表示で共通利用）。 */
+export const EFFECT_LABEL: Record<EffectKey, string> = {
+  "speed.gather": "生産速度",
+  "speed.craft": "制作速度",
+  "speed.combat": "案件速度",
+  "xp.gather": "生産XP",
+  "xp.craft": "制作XP",
+  "xp.combat": "遂行XP",
+  "power.maxHit": "実装力",
+  "power.accuracy": "精度",
+  "power.defence": "堅牢性",
+  "power.maxHp": "メンタル上限",
+  gold: "給料",
+  dropRate: "ドロップ率",
+  subEfficiency: "部下効率",
+};

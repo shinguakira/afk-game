@@ -62,11 +62,8 @@ import {
   SiJquery,
 } from "react-icons/si";
 import {
-  LuGlobe,
-  LuGamepad2,
   LuCpu,
   LuBrain,
-  LuServer,
   LuSmartphone,
   LuBug,
   LuHammer,
@@ -142,14 +139,6 @@ import {
 
 // Central icon registry. Data files reference these string ids (no JSX in data).
 const ICONS: Record<string, IconType> = {
-  // domains / framework groups
-  web: LuGlobe,
-  game: LuGamepad2,
-  embedded: LuCpu,
-  ai: LuBrain,
-  infra: LuServer,
-  mobile: LuSmartphone,
-
   // language-family group headers
   g_script: LuBraces,
   g_systems: LuCpu,

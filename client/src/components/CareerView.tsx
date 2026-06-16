@@ -1,25 +1,9 @@
 import { useGame } from "../game/store";
 import { CLASSES } from "../game/data";
 import { currentRank, nextRank, totalLevel, RANKS } from "../game/rank";
-import type { EffectKey } from "../game/modifiers";
+import { EFFECT_LABEL } from "../game/modifiers";
 import { Bar } from "./Bar";
 import { Icon } from "../ui/icons";
-
-const EFFECT_LABEL: Record<EffectKey, string> = {
-  "speed.gather": "生産速度",
-  "speed.craft": "制作速度",
-  "speed.combat": "案件速度",
-  "xp.gather": "生産XP",
-  "xp.craft": "制作XP",
-  "xp.combat": "遂行XP",
-  "power.maxHit": "実装力",
-  "power.accuracy": "精度",
-  "power.defence": "堅牢性",
-  "power.maxHp": "メンタル上限",
-  gold: "給料",
-  dropRate: "ドロップ率",
-  subEfficiency: "部下効率",
-};
 
 export function CareerView() {
   const state = useGame();

@@ -1,7 +1,7 @@
 import { useGame } from "../game/store";
 import { ITEMS, ITEM_MAP } from "../game/data";
 import type { EquipSlot } from "../game/types";
-import type { EffectKey } from "../game/modifiers";
+import { EFFECT_LABEL } from "../game/modifiers";
 import { Icon } from "../ui/icons";
 
 const SLOTS: { slot: EquipSlot; name: string; icon: string }[] = [
@@ -11,22 +11,6 @@ const SLOTS: { slot: EquipSlot; name: string; icon: string }[] = [
   { slot: "avatar", name: "アイコン", icon: "avatar" },
   { slot: "pc", name: "PC", icon: "pc" },
 ];
-
-const EFFECT_LABEL: Partial<Record<EffectKey, string>> = {
-  "speed.gather": "生産速度",
-  "speed.craft": "制作速度",
-  "speed.combat": "案件速度",
-  "xp.gather": "生産XP",
-  "xp.craft": "制作XP",
-  "xp.combat": "遂行XP",
-  "power.maxHit": "実装力",
-  "power.accuracy": "精度",
-  "power.defence": "堅牢性",
-  "power.maxHp": "メンタル上限",
-  gold: "給料",
-  dropRate: "ドロップ率",
-  subEfficiency: "部下効率",
-};
 
 function bonusTags(itemId: string | undefined) {
   const eq = itemId ? ITEM_MAP[itemId]?.equip : undefined;

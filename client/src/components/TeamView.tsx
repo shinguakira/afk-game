@@ -7,15 +7,21 @@ import { formatNumber } from "../ui/format";
 import { Bar } from "./Bar";
 import { Icon } from "../ui/icons";
 
-// 部下に割り当てられるのは生産系アクション（基礎/ライブラリ/フレームワーク）。
-// 言語(スキル)ごとに optgroup でまとめる。
-const ASSIGN_CATEGORIES = new Set(["base", "library", "framework"]);
-const ASSIGNABLE_BY_LANG = SKILLS.filter((s) => s.kind === "gather").map((s) => ({
-  lang: s,
-  actions: ACTIONS.filter(
-    (a) => a.skill === s.id && ASSIGN_CATEGORIES.has(a.category ?? "base"),
-  ),
-}));
+// 部下に割り当てられるのは生産系アクション。言語は 基礎/ライブラリ/フレームワーク、
+// クラフトスキル(料理/PC組み立て)は全アクション。スキルごとに optgroup でまとめる。
+const PROD_CATEGORIES = new Set(["base", "library", "framework"]);
+const ASSIGNABLE_BY_SKILL = SKILLS.filter(
+  (s) => s.kind === "gather" || s.kind === "craft",
+)
+  .map((s) => ({
+    skill: s,
+    actions: ACTIONS.filter(
+      (a) =>
+        a.skill === s.id &&
+        (s.kind === "craft" || PROD_CATEGORIES.has(a.category ?? "base")),
+    ),
+  }))
+  .filter((g) => g.actions.length > 0);
 
 export function TeamView() {
   const state = useGame();
@@ -90,8 +96,8 @@ export function TeamView() {
                   }}
                 >
                   <option value="">— 待機 —</option>
-                  {ASSIGNABLE_BY_LANG.map(({ lang, actions }) => (
-                    <optgroup key={lang.id} label={lang.name}>
+                  {ASSIGNABLE_BY_SKILL.map(({ skill, actions }) => (
+                    <optgroup key={skill.id} label={skill.name}>
                       {actions.map((a) => {
                         const locked = lvl < a.level;
                         return (

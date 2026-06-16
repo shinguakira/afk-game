@@ -5,7 +5,7 @@ export type SkillId = string;
 export type ActionId = string;
 export type MonsterId = string;
 
-export type ItemType = "resource" | "bar" | "weapon" | "food" | "misc";
+export type ItemType = "resource" | "product" | "weapon" | "food" | "misc";
 
 export type EquipSlot = "weapon" | "body" | "hair" | "avatar" | "pc";
 
