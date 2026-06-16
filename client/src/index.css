@@ -319,6 +319,43 @@ button.active {
   font-size: 11px;
 }
 
+/* ---- storage (Melvor風アイテムグリッド) ---- */
+.store-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+  gap: 8px;
+  max-width: 560px;
+}
+.store-tile {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0;
+}
+.store-tile:hover {
+  border-color: var(--accent);
+}
+.store-tile.selected {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 1px var(--accent-2) inset;
+}
+.store-tile .qty {
+  position: absolute;
+  right: 3px;
+  bottom: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent-2);
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 4px;
+  padding: 0 3px;
+}
+
 /* ---- combat ---- */
 .combat-arena {
   display: grid;
@@ -373,6 +410,82 @@ button.active {
 }
 .muted {
   color: var(--muted);
+}
+
+/* ---- toasts (Melvor風スナックバー・下中央) ---- */
+.toast-host {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 8px;
+  z-index: 100;
+  pointer-events: none;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  animation: toastIn 0.22s ease;
+}
+.toast.level {
+  border-left-color: var(--xp);
+}
+.toast.goal {
+  border-left-color: var(--accent-2);
+}
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---- sidebar status block ---- */
+.status {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+.status .srow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.status .sname {
+  font-weight: 700;
+  font-size: 13px;
+}
+.status .sgold {
+  color: var(--gold);
+  font-weight: 700;
+}
+.status .sstats {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 .row-between {
   display: flex;

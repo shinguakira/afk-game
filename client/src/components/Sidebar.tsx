@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { useGame } from "../game/store";
-import { GROUPS, SKILL_MAP, SKILLS, SKILLS_BY_GROUP } from "../game/data";
+import { GROUPS, SKILL_MAP, SKILLS, SKILLS_BY_GROUP, CLASS_MAP, COMBAT_STAT_IDS } from "../game/data";
 import { levelForXp } from "../game/xp";
+import { currentRank } from "../game/rank";
+import { getCombatStats } from "../game/combat";
 import { Icon } from "../ui/icons";
+import { Bar } from "./Bar";
+import { formatNumber } from "../ui/format";
 
 export type Tab = string;
 
@@ -11,19 +15,62 @@ interface SidebarProps {
   setTab: (t: Tab) => void;
 }
 
+// 上部メニュー（ストレージ/購買を上に）
+const MENU: [tab: string, icon: string, label: string][] = [
+  ["combat", "projects", "案件"],
+  ["roadmap", "roadmap", "ロードマップ"],
+  ["bank", "bank", "ストレージ"],
+  ["shop", "shop", "購買"],
+  ["equip", "company", "装備"],
+  ["career", "career", "キャリア"],
+  ["prestige", "prestige", "起業"],
+];
+
+function StatusBlock() {
+  const state = useGame();
+  const rank = currentRank(state);
+  const stats = getCombatStats(state);
+  const className = CLASS_MAP[state.jobClass ?? "none"]?.name ?? "無所属";
+  const engLevel = Math.floor(
+    COMBAT_STAT_IDS.reduce((s, id) => s + levelForXp(state.skills[id]?.xp ?? 0), 0) /
+      COMBAT_STAT_IDS.length,
+  );
+
+  return (
+    <div className="status">
+      <div className="srow">
+        <span className="sname">{rank.name}</span>
+        <span className="sgold">¥{formatNumber(state.gold)}</span>
+      </div>
+      <div className="srow" style={{ color: "var(--muted)" }}>
+        <span>{className}</span>
+        <span>Eng Lv {engLevel}</span>
+      </div>
+      <Bar
+        kind="hp"
+        value={state.playerHp / stats.maxHp}
+        right={`${Math.ceil(state.playerHp)}/${stats.maxHp}`}
+        label="メンタル"
+      />
+      <div className="sstats">
+        <span><Icon name="impl" size={11} /> 実装 {stats.maxHit}</span>
+        <span><Icon name="debug" size={11} /> 精度 {stats.attackRating}</span>
+        <span><Icon name="robust" size={11} /> 堅牢 {stats.defenceRating}</span>
+      </div>
+    </div>
+  );
+}
+
 export function Sidebar({ tab, setTab }: SidebarProps) {
   const skills = useGame((s) => s.skills);
-  const combatStats = SKILLS.filter((s) => s.kind === "combat");
-  const craftSkills = SKILLS.filter((s) => s.kind === "craft");
 
-  // 折りたたみ状態。初期はアクティブなスキルのグループだけ開く。
   const activeGroup = SKILL_MAP[tab]?.group;
   const [open, setOpen] = useState<Set<string>>(
     () => new Set(activeGroup ? [activeGroup] : ["g_script"]),
   );
-  // タブ変更時、その所属グループは開いておく。
   useEffect(() => {
-    if (activeGroup) setOpen((s) => (s.has(activeGroup) ? s : new Set(s).add(activeGroup)));
+    if (activeGroup)
+      setOpen((s) => (s.has(activeGroup) ? s : new Set(s).add(activeGroup)));
   }, [activeGroup]);
 
   const toggle = (id: string) =>
@@ -45,57 +92,14 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
     </button>
   );
 
-  const renderGroup = (g: (typeof GROUPS)[number]) => {
-    const list = SKILLS_BY_GROUP[g.id] ?? [];
-    const expanded = open.has(g.id);
-    return (
-      <div key={g.id}>
-        <button className="nav-group" onClick={() => toggle(g.id)}>
-          <Icon name={expanded ? "chevronDown" : "chevronRight"} size={13} />
-          <Icon name={g.icon} size={14} />
-          <span>{g.name}</span>
-          <span className="cnt">{list.length}</span>
-        </button>
-        {expanded && list.map((s) => navSkill(s.id, s.name, s.icon))}
-      </div>
-    );
-  };
+  const craftSkills = SKILLS.filter((s) => s.kind === "craft");
 
   return (
     <div className="sidebar">
-      <div className="nav-section">言語スタック</div>
-      {GROUPS.map(renderGroup)}
+      <StatusBlock />
 
-      <div className="nav-section">クラフト</div>
-      {craftSkills.map((s) => navSkill(s.id, s.name, s.icon))}
-
-      <div className="nav-section">現場力</div>
-      <button
-        className={`nav-item ${tab === "combat" ? "selected" : ""}`}
-        onClick={() => setTab("combat")}
-      >
-        <Icon name="projects" />
-        <span>案件</span>
-      </button>
-      {combatStats.map((s) => (
-        <div key={s.id} className="nav-item" style={{ cursor: "default" }}>
-          <Icon name={s.icon} />
-          <span>{s.name}</span>
-          <span className="lvl">{levelForXp(skills[s.id]?.xp ?? 0)}</span>
-        </div>
-      ))}
-
-      <div className="nav-section">その他</div>
-      {(
-        [
-          ["roadmap", "roadmap", "ロードマップ"],
-          ["career", "career", "キャリア"],
-          ["equip", "company", "装備"],
-          ["prestige", "prestige", "起業"],
-          ["bank", "bank", "成果物"],
-          ["shop", "shop", "購買"],
-        ] as const
-      ).map(([id, icon, label]) => (
+      <div className="nav-section">メニュー</div>
+      {MENU.map(([id, icon, label]) => (
         <button
           key={id}
           className={`nav-item ${tab === id ? "selected" : ""}`}
@@ -105,6 +109,26 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
           <span>{label}</span>
         </button>
       ))}
+
+      <div className="nav-section">言語スタック</div>
+      {GROUPS.map((g) => {
+        const list = SKILLS_BY_GROUP[g.id] ?? [];
+        const expanded = open.has(g.id);
+        return (
+          <div key={g.id}>
+            <button className="nav-group" onClick={() => toggle(g.id)}>
+              <Icon name={expanded ? "chevronDown" : "chevronRight"} size={13} />
+              <Icon name={g.icon} size={14} />
+              <span>{g.name}</span>
+              <span className="cnt">{list.length}</span>
+            </button>
+            {expanded && list.map((s) => navSkill(s.id, s.name, s.icon))}
+          </div>
+        );
+      })}
+
+      <div className="nav-section">クラフト</div>
+      {craftSkills.map((s) => navSkill(s.id, s.name, s.icon))}
     </div>
   );
 }

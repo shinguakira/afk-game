@@ -10,9 +10,11 @@ import type {
 import {
   ACTION_MAP,
   CLASS_MAP,
+  COMBAT_STAT_IDS,
   isCraftAction,
   ITEM_MAP,
   MONSTER_MAP,
+  SKILL_MAP,
   SKILLS,
 } from "./data";
 import { getEffects } from "./effects";
@@ -20,7 +22,7 @@ import { mult } from "./modifiers";
 import { prestigeGain } from "./prestige";
 import { MILESTONES } from "./roadmap";
 import { PRESTIGE_MAP } from "./data";
-import { xpForLevel } from "./xp";
+import { levelForXp, xpForLevel } from "./xp";
 import { STARTING_MENTAL_LEVEL, STAT } from "./data/skills";
 import {
   enemyHitChance,
@@ -41,6 +43,15 @@ const SAVE_VERSION = 9;
 const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
+let toastSeq = 0;
+const TOAST_MS = 2800;
+
+export interface Toast {
+  id: number;
+  text: string;
+  icon?: string;
+  kind?: "level" | "goal" | "info";
+}
 const SAVE_EVERY_MS = 15_000;
 const MAX_OFFLINE_MS = 24 * 60 * 60 * 1000; // 24h cap, like Melvor
 const LOG_LIMIT = 40;
@@ -108,10 +119,12 @@ interface GameStore extends SaveState {
   playerTimer: number;
   enemyTimer: number;
   log: string[];
+  toasts: Toast[];
   offlineSummary: OfflineSummary | null;
   ready: boolean;
 
   init: () => Promise<void>;
+  pushToast: (t: Omit<Toast, "id">) => void;
   tick: (dt: number) => void;
   startAction: (actionId: ActionId) => void;
   startCombat: (monsterId: MonsterId) => void;
@@ -137,11 +150,21 @@ export const useGame = create<GameStore>((set, get) => ({
   playerTimer: 0,
   enemyTimer: 0,
   log: [],
+  toasts: [],
   offlineSummary: null,
   ready: false,
 
   pushLog: (msg) =>
     set((s) => ({ log: [msg, ...s.log].slice(0, LOG_LIMIT) })),
+
+  pushToast: (t) => {
+    const id = ++toastSeq;
+    set((s) => ({ toasts: [...s.toasts, { ...t, id }].slice(-5) }));
+    window.setTimeout(
+      () => set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) })),
+      TOAST_MS,
+    );
+  },
 
   init: async () => {
     const raw = await loadSave();
@@ -361,7 +384,10 @@ export const useGame = create<GameStore>((set, get) => ({
     }
     if (newly.length === 0) return;
     set({ milestones: [...done], gold, bank });
-    for (const title of newly) get().pushLog(`目標達成: ${title}`);
+    for (const title of newly) {
+      get().pushLog(`目標達成: ${title}`);
+      get().pushToast({ text: `目標達成: ${title}`, icon: "career", kind: "goal" });
+    }
   },
 
   dismissOffline: () => set({ offlineSummary: null }),
@@ -376,6 +402,25 @@ if (import.meta.env.DEV) {
 
 type SetFn = (partial: Partial<GameStore>) => void;
 type GetFn = () => GameStore;
+
+/** スキルがレベルアップしていたらトーストを出す。 */
+function toastLevelUp(
+  get: GetFn,
+  oldXp: number,
+  newXp: number,
+  skillId: string,
+): void {
+  const before = levelForXp(oldXp);
+  const after = levelForXp(newXp);
+  if (after > before) {
+    const sk = SKILL_MAP[skillId];
+    get().pushToast({
+      text: `${sk?.name ?? skillId} が Lv${after} に！`,
+      icon: sk?.icon,
+      kind: "level",
+    });
+  }
+}
 
 function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
   const s = get();
@@ -434,6 +479,14 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
       : s.skills;
 
   set({ bank, skills, actionProgress: progress, active: stopped ? null : s.active });
+  if (xpGained > 0) {
+    toastLevelUp(
+      get,
+      s.skills[action.skill]?.xp ?? 0,
+      skills[action.skill]?.xp ?? 0,
+      action.skill,
+    );
+  }
   if (stopped) get().pushLog(`素材切れ: ${action.name}`);
 }
 
@@ -545,5 +598,8 @@ function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
   if (logs.length) {
     const cur = get().log;
     set({ log: [...logs.reverse(), ...cur].slice(0, LOG_LIMIT) });
+  }
+  for (const id of COMBAT_STAT_IDS) {
+    toastLevelUp(get, s.skills[id]?.xp ?? 0, skills[id]?.xp ?? 0, id);
   }
 }

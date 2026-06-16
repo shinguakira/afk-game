@@ -11,6 +11,7 @@ import { CareerView } from "./components/CareerView";
 import { PrestigeView } from "./components/PrestigeView";
 import { EquipView } from "./components/EquipView";
 import { RoadmapView } from "./components/RoadmapView";
+import { ToastHost } from "./components/ToastHost";
 import { LogPanel } from "./components/LogPanel";
 import { OfflineModal } from "./components/OfflineModal";
 
@@ -53,6 +54,7 @@ export default function App() {
         </div>
       </div>
       <OfflineModal />
+      <ToastHost />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useGame } from "../game/store";
 import { getCombatStats } from "../game/combat";
 import { ACTION_MAP, MONSTER_MAP } from "../game/data";
+import { currentRank } from "../game/rank";
 import { formatNumber } from "../ui/format";
 import { Bar } from "./Bar";
 import { Icon } from "../ui/icons";
@@ -20,6 +21,9 @@ export function TopBar() {
     <div className="topbar">
       <span className="title">
         <Icon name="company" size={18} /> Idle Engineer
+      </span>
+      <span className="muted" style={{ fontSize: 13 }}>
+        {currentRank(state).name}
       </span>
 
       <div className="stat">

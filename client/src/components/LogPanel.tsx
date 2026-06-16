@@ -62,7 +62,7 @@ export function LogPanel() {
           <strong style={{ color: "var(--text)" }}>{combatLevel}</strong>
         </div>
         <div className="row-between">
-          <span>成果物の種類</span>
+          <span>アイテム種類</span>
           <strong style={{ color: "var(--text)" }}>{bankCount}</strong>
         </div>
         {stock > 0 && (
