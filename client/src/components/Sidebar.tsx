@@ -88,6 +88,7 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
       <div className="nav-section">その他</div>
       {(
         [
+          ["roadmap", "roadmap", "ロードマップ"],
           ["career", "career", "キャリア"],
           ["equip", "company", "装備"],
           ["prestige", "prestige", "起業"],

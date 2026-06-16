@@ -134,6 +134,7 @@ import {
   LuFish,
   LuSalad,
   LuCroissant,
+  LuRoute,
 } from "react-icons/lu";
 
 // Central icon registry. Data files reference these string ids (no JSX in data).
@@ -275,6 +276,7 @@ const ICONS: Record<string, IconType> = {
   search: LuSearch,
 
   // tabs / ui
+  roadmap: LuRoute,
   career: LuTrendingUp,
   team: LuUsers,
   prestige: LuRocket,

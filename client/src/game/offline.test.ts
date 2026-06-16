@@ -30,6 +30,7 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
     prestigePoints: 0,
     prestigeUpgrades: {},
     prestigeCount: 0,
+    milestones: [],
     equipment: {},
     selectedFood: null,
     playerHp: 100,

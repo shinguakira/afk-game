@@ -16,8 +16,8 @@ export const RANKS: Rank[] = [
   { index: 2, name: "ミドル", total: 80 },
   { index: 3, name: "シニア", total: 160 },
   { index: 4, name: "テックリード", total: 280 },
-  { index: 5, name: "マネージャ", total: 450 },
-  { index: 6, name: "CTO", total: 700 },
+  { index: 5, name: "役員", total: 450 },
+  { index: 6, name: "社長", total: 700 },
 ];
 
 /** 全スキルレベルの合計。 */

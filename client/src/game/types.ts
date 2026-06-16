@@ -134,6 +134,8 @@ export interface SaveState {
   prestigeUpgrades: Record<string, number>;
   /** 起業した回数。 */
   prestigeCount: number;
+  /** 達成済みマイルストーン id（キャリア・ロードマップ）。 */
+  milestones: string[];
   /** スロット → 装備中アイテム id。 */
   equipment: Partial<Record<EquipSlot, ItemId>>;
   selectedFood: ItemId | null;

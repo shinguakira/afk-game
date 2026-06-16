@@ -18,6 +18,7 @@ import {
 import { getEffects } from "./effects";
 import { mult } from "./modifiers";
 import { prestigeGain } from "./prestige";
+import { MILESTONES } from "./roadmap";
 import { PRESTIGE_MAP } from "./data";
 import { xpForLevel } from "./xp";
 import { STARTING_MENTAL_LEVEL, STAT } from "./data/skills";
@@ -36,7 +37,7 @@ import {
 
 // Bump whenever the save schema changes incompatibly (e.g. skill ids renamed).
 // On mismatch we discard the old save and start fresh (no migrations yet).
-const SAVE_VERSION = 8;
+const SAVE_VERSION = 9;
 const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
@@ -69,6 +70,7 @@ function makeStartingState(): SaveState {
     prestigePoints: 0,
     prestigeUpgrades: {},
     prestigeCount: 0,
+    milestones: [],
     equipment: {},
     selectedFood: "coffee",
     playerHp: maxHp,
@@ -88,6 +90,7 @@ function pickSaveState(s: GameStore): SaveState {
     prestigePoints: s.prestigePoints,
     prestigeUpgrades: s.prestigeUpgrades,
     prestigeCount: s.prestigeCount,
+    milestones: s.milestones,
     equipment: s.equipment,
     selectedFood: s.selectedFood,
     playerHp: s.playerHp,
@@ -119,6 +122,7 @@ interface GameStore extends SaveState {
   setClass: (classId: string) => void;
   prestige: () => void;
   buyPrestigeUpgrade: (id: string) => void;
+  checkRoadmap: () => void;
   sell: (itemId: ItemId, qty: number) => void;
   buyItem: (itemId: ItemId, qty?: number) => void;
   saveNow: () => Promise<void>;
@@ -184,6 +188,7 @@ export const useGame = create<GameStore>((set, get) => ({
     if (!s.ready) return;
     if (s.active?.kind === "skill") runSkillTick(set, get, dt);
     else if (s.active?.kind === "combat") runCombatTick(set, get, dt);
+    get().checkRoadmap();
   },
 
   startAction: (actionId) => {
@@ -265,6 +270,7 @@ export const useGame = create<GameStore>((set, get) => ({
       prestigePoints: s.prestigePoints + gain,
       prestigeUpgrades: s.prestigeUpgrades,
       prestigeCount: s.prestigeCount + 1,
+      milestones: s.milestones, // 達成済みマイルストーンは永続
       enemyHp: 0,
       playerTimer: 0,
       enemyTimer: 0,
@@ -333,6 +339,29 @@ export const useGame = create<GameStore>((set, get) => ({
       log: [],
       offlineSummary: null,
     });
+  },
+
+  checkRoadmap: () => {
+    const s = get();
+    const done = new Set(s.milestones);
+    let gold = s.gold;
+    let bank = s.bank;
+    const newly: string[] = [];
+    for (const m of MILESTONES) {
+      if (done.has(m.id) || !m.check(s)) continue;
+      done.add(m.id);
+      newly.push(m.title);
+      if (m.reward?.gold) gold += m.reward.gold;
+      if (m.reward?.items) {
+        bank = { ...bank };
+        for (const [id, q] of Object.entries(m.reward.items)) {
+          bank[id] = (bank[id] ?? 0) + q;
+        }
+      }
+    }
+    if (newly.length === 0) return;
+    set({ milestones: [...done], gold, bank });
+    for (const title of newly) get().pushLog(`目標達成: ${title}`);
   },
 
   dismissOffline: () => set({ offlineSummary: null }),

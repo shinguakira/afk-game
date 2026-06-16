@@ -10,6 +10,7 @@ import { ShopView } from "./components/ShopView";
 import { CareerView } from "./components/CareerView";
 import { PrestigeView } from "./components/PrestigeView";
 import { EquipView } from "./components/EquipView";
+import { RoadmapView } from "./components/RoadmapView";
 import { LogPanel } from "./components/LogPanel";
 import { OfflineModal } from "./components/OfflineModal";
 
@@ -32,6 +33,7 @@ export default function App() {
 
   let main;
   if (tab === "combat") main = <CombatView />;
+  else if (tab === "roadmap") main = <RoadmapView />;
   else if (tab === "career") main = <CareerView />;
   else if (tab === "equip") main = <EquipView />;
   else if (tab === "prestige") main = <PrestigeView />;

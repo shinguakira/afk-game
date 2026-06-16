@@ -1,16 +1,15 @@
 import type { SaveState } from "./types";
 import { currentRank, totalLevel } from "./rank";
 
-/** 起業(プレステージ)に必要な最低役職ランク。3 = シニア。 */
-export const PRESTIGE_MIN_RANK = 3;
+// 決定(SPEC 0-11①): 起業はいつでも可能（ランクゲート無し）。
+// ただし力不足での起業はストックが少なく旨味が無い（将来は生活費デバフも直結）。
 
-/** 今起業したら得られるストック数。 */
+/** 今起業したら得られるストック数。準備が浅いほど少ない。 */
 export function prestigeGain(state: SaveState): number {
-  const rank = currentRank(state);
-  if (rank.index < PRESTIGE_MIN_RANK) return 0;
-  return Math.floor(totalLevel(state) / 20) + rank.index * 2;
+  return Math.floor(totalLevel(state) / 20) + currentRank(state).index * 2;
 }
 
-export function canPrestige(state: SaveState): boolean {
-  return currentRank(state).index >= PRESTIGE_MIN_RANK;
+/** 起業に値する“準備度”の目安（UIの警告用）。シニア未満は準備不足とみなす。 */
+export function isUnderPrepared(state: SaveState): boolean {
+  return currentRank(state).index < 3;
 }

@@ -2,12 +2,16 @@ import { useGame } from "../game/store";
 import { COMBAT_STAT_IDS, CLASS_MAP } from "../game/data";
 import { levelForXp } from "../game/xp";
 import { currentRank } from "../game/rank";
+import { firstIncomplete, AXIS_META } from "../game/roadmap";
+import { Icon } from "../ui/icons";
 
 export function LogPanel() {
   const log = useGame((s) => s.log);
   const skills = useGame((s) => s.skills);
   const bank = useGame((s) => s.bank);
   const jobClass = useGame((s) => s.jobClass);
+  const milestones = useGame((s) => s.milestones);
+  const goal = firstIncomplete(milestones, useGame.getState());
 
   // Engineer level = avg of the four combat stats.
   const combatLevel = Math.floor(
@@ -23,6 +27,26 @@ export function LogPanel() {
 
   return (
     <div>
+      <h3 style={{ marginTop: 0 }}>次の目標</h3>
+      {goal ? (
+        <div
+          className="card"
+          style={{ marginBottom: 14, padding: "10px 12px" }}
+        >
+          <strong style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <Icon name={AXIS_META[goal.axis].icon} size={15} />
+            {goal.title}
+          </strong>
+          <div className="muted" style={{ fontSize: 12, marginTop: 4 }}>
+            {goal.hint}
+          </div>
+        </div>
+      ) : (
+        <div className="muted" style={{ marginBottom: 14, fontSize: 13 }}>
+          全目標を達成しました。
+        </div>
+      )}
+
       <h3 style={{ marginTop: 0 }}>概要</h3>
       <div className="muted" style={{ fontSize: 13, marginBottom: 12 }}>
         <div className="row-between">

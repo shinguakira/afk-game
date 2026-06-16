@@ -1,16 +1,13 @@
 import { useGame } from "../game/store";
 import { PRESTIGE_UPGRADES } from "../game/data";
-import { canPrestige, prestigeGain, PRESTIGE_MIN_RANK } from "../game/prestige";
-import { currentRank, RANKS } from "../game/rank";
+import { prestigeGain, isUnderPrepared } from "../game/prestige";
 import { formatNumber } from "../ui/format";
 import { Icon } from "../ui/icons";
 
 export function PrestigeView() {
   const state = useGame();
   const gain = prestigeGain(state);
-  const eligible = canPrestige(state);
-  const rank = currentRank(state);
-  const minRankName = RANKS[PRESTIGE_MIN_RANK].name;
+  const underPrepared = isUnderPrepared(state);
 
   return (
     <div>
@@ -32,18 +29,13 @@ export function PrestigeView() {
           <span className="muted">通算起業 {state.prestigeCount} 回</span>
         </div>
         <div className="row-between" style={{ alignItems: "center" }}>
-          <span className="muted">
-            {eligible
-              ? `今起業すると ストック +${gain}`
-              : `${minRankName}（現在: ${rank.name}）で起業を解禁`}
-          </span>
+          <span className="muted">今起業すると ストック +{gain}</span>
           <button
             className="primary"
-            disabled={!eligible}
             onClick={() => {
               if (
                 confirm(
-                  `全進捗（スキル/成果物/部下/職種）をリセットして起業し、ストックを ${gain} 獲得します。よろしいですか？`,
+                  `全進捗（スキル/成果物/職種）をリセットして起業し、ストックを ${gain} 獲得します。よろしいですか？`,
                 )
               )
                 state.prestige();
@@ -52,6 +44,11 @@ export function PrestigeView() {
             起業する
           </button>
         </div>
+        {underPrepared && (
+          <div className="muted" style={{ fontSize: 12, marginTop: 8, color: "var(--danger)" }}>
+            注意: 準備不足での起業はストックが少なく、再スタートが厳しくなります（シニア以上推奨）。
+          </div>
+        )}
       </div>
 
       <h3 style={{ margin: "0 0 10px" }}>経営ツリー（永続強化）</h3>
