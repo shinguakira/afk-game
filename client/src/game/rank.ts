@@ -42,13 +42,3 @@ export function nextRank(state: SaveState): Rank | null {
   return RANKS[cur.index + 1] ?? null;
 }
 
-/** 採用できる部下の上限（役職ランクで解禁）。シニア(3)で1人〜。 */
-export function maxSubordinates(rankIndex: number): number {
-  if (rankIndex >= 6) return 6; // CTO
-  if (rankIndex >= 5) return 4; // マネージャ
-  if (rankIndex >= 4) return 3; // テックリード
-  if (rankIndex >= 3) return 2; // シニア
-  if (rankIndex >= 2) return 1; // ミドルでお試し1人
-  return 0;
-}
-

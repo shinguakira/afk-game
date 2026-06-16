@@ -3,8 +3,6 @@ import { ACTION_MAP, isCraftAction, ITEM_MAP, MONSTER_MAP, STAT } from "./data";
 import { avgEnemyDamage, avgPlayerDamage, getCombatStats } from "./combat";
 import { getEffects } from "./effects";
 import { type Effects, mult } from "./modifiers";
-import { subSpeedMult } from "./team";
-import { levelForXp } from "./xp";
 
 /** Combat XP split: accuracy/damage/defence each get 1/3, mental 1/3 on top. */
 export function grantCombatXp(
@@ -29,12 +27,8 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
   const summary: OfflineSummary = { ms, xp: {}, items: {}, gold: 0 };
   const eff = getEffects(state);
 
-  // プレイヤー自身の作業（生産/制作 or 案件）。
   if (state.active?.kind === "skill") simPlayerSkill(state, ms, summary, eff);
   else if (state.active?.kind === "combat") simPlayerCombat(state, ms, summary, eff);
-
-  // 部下の並行作業（プレイヤーの後に共有バンクを処理）。
-  simSubordinates(state, ms, summary, eff);
 
   return summary;
 }
@@ -88,48 +82,6 @@ function simPlayerSkill(
 }
 
 /** 部下の並行生産をオフライン分まとめて適用（解析的）。 */
-function simSubordinates(
-  state: SaveState,
-  ms: number,
-  summary: OfflineSummary,
-  eff: Effects,
-): void {
-  for (const sub of state.subordinates) {
-    if (!sub.assignment) continue;
-    const action = ACTION_MAP[sub.assignment];
-    if (!action || levelForXp(sub.xp) < action.level) continue;
-
-    const effTime = action.time / subSpeedMult(sub, eff);
-    let completions = Math.floor((ms + sub.progress) / effTime);
-
-    if (action.inputs) {
-      const maxByInputs = Math.min(
-        ...Object.entries(action.inputs).map(([id, q]) =>
-          Math.floor((state.bank[id] ?? 0) / (q as number)),
-        ),
-      );
-      completions = Math.min(completions, maxByInputs);
-      sub.progress = 0;
-    } else {
-      sub.progress = ms + sub.progress - completions * effTime;
-    }
-    if (completions <= 0) continue;
-
-    if (action.inputs) {
-      for (const [id, q] of Object.entries(action.inputs)) {
-        state.bank[id] = (state.bank[id] ?? 0) - (q as number) * completions;
-        if (state.bank[id] <= 0) delete state.bank[id];
-        summary.items[id] = (summary.items[id] ?? 0) - (q as number) * completions;
-      }
-    }
-    for (const [id, q] of Object.entries(action.outputs)) {
-      state.bank[id] = (state.bank[id] ?? 0) + (q as number) * completions;
-      summary.items[id] = (summary.items[id] ?? 0) + (q as number) * completions;
-    }
-    sub.xp += action.xp * completions;
-  }
-}
-
 function simPlayerCombat(
   state: SaveState,
   ms: number,

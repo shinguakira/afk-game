@@ -63,15 +63,6 @@ export const PRESTIGE_UPGRADES: PrestigeUpgrade[] = [
     modifiers: (lv) => [{ key: "power.maxHp", pct: 10 * lv }],
   },
   {
-    id: "recruiting",
-    name: "採用力",
-    icon: "recruiting",
-    desc: "部下効率 +20% / Lv",
-    maxLevel: 5,
-    cost: (n) => n * 5,
-    modifiers: (lv) => [{ key: "subEfficiency", pct: 20 * lv }],
-  },
-  {
     id: "delivery",
     name: "開発力",
     icon: "delivery",

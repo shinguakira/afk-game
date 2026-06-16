@@ -90,7 +90,6 @@ import {
   LuMicroscope,
   LuClipboardList,
   LuSparkles,
-  LuMegaphone,
   LuLeaf,
   LuBanknote,
   LuBot,
@@ -308,7 +307,6 @@ const ICONS: Record<string, IconType> = {
   tech: LuBrain,
   brand: LuSparkles,
   wellness: LuLeaf,
-  recruiting: LuMegaphone,
   delivery: LuFlame,
 
   // 案件 (monsters)

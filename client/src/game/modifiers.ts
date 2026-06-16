@@ -17,9 +17,7 @@ export type EffectKey =
   | "power.maxHp"
   // 経済
   | "gold"
-  | "dropRate"
-  // 部下の作業効率
-  | "subEfficiency";
+  | "dropRate";
 
 export interface Modifier {
   key: EffectKey;
@@ -61,5 +59,4 @@ export const EFFECT_LABEL: Record<EffectKey, string> = {
   "power.maxHp": "メンタル上限",
   gold: "給料",
   dropRate: "ドロップ率",
-  subEfficiency: "部下効率",
 };

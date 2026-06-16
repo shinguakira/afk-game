@@ -89,7 +89,6 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
       {(
         [
           ["career", "career", "キャリア"],
-          ["team", "team", "チーム"],
           ["equip", "company", "装備"],
           ["prestige", "prestige", "起業"],
           ["bank", "bank", "成果物"],

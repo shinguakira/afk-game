@@ -17,8 +17,6 @@ import {
 } from "./data";
 import { getEffects } from "./effects";
 import { mult } from "./modifiers";
-import { advanceSubordinates, hireCost, SUB_NAMES } from "./team";
-import { currentRank, maxSubordinates } from "./rank";
 import { prestigeGain } from "./prestige";
 import { PRESTIGE_MAP } from "./data";
 import { xpForLevel } from "./xp";
@@ -38,7 +36,7 @@ import {
 
 // Bump whenever the save schema changes incompatibly (e.g. skill ids renamed).
 // On mismatch we discard the old save and start fresh (no migrations yet).
-const SAVE_VERSION = 7;
+const SAVE_VERSION = 8;
 const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
@@ -68,7 +66,6 @@ function makeStartingState(): SaveState {
     bank: { coffee: 10 },
     gold: 25,
     jobClass: null,
-    subordinates: [],
     prestigePoints: 0,
     prestigeUpgrades: {},
     prestigeCount: 0,
@@ -88,7 +85,6 @@ function pickSaveState(s: GameStore): SaveState {
     bank: s.bank,
     gold: s.gold,
     jobClass: s.jobClass,
-    subordinates: s.subordinates,
     prestigePoints: s.prestigePoints,
     prestigeUpgrades: s.prestigeUpgrades,
     prestigeCount: s.prestigeCount,
@@ -121,9 +117,6 @@ interface GameStore extends SaveState {
   unequip: (slot: EquipSlot) => void;
   setFood: (itemId: ItemId | null) => void;
   setClass: (classId: string) => void;
-  hireSubordinate: () => void;
-  assignSubordinate: (id: string, actionId: ActionId | null) => void;
-  fireSubordinate: (id: string) => void;
   prestige: () => void;
   buyPrestigeUpgrade: (id: string) => void;
   sell: (itemId: ItemId, qty: number) => void;
@@ -189,11 +182,8 @@ export const useGame = create<GameStore>((set, get) => ({
   tick: (dt) => {
     const s = get();
     if (!s.ready) return;
-    // Player's own action.
     if (s.active?.kind === "skill") runSkillTick(set, get, dt);
     else if (s.active?.kind === "combat") runCombatTick(set, get, dt);
-    // Subordinates work in parallel (independent of the player's action).
-    if (s.subordinates.length) runSubordinatesTick(set, get, dt);
   },
 
   startAction: (actionId) => {
@@ -260,48 +250,6 @@ export const useGame = create<GameStore>((set, get) => ({
   setClass: (classId) => {
     set({ jobClass: classId });
     get().pushLog(`職種を変更: ${CLASS_MAP[classId]?.name ?? classId}`);
-  },
-
-  hireSubordinate: () => {
-    const s = get();
-    const cap = maxSubordinates(currentRank(s).index);
-    if (s.subordinates.length >= cap) {
-      get().pushLog(
-        cap === 0 ? "ミドル昇進で部下を採用できます" : "採用枠が一杯です",
-      );
-      return;
-    }
-    const cost = hireCost(s.subordinates.length);
-    if (s.gold < cost) {
-      get().pushLog(`採用費 ¥${cost} が足りません`);
-      return;
-    }
-    const name = SUB_NAMES[s.subordinates.length % SUB_NAMES.length];
-    const id =
-      (globalThis.crypto?.randomUUID?.() ?? `sub_${s.subordinates.length}`) +
-      `_${s.subordinates.length}`;
-    set({
-      gold: s.gold - cost,
-      subordinates: [
-        ...s.subordinates,
-        { id, name, xp: 0, assignment: null, progress: 0 },
-      ],
-    });
-    get().pushLog(`${name} を採用 (¥${cost})`);
-  },
-
-  assignSubordinate: (id, actionId) => {
-    set((st) => ({
-      subordinates: st.subordinates.map((sub) =>
-        sub.id === id ? { ...sub, assignment: actionId, progress: 0 } : sub,
-      ),
-    }));
-  },
-
-  fireSubordinate: (id) => {
-    set((st) => ({
-      subordinates: st.subordinates.filter((sub) => sub.id !== id),
-    }));
   },
 
   prestige: () => {
@@ -458,18 +406,6 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
 
   set({ bank, skills, actionProgress: progress, active: stopped ? null : s.active });
   if (stopped) get().pushLog(`素材切れ: ${action.name}`);
-}
-
-function runSubordinatesTick(set: SetFn, get: GetFn, dt: number): void {
-  const s = get();
-  const eff = getEffects(s);
-  const { bank, subordinates } = advanceSubordinates(
-    s.subordinates,
-    s.bank,
-    dt,
-    eff,
-  );
-  set({ bank, subordinates });
 }
 
 function runCombatTick(set: SetFn, get: GetFn, dt: number): void {

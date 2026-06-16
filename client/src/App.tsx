@@ -8,7 +8,6 @@ import { CombatView } from "./components/CombatView";
 import { BankView } from "./components/BankView";
 import { ShopView } from "./components/ShopView";
 import { CareerView } from "./components/CareerView";
-import { TeamView } from "./components/TeamView";
 import { PrestigeView } from "./components/PrestigeView";
 import { EquipView } from "./components/EquipView";
 import { LogPanel } from "./components/LogPanel";
@@ -34,7 +33,6 @@ export default function App() {
   let main;
   if (tab === "combat") main = <CombatView />;
   else if (tab === "career") main = <CareerView />;
-  else if (tab === "team") main = <TeamView />;
   else if (tab === "equip") main = <EquipView />;
   else if (tab === "prestige") main = <PrestigeView />;
   else if (tab === "bank") main = <BankView />;

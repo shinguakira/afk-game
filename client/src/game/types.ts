@@ -114,18 +114,6 @@ export interface Monster {
   regen?: number;
 }
 
-/** 部下。プレイヤーとは別に生産/制作アクションを1つ並行で回せる。 */
-export interface Subordinate {
-  id: string;
-  name: string;
-  /** 自身の経験値（levelForXp で熟練度に変換）。 */
-  xp: number;
-  /** 割り当て中のアクション id（生産/制作のみ）。null = 待機。 */
-  assignment: ActionId | null;
-  /** 進捗(ms)。 */
-  progress: number;
-}
-
 // ---- Runtime save state ----
 
 export type ActiveAction =
@@ -140,8 +128,6 @@ export interface SaveState {
   gold: number;
   /** 選択中の職種クラス id（null = 無所属）。補正の源。 */
   jobClass: string | null;
-  /** 部下。生産/制作を並行で回す。 */
-  subordinates: Subordinate[];
   /** 起業(プレステージ)で得る永続通貨「ストック」。 */
   prestigePoints: number;
   /** 永続アップグレード id → 取得レベル。 */
