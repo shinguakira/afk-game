@@ -81,7 +81,7 @@ export function BankView() {
               title={it.name}
               onClick={() => setSelected(id)}
             >
-              <Icon name={it.icon} size={26} />
+              <Icon name={it.icon} size={40} />
               <span className="qty">{formatNumber(qty)}</span>
             </button>
           );

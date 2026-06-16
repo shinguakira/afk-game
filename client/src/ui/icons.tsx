@@ -1,4 +1,5 @@
 import type { IconType } from "react-icons";
+import { ITEM_ICONS } from "./itemIcons";
 import {
   SiJavascript,
   SiTypescript,
@@ -329,6 +330,19 @@ export interface IconProps {
 }
 
 export function Icon({ name, size = 18, className, color, title }: IconProps) {
+  // 自作アイテムアイコンを優先（料理/パーツ/資源/ギア）。
+  if (name && ITEM_ICONS[name]) {
+    const el = ITEM_ICONS[name](size);
+    return (
+      <span
+        className={className}
+        title={title}
+        style={{ display: "inline-flex", verticalAlign: "-0.15em" }}
+      >
+        {el}
+      </span>
+    );
+  }
   const C = (name && ICONS[name]) || LuFileCode2;
   return (
     <C

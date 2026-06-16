@@ -121,13 +121,13 @@ export const ITEMS: Item[] = [
   { id: "cola", name: "コーラ", type: "food", icon: "cola", sellPrice: 3, heals: 7 },
   { id: "onigiri", name: "おにぎり", type: "food", icon: "onigiri", sellPrice: 4, heals: 9 },
   { id: "energy_drink", name: "エナジードリンク", type: "food", icon: "energy", sellPrice: 8, heals: 13 },
-  { id: "cupramen", name: "カップ麺", type: "food", icon: "noodles", sellPrice: 5, heals: 11 },
+  { id: "cupramen", name: "カップ麺", type: "food", icon: "cupramen", sellPrice: 5, heals: 11 },
   { id: "bento", name: "弁当", type: "food", icon: "bento", sellPrice: 10, heals: 16 },
   { id: "ramen", name: "ラーメン", type: "food", icon: "ramen", sellPrice: 14, heals: 20 },
-  { id: "gyudon", name: "牛丼", type: "food", icon: "rice", sellPrice: 15, heals: 22 },
+  { id: "gyudon", name: "牛丼", type: "food", icon: "gyudon", sellPrice: 15, heals: 22 },
   { id: "pizza", name: "ピザ", type: "food", icon: "pizza", sellPrice: 18, heals: 26 },
   { id: "sushi", name: "寿司", type: "food", icon: "sushi", sellPrice: 24, heals: 30 },
-  { id: "steak", name: "ステーキ", type: "food", icon: "meat", sellPrice: 30, heals: 38 },
+  { id: "steak", name: "ステーキ", type: "food", icon: "steak", sellPrice: 30, heals: 38 },
   { id: "paid_leave", name: "有給", type: "food", icon: "leave", sellPrice: 50, heals: 60 },
 
   // ===== その他ドロップ =====

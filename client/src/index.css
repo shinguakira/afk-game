@@ -322,9 +322,9 @@ button.active {
 /* ---- storage (Melvor風アイテムグリッド) ---- */
 .store-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
   gap: 8px;
-  max-width: 560px;
+  max-width: 600px;
 }
 .store-tile {
   position: relative;
