@@ -45,12 +45,20 @@ const TICK_MS = 100;
 let loopStarted = false;
 let toastSeq = 0;
 const TOAST_MS = 4200;
+let xpFlashTimer: number | undefined;
+const XP_FLASH_MS = 3500;
 
 export interface Toast {
   id: number;
   text: string;
   icon?: string;
   kind?: "level" | "goal" | "info";
+}
+
+/** 直近のXP獲得インジケータ（同じスキルなら加算、しばらく無獲得で消える）。 */
+export interface XpFlash {
+  skillId: string;
+  amount: number;
 }
 const SAVE_EVERY_MS = 15_000;
 const MAX_OFFLINE_MS = 24 * 60 * 60 * 1000; // 24h cap, like Melvor
@@ -120,11 +128,13 @@ interface GameStore extends SaveState {
   enemyTimer: number;
   log: string[];
   toasts: Toast[];
+  xpFlash: XpFlash | null;
   offlineSummary: OfflineSummary | null;
   ready: boolean;
 
   init: () => Promise<void>;
   pushToast: (t: Omit<Toast, "id">) => void;
+  flashXp: (skillId: string, amount: number) => void;
   tick: (dt: number) => void;
   startAction: (actionId: ActionId) => void;
   startCombat: (monsterId: MonsterId) => void;
@@ -151,6 +161,7 @@ export const useGame = create<GameStore>((set, get) => ({
   enemyTimer: 0,
   log: [],
   toasts: [],
+  xpFlash: null,
   offlineSummary: null,
   ready: false,
 
@@ -164,6 +175,15 @@ export const useGame = create<GameStore>((set, get) => ({
       () => set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) })),
       TOAST_MS,
     );
+  },
+
+  flashXp: (skillId, amount) => {
+    if (amount <= 0) return;
+    const cur = get().xpFlash;
+    const acc = cur && cur.skillId === skillId ? cur.amount + amount : amount;
+    set({ xpFlash: { skillId, amount: acc } });
+    if (xpFlashTimer) clearTimeout(xpFlashTimer);
+    xpFlashTimer = window.setTimeout(() => set({ xpFlash: null }), XP_FLASH_MS);
   },
 
   init: async () => {
@@ -480,6 +500,7 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
 
   set({ bank, skills, actionProgress: progress, active: stopped ? null : s.active });
   if (xpGained > 0) {
+    get().flashXp(action.skill, Math.round(xpGained));
     toastLevelUp(
       get,
       s.skills[action.skill]?.xp ?? 0,
@@ -504,6 +525,7 @@ function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
   const goldMult = mult(eff, "gold");
   const dropMult = mult(eff, "dropRate");
   const combatXpMult = mult(eff, "xp.combat");
+  let combatXpGained = 0;
   let enemyHp = s.enemyHp > 0 ? s.enemyHp : monster.hp;
   let playerHp = s.playerHp > 0 ? s.playerHp : stats.maxHp;
   let playerTimer = s.playerTimer + dt;
@@ -545,6 +567,7 @@ function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
           }
         }
         skills = grantCombatXp(skills, monster.xp * combatXpMult);
+        combatXpGained += monster.xp * combatXpMult;
         logs.push(`${monster.name} を解決！ (+${Math.round(monster.xp * combatXpMult)} xp)`);
         enemyHp = monster.hp; // respawn next target
       }
@@ -602,4 +625,5 @@ function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
   for (const id of COMBAT_STAT_IDS) {
     toastLevelUp(get, s.skills[id]?.xp ?? 0, skills[id]?.xp ?? 0, id);
   }
+  if (combatXpGained > 0) get().flashXp("combat", Math.round(combatXpGained));
 }
