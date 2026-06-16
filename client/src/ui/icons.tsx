@@ -335,6 +335,28 @@ const ICONS: Record<string, IconType> = {
   webapp: LuGlobe,
 };
 
+// 言語/フレームワークのブランド配色（公式色。暗すぎる色は暗背景で見えるよう明るめに調整）。
+const BRAND_COLOR: Record<string, string> = {
+  // languages
+  javascript: "#F7DF1E", typescript: "#3178C6", python: "#4B8BBE", ruby: "#CC342D",
+  php: "#8993BE", lua: "#5B6BC0", perl: "#5C7AB0", c: "#A8B9CC", cpp: "#00599C",
+  rust: "#E07B53", go: "#00ADD8", zig: "#F7A41D", java: "#ED8B00", kotlin: "#A97BFF",
+  scala: "#DC322F", csharp: "#68217A", swift: "#F05138", dart: "#0175C2", objc: "#5C9FE0",
+  haskell: "#8C6FB0", elixir: "#9B6FC4", clojure: "#5881D8", fsharp: "#378BBA",
+  erlang: "#C5163F", r: "#276DC3", julia: "#B07BC8", sql: "#5B9BD5", cobol: "#5B87BF",
+  fortran: "#9B7BC4", asm: "#8A7CF0",
+  // frameworks
+  react: "#61DAFB", vue: "#4FC08D", svelte: "#FF3E00", angular: "#DD0031",
+  nextjs: "#E8E8E8", node: "#6FBF4E", django: "#44B78B", rails: "#E33A3A",
+  spring: "#6DB33F", laravel: "#FF2D20", flutter: "#48A8E0", reactnative: "#61DAFB",
+  swiftui: "#F05138", compose: "#4285F4", unity: "#DEDEDE", unreal: "#CFCFCF",
+  godot: "#5BA0CF", pytorch: "#EE4C2C", tensorflow: "#FF6F00", pandas: "#9B7BD4",
+  sklearn: "#F7931E", docker: "#2496ED", kubernetes: "#4D7BE8", terraform: "#9468D4",
+  express: "#BBBBBB", qt: "#41CD52", dotnet: "#7B5BD4", symfony: "#CCCCCC",
+  phoenix: "#FD4F00", ktor: "#3B8CFA", numpy: "#4DABCF", fastapi: "#10AA98",
+  flask: "#CCCCCC", axios: "#7A52E8", jquery: "#2780B8",
+};
+
 export interface IconProps {
   name?: string;
   size?: number;
@@ -358,11 +380,12 @@ export function Icon({ name, size = 18, className, color, title }: IconProps) {
     );
   }
   const C = (name && ICONS[name]) || LuFileCode2;
+  const brand = name ? BRAND_COLOR[name] : undefined;
   return (
     <C
       size={size}
       className={className}
-      color={color}
+      color={color ?? brand}
       title={title}
       style={{ verticalAlign: "-0.15em", flexShrink: 0 }}
     />
