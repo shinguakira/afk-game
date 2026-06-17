@@ -37,6 +37,7 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
     playerHp: 100,
     active: null,
     actionProgress: 0,
+    plots: [],
     lastSaved: 0,
     ...over,
   };
@@ -187,6 +188,15 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
     `${ok ? "PASS" : "FAIL"}  SRE craft bonus reaches 料理: ${base.bank.onigiri} → ${sre.bank.onigiri} (${ratio.toFixed(3)})`,
   );
   if (!ok) failures++;
+}
+
+// 9) 農業: 作物は active と独立に放置で育つ（オフラインでも成長、上限でキャップ）。
+{
+  const s = freshState({ plots: [{ crop: "tomato", growth: 0 }] }); // tomato growMs=45s
+  simulateOffline(s, 30_000); // 30s 経過
+  check("plot grows offline (30s)", Math.round(s.plots[0].growth), 30_000);
+  simulateOffline(s, 60_000); // さらに60s → 45sでキャップ
+  check("plot growth caps at growMs", s.plots[0].growth, 45_000);
 }
 
 console.log(failures === 0 ? "\nALL PASS" : `\n${failures} FAILURE(S)`);

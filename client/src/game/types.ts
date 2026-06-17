@@ -131,10 +131,19 @@ export type ActiveAction =
   | { kind: "combat"; monsterId: MonsterId }
   | null;
 
+/** 農業の畑1区画。作物を植えると growth(ms) が経過時間で増え、growMs で収穫可。
+ *  作物の成長は放置で進む（能動アクションとは独立）。手入れ中は成長が加速する。 */
+export interface PlotState {
+  crop: ItemId | null;
+  growth: number;
+}
+
 export interface SaveState {
   version: number;
   skills: Record<SkillId, { xp: number }>;
   bank: Record<ItemId, number>;
+  /** 農業の畑（放置で育つ）。 */
+  plots: PlotState[];
   gold: number;
   /** 選択中の職種クラス id（null = 無所属）。補正の源。 */
   jobClass: string | null;

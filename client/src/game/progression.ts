@@ -1,5 +1,6 @@
 import type { OfflineSummary, SaveState } from "./types";
 import { ACTION_MAP, isCraftAction, ITEM_MAP, MONSTER_MAP, STAT } from "./data";
+import { FARM_CROP_MAP, TEND_BOOST } from "./data/farming";
 import { avgEnemyDamage, avgPlayerDamage, getCombatStats } from "./combat";
 import { getEffects } from "./effects";
 import { type Effects, mult } from "./modifiers";
@@ -30,7 +31,24 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
   if (state.active?.kind === "skill") simPlayerSkill(state, ms, summary, eff);
   else if (state.active?.kind === "combat") simPlayerCombat(state, ms, summary, eff);
 
+  simPlots(state, ms); // 作物は放置で育つ（オフラインも進む。収穫は帰宅後に手動）
+
   return summary;
+}
+
+/** オフライン中の作物成長。手入れ中(active=farming)なら加速。収穫はしない（成長のみ）。 */
+function simPlots(state: SaveState, ms: number): void {
+  if (!state.plots) return;
+  const tending =
+    state.active?.kind === "skill" &&
+    ACTION_MAP[state.active.actionId]?.skill === "farming";
+  const rate = tending ? TEND_BOOST : 1;
+  for (const p of state.plots) {
+    if (!p.crop) continue;
+    const spec = FARM_CROP_MAP[p.crop];
+    if (!spec) continue;
+    p.growth = Math.min(spec.growMs, p.growth + ms * rate);
+  }
 }
 
 function simPlayerSkill(

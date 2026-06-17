@@ -203,6 +203,12 @@ IT企業を舞台にした放置型RPG。`Melvor Idle` のコアループ（1つ
 - 生活費(放置コスト)と相殺させて経済の緊張を作る（0-6）。
 - ※「成果物」「サービス化」「リリース」という語・アイテム・アクションは SPEC から一掃済み。
 
+### 0-11f. 農業＝放置成長＋能動の手入れ（2026-06-17 決定）
+農業だけ他スキルと違う独自メカニクス（Melvor Farming 型）:
+- **作物＝放置成長**: 畑(plot)に作物を植えると、`active` とは独立に経過時間で育つ（オフラインも進む）。育ちきったら**手動で収穫**＝作物アイテム＋farming XP。
+- **手入れ＝能動**: 「土を整える / 水やり / 肥料をまく」は active アクション。farming XP が入り、**手入れ中は全畑の成長が ×2.5 加速**。
+- 実装: `SaveState.plots: {crop, growth}[]`（PLOT_COUNT=4）、`store.advancePlots`（tick毎・active=farmingで加速）、`plantCrop/harvestPlot`、`progression.simPlots`（オフライン成長）、`data/farming.ts`（FARM_CROPS: 成長時間/収穫数/XP）、`FarmingView`。作物itemは§前のtomato/carrot/…＋rice/dough(料理素材)。SAVE_VERSION 16。
+
 ---
 
 ## 1. コンセプト / 世界観

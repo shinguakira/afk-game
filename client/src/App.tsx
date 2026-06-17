@@ -7,6 +7,7 @@ import { SkillView } from "./components/SkillView";
 import { CombatView } from "./components/CombatView";
 import { BankView } from "./components/BankView";
 import { ShopView } from "./components/ShopView";
+import { FarmingView } from "./components/FarmingView";
 import { CareerView } from "./components/CareerView";
 import { PrestigeView } from "./components/PrestigeView";
 import { EquipView } from "./components/EquipView";
@@ -40,6 +41,7 @@ export default function App() {
   else if (tab === "prestige") main = <PrestigeView />;
   else if (tab === "bank") main = <BankView />;
   else if (tab === "shop") main = <ShopView />;
+  else if (tab === "farming") main = <FarmingView />;
   else if (SKILL_MAP[tab]) main = <SkillView skillId={tab} />;
   else main = <CombatView />;
 

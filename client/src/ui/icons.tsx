@@ -137,6 +137,7 @@ import {
   LuZap,
   LuWheat,
   LuSprout,
+  LuShovel,
   LuFish,
   LuSalad,
   LuCroissant,
@@ -282,6 +283,8 @@ const ICONS: Record<string, IconType> = {
   dough: LuCroissant,
   leave: LuLeaf,
   farming: LuSprout,
+  till: LuShovel,
+  fertilizer: LuLeaf,
   // 作物アイコンは itemIcons.tsx の自作SVG（ITEM_ICONS が優先）。近似の流用はしない。
 
   // combat stats

@@ -24,6 +24,7 @@ import { MILESTONES } from "./roadmap";
 import { PRESTIGE_MAP } from "./data";
 import { levelForXp, xpForLevel } from "./xp";
 import { STARTING_MENTAL_LEVEL, STAT } from "./data/skills";
+import { FARM_CROP_MAP, TEND_BOOST, PLOT_COUNT } from "./data/farming";
 import {
   enemyHitChance,
   getCombatStats,
@@ -39,7 +40,7 @@ import {
 
 // Bump whenever the save schema changes incompatibly (e.g. skill ids renamed).
 // On mismatch we discard the old save and start fresh (no migrations yet).
-const SAVE_VERSION = 15;
+const SAVE_VERSION = 16;
 const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
@@ -95,6 +96,7 @@ function makeStartingState(): SaveState {
     playerHp: maxHp,
     active: null,
     actionProgress: 0,
+    plots: Array.from({ length: PLOT_COUNT }, () => ({ crop: null, growth: 0 })),
     lastSaved: Date.now(),
   };
 }
@@ -115,6 +117,7 @@ function pickSaveState(s: GameStore): SaveState {
     playerHp: s.playerHp,
     active: s.active,
     actionProgress: s.actionProgress,
+    plots: s.plots,
     lastSaved: Date.now(),
   };
 }
@@ -148,6 +151,8 @@ interface GameStore extends SaveState {
   checkRoadmap: () => void;
   sell: (itemId: ItemId, qty: number) => void;
   buyItem: (itemId: ItemId, qty?: number) => void;
+  plantCrop: (plotIndex: number, cropId: string) => void;
+  harvestPlot: (plotIndex: number) => void;
   saveNow: () => Promise<void>;
   hardReset: () => Promise<void>;
   dismissOffline: () => void;
@@ -198,6 +203,7 @@ export const useGame = create<GameStore>((set, get) => ({
     const base = loaded ?? makeStartingState();
     // Merge in any skills added since the save was written.
     for (const s of SKILLS) base.skills[s.id] ??= { xp: 0 };
+    base.plots ??= Array.from({ length: PLOT_COUNT }, () => ({ crop: null, growth: 0 }));
 
     let offlineSummary: OfflineSummary | null = null;
     const elapsed = Date.now() - (base.lastSaved ?? Date.now());
@@ -231,6 +237,7 @@ export const useGame = create<GameStore>((set, get) => ({
     if (!s.ready) return;
     if (s.active?.kind === "skill") runSkillTick(set, get, dt);
     else if (s.active?.kind === "combat") runCombatTick(set, get, dt);
+    advancePlots(set, get, dt); // 作物は active と独立に放置で育つ
     get().checkRoadmap();
   },
 
@@ -368,6 +375,36 @@ export const useGame = create<GameStore>((set, get) => ({
     });
   },
 
+  // 畑に作物を植える（farming Lvを満たし、空き畑のみ）。以後は放置で育つ。
+  plantCrop: (plotIndex, cropId) => {
+    set((s) => {
+      const spec = FARM_CROP_MAP[cropId];
+      const plot = s.plots[plotIndex];
+      if (!spec || !plot || plot.crop) return {};
+      if (levelForXp(s.skills.farming?.xp ?? 0) < spec.level) return {};
+      const plots = s.plots.slice();
+      plots[plotIndex] = { crop: cropId, growth: 0 };
+      return { plots };
+    });
+  },
+
+  // 育ちきった畑を収穫（作物アイテム＋farming XP）。畑は空に戻る。
+  harvestPlot: (plotIndex) => {
+    const s = get();
+    const plot = s.plots[plotIndex];
+    if (!plot?.crop) return;
+    const spec = FARM_CROP_MAP[plot.crop];
+    if (!spec || plot.growth < spec.growMs) return;
+    const bank = { ...s.bank, [plot.crop]: (s.bank[plot.crop] ?? 0) + spec.yield };
+    const plots = s.plots.slice();
+    plots[plotIndex] = { crop: null, growth: 0 };
+    const before = s.skills.farming?.xp ?? 0;
+    const skills = { ...s.skills, farming: { xp: before + spec.xp } };
+    set({ bank, plots, skills });
+    get().flashXp("farming", spec.xp);
+    toastLevelUp(get, before, before + spec.xp, "farming");
+  },
+
   saveNow: async () => {
     await writeSave(pickSaveState(get()));
   },
@@ -440,6 +477,25 @@ function toastLevelUp(
       kind: "level",
     });
   }
+}
+
+/** 作物の放置成長。activeとは独立に毎tick進む。手入れ中(active=farming)は加速。 */
+function advancePlots(set: SetFn, get: GetFn, dt: number): void {
+  const s = get();
+  if (!s.plots?.some((p) => p.crop)) return;
+  const tending =
+    s.active?.kind === "skill" &&
+    ACTION_MAP[s.active.actionId]?.skill === "farming";
+  const rate = tending ? TEND_BOOST : 1;
+  let changed = false;
+  const plots = s.plots.map((p) => {
+    if (!p.crop) return p;
+    const spec = FARM_CROP_MAP[p.crop];
+    if (!spec || p.growth >= spec.growMs) return p;
+    changed = true;
+    return { ...p, growth: Math.min(spec.growMs, p.growth + dt * rate) };
+  });
+  if (changed) set({ plots });
 }
 
 function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
