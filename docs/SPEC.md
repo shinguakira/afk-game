@@ -210,6 +210,7 @@ IT企業を舞台にした放置型RPG。`Melvor Idle` のコアループ（1つ
 - 実装: `SaveState.plots: {crop, growth}[]`（PLOT_COUNT=4）、`store.advancePlots`（tick毎・active=farmingで加速）、`plantCrop/harvestPlot`、`progression.simPlots`（オフライン成長）、`data/farming.ts`（FARM_CROPS: 成長時間/収穫数/XP/種）、`FarmingView`。作物itemは§前のtomato/carrot/…＋rice/dough(料理素材)。
 - **種システム**: 植えるには対応する**種アイテムを消費**（ショップで購入）。作物ピッカーに**育成時間・収穫数・種要否(所持数)**を表示。例外: **パースニップ(parsnip)だけ種不要**のスターター作物。SAVE_VERSION 17。
 - **成長時間は長尺**（放置ゲーム）: 最短=ミニトマト30分、パースニップ=4時間、上位ほど長い（りんご6時間）。長い作物ほど収穫数も多い（×3→×15）。手入れで×2.5加速・オフラインも進む。
+- **ハーブ・ドリンク素材系**: ミント/しょうが/レモン/ぶどう/コーヒー豆/高麗人参 を栽培でき、**料理で自家製ドリンクの材料**になる（ミントティー/レモネード/ぶどうジュース/自家製エナジードリンク＝高麗人参+コーヒー豆）。アイコンは全て自作SVG。
 
 ---
 

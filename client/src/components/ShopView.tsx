@@ -21,6 +21,8 @@ const SECTIONS: { title: string; icon: string; items: string[] }[] = [
     items: [
       "seed_tomato", "seed_rice", "seed_carrot", "seed_edamame",
       "seed_wheat", "seed_shiitake", "seed_strawberry", "seed_apple",
+      "seed_mint", "seed_ginger", "seed_lemon", "seed_grape",
+      "seed_coffee", "seed_ginseng",
     ],
   },
   {

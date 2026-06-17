@@ -144,6 +144,14 @@ export const ITEMS: Item[] = [
   { id: "strawberry", name: "いちご", type: "food", icon: "strawberry", sellPrice: 12, heals: 20 },
   { id: "apple", name: "りんご", type: "food", icon: "apple", sellPrice: 15, heals: 26 },
 
+  // ===== ハーブ・ドリンク素材（農業で栽培。ジュース/茶/エナジードリンクの材料） =====
+  { id: "mint", name: "ミント", type: "misc", icon: "mint", sellPrice: 4 },
+  { id: "ginger", name: "しょうが", type: "misc", icon: "ginger", sellPrice: 5 },
+  { id: "lemon", name: "レモン", type: "misc", icon: "lemon", sellPrice: 6 },
+  { id: "grape", name: "ぶどう", type: "food", icon: "grape", sellPrice: 10, heals: 10 },
+  { id: "coffee_bean", name: "コーヒー豆", type: "misc", icon: "coffee_bean", sellPrice: 8 },
+  { id: "ginseng", name: "高麗人参", type: "misc", icon: "ginseng", sellPrice: 14 },
+
   // ===== 種（ショップで購入 → 農業で植える。パースニップは種不要） =====
   { id: "seed_tomato", name: "ミニトマトの種", type: "misc", icon: "seed", sellPrice: 2 },
   { id: "seed_rice", name: "稲の種もみ", type: "misc", icon: "seed", sellPrice: 2 },
@@ -153,6 +161,12 @@ export const ITEMS: Item[] = [
   { id: "seed_shiitake", name: "しいたけの菌床", type: "misc", icon: "seed", sellPrice: 4 },
   { id: "seed_strawberry", name: "いちごの苗", type: "misc", icon: "seed", sellPrice: 5 },
   { id: "seed_apple", name: "りんごの苗木", type: "misc", icon: "seed", sellPrice: 6 },
+  { id: "seed_mint", name: "ミントの苗", type: "misc", icon: "seed", sellPrice: 2 },
+  { id: "seed_ginger", name: "しょうがの種", type: "misc", icon: "seed", sellPrice: 3 },
+  { id: "seed_lemon", name: "レモンの苗木", type: "misc", icon: "seed", sellPrice: 4 },
+  { id: "seed_grape", name: "ぶどうの苗", type: "misc", icon: "seed", sellPrice: 5 },
+  { id: "seed_coffee", name: "コーヒーの苗木", type: "misc", icon: "seed", sellPrice: 6 },
+  { id: "seed_ginseng", name: "高麗人参の種", type: "misc", icon: "seed", sellPrice: 8 },
 
   // ===== 飲食物 (food / 回復) =====
   { id: "water", name: "水", type: "food", icon: "water", sellPrice: 1, heals: 3 },
@@ -168,6 +182,11 @@ export const ITEMS: Item[] = [
   { id: "sushi", name: "寿司", type: "food", icon: "sushi", sellPrice: 24, heals: 30 },
   { id: "steak", name: "ステーキ", type: "food", icon: "steak", sellPrice: 30, heals: 38 },
   { id: "paid_leave", name: "有給", type: "food", icon: "leave", sellPrice: 50, heals: 60 },
+  // 自家製ドリンク（料理で作物素材から作る）
+  { id: "mint_tea", name: "ミントティー", type: "food", icon: "mint_tea", sellPrice: 8, heals: 14 },
+  { id: "lemonade", name: "レモネード", type: "food", icon: "lemonade", sellPrice: 12, heals: 18 },
+  { id: "grape_juice", name: "ぶどうジュース", type: "food", icon: "grape_juice", sellPrice: 16, heals: 24 },
+  { id: "homemade_energy", name: "自家製エナジードリンク", type: "food", icon: "energy_home", sellPrice: 28, heals: 42 },
 ];
 // 注: OSS活動/資格/評価/負債のような「抽象的な成果」はアイテム化しない（在庫に積む名詞はノイズ）。
 // 知的活動が生むのは commit のみ。アイテムを生むのは物理制作(料理/PC組立/電子工作)だけ。

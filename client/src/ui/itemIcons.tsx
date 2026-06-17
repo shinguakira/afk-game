@@ -365,4 +365,91 @@ export const ITEM_ICONS: Record<string, R> = {
       <path d="M13 4.6q2.6-2 4.6-1q-0.8 2.8-3.7 2.3z" fill="#43933a" stroke="#2e6a28" strokeWidth="0.6" />
     </g>,
   ),
+
+  // ===== ハーブ・ドリンク素材 =====
+  mint: svg(
+    <g>
+      <path d="M12 22V6" stroke="#3f8a37" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+      <path d="M12 9C7 8 5 12 8 15C11 14 12 11 12 9z" fill="#5bb24a" stroke="#2e6a28" strokeWidth="0.8" />
+      <path d="M12 9C17 8 19 12 16 15C13 14 12 11 12 9z" fill="#43933a" stroke="#2e6a28" strokeWidth="0.8" />
+      <path d="M12 4C9.5 3 8 6 10 8C12 7 12 5.5 12 4z" fill="#6dc35a" stroke="#2e6a28" strokeWidth="0.8" />
+      <path d="M12 4C14.5 3 16 6 14 8C12 7 12 5.5 12 4z" fill="#4ea03f" stroke="#2e6a28" strokeWidth="0.8" />
+    </g>,
+  ),
+  ginger: svg(
+    <g fill="#d9b27a" stroke="#a9824f" strokeWidth="1" strokeLinejoin="round">
+      <path d="M5 13C4 9 8 7 11 9C13 6 18 7 18 11C20 13 18 17 14 17C12 20 7 19 6 16C4 16 4 14 5 13z" />
+      <path d="M11 9l1.5 3M14 17l-1-3M6.5 16l2.5-2" stroke="#a9824f" strokeWidth="0.8" fill="none" />
+    </g>,
+  ),
+  lemon: svg(
+    <g>
+      <ellipse cx="12" cy="13" rx="8.5" ry="6.5" fill="#f6d743" stroke="#d4b021" strokeWidth="1.2" />
+      <ellipse cx="9" cy="10.5" rx="2.6" ry="1.5" fill="#fbe98c" opacity="0.7" />
+      <path d="M3.5 13H2M22 13h-1.5" stroke="#c9a91e" strokeWidth="1.8" strokeLinecap="round" />
+    </g>,
+  ),
+  grape: svg(
+    <g>
+      <path d="M13 5q3-2 5 0q-1 3-4 2z" fill="#43933a" stroke="#2e6a28" strokeWidth="0.6" />
+      <path d="M12 5C12 6.5 13 6.5 14 6" stroke="#6b4a2b" strokeWidth="1.3" fill="none" />
+      <g fill="#8e5bb5" stroke="#5f3a82" strokeWidth="0.7">
+        <circle cx="9" cy="9.5" r="2.3" /><circle cx="13.6" cy="9.5" r="2.3" />
+        <circle cx="11.3" cy="13" r="2.3" /><circle cx="15.7" cy="12.8" r="2.3" />
+        <circle cx="9.4" cy="16.2" r="2.3" /><circle cx="13.4" cy="16.3" r="2.3" />
+        <circle cx="11.4" cy="19.4" r="2.3" />
+      </g>
+    </g>,
+  ),
+  coffee_bean: svg(
+    <g>
+      <ellipse cx="12" cy="12" rx="6.5" ry="9" fill="#6b4226" stroke="#4a2c18" strokeWidth="1.2" />
+      <path d="M12 3.5C9 8 15 16 12 20.5" stroke="#3a2113" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+    </g>,
+  ),
+  ginseng: svg(
+    <g>
+      <g stroke="#d8c89c" strokeWidth="2.4" strokeLinecap="round" fill="none">
+        <path d="M12 6V12" />
+        <path d="M12 12L8 21" />
+        <path d="M12 12L16 21" />
+        <path d="M12 8L7 11.5" />
+        <path d="M12 8L17 11.5" />
+      </g>
+      <circle cx="12" cy="5.5" r="2" fill="#ece0c0" stroke="#bfa878" strokeWidth="1" />
+      <path d="M12 4.5C12 2.5 10.5 2 9.5 2.3M12 4.5C12 2.5 13.5 2 14.5 2.3" stroke="#3f8a37" strokeWidth="1.3" fill="none" strokeLinecap="round" />
+    </g>,
+  ),
+
+  // ===== 自家製ドリンク =====
+  mint_tea: svg(
+    <g>
+      <path d="M6 3v2.5M9.5 3v2.5M13 3v2.5" stroke="#8fb98f" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M3 8h13v5a6.5 6.5 0 0 1-13 0z" fill="#eef2f0" stroke="#9aa3ad" strokeWidth="1.2" />
+      <path d="M4 9.5h11v3a5 5 0 0 1-11 0z" fill="#6fb24a" />
+      <path d="M16 9.5a3 3 0 0 1 0 6" fill="none" stroke="#9aa3ad" strokeWidth="1.4" />
+    </g>,
+  ),
+  lemonade: svg(
+    <g>
+      <path d="M6 6L18 6L16.5 21L7.5 21z" fill="#f7e27a" stroke="#d4b021" strokeWidth="1.2" />
+      <path d="M6 6L18 6L17.7 9.5L6.3 9.5z" fill="#fbea9a" />
+      <line x1="14" y1="3" x2="11" y2="20" stroke="#e05656" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="9.5" cy="14.5" r="2.2" fill="#f6d743" stroke="#d4b021" strokeWidth="0.8" />
+    </g>,
+  ),
+  grape_juice: svg(
+    <g>
+      <path d="M6 6L18 6L16.5 21L7.5 21z" fill="#8e5bb5" stroke="#5f3a82" strokeWidth="1.2" />
+      <path d="M6 6L18 6L17.7 9.5L6.3 9.5z" fill="#a274c4" />
+      <line x1="13.5" y1="3" x2="11" y2="20" stroke="#e8e2ee" strokeWidth="1.5" strokeLinecap="round" />
+    </g>,
+  ),
+  energy_home: svg(
+    <g>
+      <rect x="7" y="3" width="10" height="18" rx="2" fill="#2a9d5c" stroke="#1c6e40" strokeWidth="1.2" />
+      <rect x="7" y="3" width="10" height="3" rx="1.5" fill="#cfd6dd" />
+      <path d="M12.8 8l-3.3 5.5H12l-1 4 4.2-6.2H12.6z" fill="#f2c14e" stroke="#c9971f" strokeWidth="0.6" strokeLinejoin="round" />
+    </g>,
+  ),
 };

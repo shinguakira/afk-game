@@ -26,6 +26,14 @@ export const FARM_CROPS: FarmCrop[] = [
   { id: "shiitake", level: 8, growMs: 10_800_000, yield: 9, xp: 200, seed: "seed_shiitake" }, // 3時間
   { id: "strawberry", level: 10, growMs: 14_400_000, yield: 11, xp: 300, seed: "seed_strawberry" }, // 4時間
   { id: "apple", level: 13, growMs: 21_600_000, yield: 15, xp: 460, seed: "seed_apple" }, // 6時間
+
+  // ハーブ・ドリンク素材系（料理でジュース/茶/エナジードリンクの材料になる）
+  { id: "mint", level: 2, growMs: 2_400_000, yield: 4, xp: 38, seed: "seed_mint" }, // 40分
+  { id: "ginger", level: 4, growMs: 3_600_000, yield: 3, xp: 56, seed: "seed_ginger" }, // 1時間
+  { id: "lemon", level: 5, growMs: 5_400_000, yield: 4, xp: 88, seed: "seed_lemon" }, // 1.5時間
+  { id: "grape", level: 7, growMs: 7_200_000, yield: 5, xp: 125, seed: "seed_grape" }, // 2時間
+  { id: "coffee_bean", level: 9, growMs: 10_800_000, yield: 4, xp: 190, seed: "seed_coffee" }, // 3時間
+  { id: "ginseng", level: 12, growMs: 18_000_000, yield: 3, xp: 380, seed: "seed_ginseng" }, // 5時間
 ];
 
 export const FARM_CROP_MAP: Record<string, FarmCrop> = Object.fromEntries(

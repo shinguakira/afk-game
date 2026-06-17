@@ -12,6 +12,11 @@ const COOKING: GameAction[] = [
   { id: "cook_pizza", skill: "cooking", name: "ピザを焼く", level: 12, time: 3600, xp: 38, inputs: { dough: 1, veg: 1, meat: 1 }, outputs: { pizza: 1 } },
   { id: "cook_sushi", skill: "cooking", name: "寿司を握る", level: 16, time: 3800, xp: 46, inputs: { rice: 1, fish_ing: 2 }, outputs: { sushi: 1 } },
   { id: "cook_steak", skill: "cooking", name: "ステーキを焼く", level: 20, time: 4000, xp: 54, inputs: { meat: 3 }, outputs: { steak: 1 } },
+  // 自家製ドリンク: 農業のハーブ/素材から作る
+  { id: "brew_mint_tea", skill: "cooking", name: "ミントティーを淹れる", level: 2, time: 2800, xp: 18, inputs: { mint: 2 }, outputs: { mint_tea: 1 } },
+  { id: "make_lemonade", skill: "cooking", name: "レモネードを作る", level: 4, time: 3000, xp: 26, inputs: { lemon: 3 }, outputs: { lemonade: 1 } },
+  { id: "make_grape_juice", skill: "cooking", name: "ぶどうジュースを搾る", level: 7, time: 3200, xp: 36, inputs: { grape: 4 }, outputs: { grape_juice: 1 } },
+  { id: "make_energy", skill: "cooking", name: "自家製エナジードリンクを作る", level: 12, time: 3800, xp: 60, inputs: { ginseng: 1, coffee_bean: 3 }, outputs: { homemade_energy: 1 } },
 ];
 
 // PC組み立て: ショップで買ったパーツを組んで PC(装備) を作る。
