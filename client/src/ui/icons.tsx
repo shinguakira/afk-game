@@ -402,6 +402,22 @@ const BRAND_COLOR: Record<string, string> = {
   flask: "#CCCCCC", axios: "#7A52E8", jquery: "#2780B8",
   // infra/cloud
   linux: "#F5C542", aws: "#FF9900", gcp: "#4285F4", nginx: "#2DA53F", raspberrypi: "#A22846",
+  azure: "#3B96F0", database: "#5BC0DE",
+  // 領域・プラットフォーム
+  web: "#38BDF8", game: "#C084FC", mobile: "#34D399", embedded: "#F59E0B",
+  ai: "#F472B6", ai_data: "#F472B6", data: "#60A5FA",
+  // 業界ドメイン
+  fintech: "#22C55E", ec: "#FB923C", healthcare: "#F87171", legal: "#E2B857", public: "#7DB3F0",
+  // カテゴリ
+  g_script: "#FACC15", platform: "#A78BFA", infra: "#56B6C2", domain: "#F0A858",
+  // クラフト系スキル/アクション
+  cooking: "#FB923C", pcbuild: "#60A5FA", electronics: "#34D399", farming: "#5BB24A",
+  till: "#C08A4A", fertilizer: "#7CB342", soldering: "#34D399",
+  // 現場力（戦闘ステ）
+  debug: "#60A5FA", impl: "#F87171", robust: "#34D399", mental: "#C084FC",
+  // 案件・メタ
+  projects: "#F87171", roadmap: "#FBBF24", career: "#34D399", prestige: "#C084FC",
+  funding: "#22C55E", bank: "#FBBF24", shop: "#38BDF8",
 };
 
 export interface IconProps {

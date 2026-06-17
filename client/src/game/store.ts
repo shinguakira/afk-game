@@ -207,8 +207,11 @@ export const useGame = create<GameStore>((set, get) => ({
 
     let offlineSummary: OfflineSummary | null = null;
     const elapsed = Date.now() - (base.lastSaved ?? Date.now());
-    if (loaded && base.active && elapsed > 3000) {
-      offlineSummary = simulateOffline(base, Math.min(elapsed, MAX_OFFLINE_MS));
+    // 能動作業が無くても、植えてある作物はオフラインで育てる（全体的に時間進行）。
+    const hasCrops = base.plots?.some((p) => p.crop);
+    if (loaded && elapsed > 3000 && (base.active || hasCrops)) {
+      const sum = simulateOffline(base, Math.min(elapsed, MAX_OFFLINE_MS));
+      if (base.active) offlineSummary = sum; // おかえりモーダルは能動作業があった時だけ
     }
 
     set({ ...base, offlineSummary, ready: true, enemyHp: 0 });

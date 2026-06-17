@@ -29,57 +29,74 @@ function CropPicker({
 }) {
   const plant = useGame((s) => s.plantCrop);
   const bank = useGame((s) => s.bank);
+
+  // 植えられるもの（Lv充足＋種あり/種不要）を先頭に、次にLv順。数が増えても上に使える作物が並ぶ。
+  const rows = FARM_CROPS.map((c) => {
+    const owned = c.seed ? bank[c.seed] ?? 0 : 0;
+    const lockedLv = farmLevel < c.level;
+    const noSeed = !!c.seed && owned < 1;
+    return { c, owned, lockedLv, noSeed, plantable: !lockedLv && !noSeed };
+  }).sort((a, b) =>
+    Number(b.plantable) - Number(a.plantable) || a.c.level - b.c.level,
+  );
+
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2 style={{ margin: "0 0 10px", fontSize: 18 }}>植える作物を選ぶ</h2>
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          {FARM_CROPS.map((c) => {
+      <div
+        className="modal"
+        onClick={(e) => e.stopPropagation()}
+        style={{ width: "min(580px, 94vw)" }}
+      >
+        <h2 style={{ margin: "0 0 10px", fontSize: 18 }}>植える作物</h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(116px, 1fr))",
+            gap: 8,
+            maxHeight: "58vh",
+            overflowY: "auto",
+            paddingRight: 4,
+          }}
+        >
+          {rows.map(({ c, owned, lockedLv, noSeed, plantable }) => {
             const it = ITEM_MAP[c.id];
-            const seedIt = c.seed ? ITEM_MAP[c.seed] : null;
-            const owned = c.seed ? bank[c.seed] ?? 0 : 0;
-            const lockedLv = farmLevel < c.level;
-            const noSeed = !!c.seed && owned < 1;
-            const disabled = lockedLv || noSeed;
             return (
               <button
                 key={c.id}
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  gap: 10,
-                  width: "100%",
-                  padding: "8px 12px",
-                  background: "var(--panel, #1b2129)",
-                  border: "1px solid var(--border, #2a323c)",
-                  borderRadius: 8,
-                  opacity: disabled ? 0.5 : 1,
-                  cursor: disabled ? "not-allowed" : "pointer",
-                }}
-                disabled={disabled}
+                disabled={!plantable}
                 onClick={() => {
                   plant(plotIndex, c.id);
                   onClose();
                 }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 3,
+                  padding: "10px 6px 8px",
+                  background: "var(--panel, #1b2129)",
+                  border: `1px solid ${plantable ? "var(--border, #2a323c)" : "transparent"}`,
+                  borderRadius: 8,
+                  opacity: plantable ? 1 : 0.5,
+                  cursor: plantable ? "pointer" : "not-allowed",
+                }}
               >
-                <Icon name={it?.icon} size={30} />
-                <div style={{ textAlign: "left", flex: 1 }}>
-                  <div style={{ fontWeight: 600 }}>{it?.name}</div>
-                  <div className="muted" style={{ fontSize: 12 }}>
-                    <Icon name="till" size={11} /> 育成 {fmtTime(c.growMs)} ・ 収穫 ×{c.yield}
-                  </div>
+                <Icon name={it?.icon} size={34} />
+                <div style={{ fontWeight: 600, fontSize: 12.5, textAlign: "center" }}>
+                  {it?.name}
                 </div>
-                <div className="muted" style={{ fontSize: 12, textAlign: "right", whiteSpace: "nowrap" }}>
+                <div className="muted" style={{ fontSize: 11 }}>
+                  {fmtTime(c.growMs)} ・ ×{c.yield}
+                </div>
+                <div style={{ fontSize: 11, fontWeight: 600 }}>
                   {lockedLv ? (
-                    <span style={{ color: "var(--danger)" }}>Lv {c.level} 必要</span>
-                  ) : c.seed ? (
-                    <span style={{ color: noSeed ? "var(--danger)" : undefined }}>
-                      {seedIt?.name} {owned}
-                    </span>
+                    <span style={{ color: "var(--danger, #e05656)" }}>Lv {c.level} 必要</span>
+                  ) : !c.seed ? (
+                    <span style={{ color: "#6ee7a8" }}>種不要</span>
                   ) : (
-                    <span style={{ color: "var(--accent, #6ee7a8)" }}>種不要</span>
+                    <span style={{ color: noSeed ? "var(--danger, #e05656)" : "var(--muted)" }}>
+                      種 {owned}
+                    </span>
                   )}
                 </div>
               </button>
