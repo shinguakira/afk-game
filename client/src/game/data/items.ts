@@ -149,9 +149,6 @@ export const ITEMS: Item[] = [
   { id: "sushi", name: "寿司", type: "food", icon: "sushi", sellPrice: 24, heals: 30 },
   { id: "steak", name: "ステーキ", type: "food", icon: "steak", sellPrice: 30, heals: 38 },
   { id: "paid_leave", name: "有給", type: "food", icon: "leave", sellPrice: 50, heals: 60 },
-
-  // ===== その他ドロップ =====
-  { id: "tech_debt", name: "技術的負債", type: "misc", icon: "techdebt", sellPrice: 1 },
-  { id: "kudos", name: "感謝", type: "misc", icon: "kudos", sellPrice: 3 },
-  { id: "cert", name: "資格", type: "misc", icon: "cert", sellPrice: 60 },
 ];
+// 注: OSS活動/資格/評価/負債のような「抽象的な成果」はアイテム化しない（在庫に積む名詞はノイズ）。
+// 知的活動が生むのは commit のみ。アイテムを生むのは物理制作(料理/PC組立/はんだづけ)だけ。

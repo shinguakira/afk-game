@@ -302,7 +302,7 @@ export function buildActions(): GameAction[] {
         outputs: {},
       });
     }
-    // OSS コミット
+    // OSS コミット（抽象的な実績＝高XPのみ。アイテムは生まない）
     out.push({
       id: `oss_${sk}`,
       skill: sk,
@@ -312,9 +312,9 @@ export function buildActions(): GameAction[] {
       level: l.oss ?? 22,
       time: 4200,
       xp: 50 + (l.oss ?? 22) * 2,
-      outputs: { kudos: 1 },
+      outputs: {},
     });
-    // 資格
+    // 資格（高XPの到達目標。アイテム化しない＝状態/効果は将来別途）
     const cert = l.cert ?? [`${l.name} 上級認定`, 36];
     out.push({
       id: `cert_${sk}`,
@@ -325,7 +325,7 @@ export function buildActions(): GameAction[] {
       level: cert[1],
       time: 5200,
       xp: 100 + cert[1] * 3,
-      outputs: { cert: 1 },
+      outputs: {},
     });
   }
   return out;

@@ -44,7 +44,7 @@ export const MONSTERS: Monster[] = [
     goldMin: 10,
     goldMax: 22,
     regen: 1.2, // 「やっぱり変えて」じわじわ巻き戻る
-    loot: [{ item: "tech_debt", chance: 1, min: 1, max: 4 }],
+    loot: [{ item: "commit", chance: 0.4, min: 1, max: 2 }],
   },
   {
     id: "feature",
@@ -58,10 +58,7 @@ export const MONSTERS: Monster[] = [
     xp: 46,
     goldMin: 18,
     goldMax: 40,
-    loot: [
-      { item: "commit", chance: 0.4, min: 1, max: 2 },
-      { item: "kudos", chance: 0.5, min: 1, max: 2 },
-    ],
+    loot: [{ item: "commit", chance: 0.5, min: 1, max: 2 }],
   },
   {
     id: "review",
@@ -89,10 +86,7 @@ export const MONSTERS: Monster[] = [
     xp: 80,
     goldMin: 40,
     goldMax: 90,
-    loot: [
-      { item: "commit", chance: 0.6, min: 1, max: 3 },
-      { item: "kudos", chance: 0.6, min: 1, max: 3 },
-    ],
+    loot: [{ item: "commit", chance: 0.6, min: 1, max: 3 }],
   },
   {
     id: "incident",

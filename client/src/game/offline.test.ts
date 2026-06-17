@@ -80,7 +80,7 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   );
   if (!gotXp) failures++;
   console.log(
-    `      combat 1h: gold +${sum.gold}, tech_debt +${s.bank.tech_debt ?? 0}, mental ${s.playerHp}`,
+    `      combat 1h: gold +${sum.gold}, commit +${s.bank.commit ?? 0}, mental ${s.playerHp}`,
   );
 }
 
