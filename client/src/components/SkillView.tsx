@@ -154,7 +154,7 @@ export function SkillView({ skillId }: { skillId: string }) {
                       {!unlocked
                         ? `Lv ${a.level} で解禁（開始不可）`
                         : !canCraft
-                          ? "コミット不足"
+                          ? "素材不足"
                           : "開始"}
                     </button>
                   )}

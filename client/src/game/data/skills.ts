@@ -1,6 +1,6 @@
 import type { Skill } from "../types";
 import { buildLangSkills } from "./techtree";
-import { INFRA_SKILLS, PLATFORM_SKILLS, DOMAIN_SKILLS, SOLDERING_SKILL } from "./sectors";
+import { INFRA_SKILLS, PLATFORM_SKILLS, DOMAIN_SKILLS, ELECTRONICS_SKILL } from "./sectors";
 
 export const SKILLS: Skill[] = [
   // 言語（techtree から生成）
@@ -14,7 +14,7 @@ export const SKILLS: Skill[] = [
   // クラフト
   { id: "cooking", name: "料理", kind: "craft", category: "craft", icon: "cooking" },
   { id: "pcbuild", name: "PC組み立て", kind: "craft", category: "craft", icon: "pcbuild" },
-  SOLDERING_SKILL,
+  ELECTRONICS_SKILL,
   // 現場力（combat ステ）
   { id: "debug", name: "デバッグ力", kind: "combat", category: "combat", icon: "debug" },
   { id: "impl", name: "実装力", kind: "combat", category: "combat", icon: "impl" },

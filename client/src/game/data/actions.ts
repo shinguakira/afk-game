@@ -20,7 +20,7 @@ const PCBUILD: GameAction[] = [
   { id: "assemble_pc_high", skill: "pcbuild", name: "ハイエンドPCを組む", level: 16, time: 5000, xp: 150, inputs: { cpu_i9: 1, gpu_rtx4090: 1, ram_32: 1, ssd_2tb: 1 }, outputs: { pc_high: 1 } },
 ];
 
-// 全アクション = 言語ツリー(techtree) + インフラ/ドメイン/はんだづけ(sectors) + 料理 + PC組み立て。
+// 全アクション = 言語ツリー(techtree) + インフラ/領域/ドメイン/電子工作(sectors) + 料理 + PC組み立て。
 export const ACTIONS: GameAction[] = [
   ...buildActions(),
   ...SECTOR_ACTIONS,

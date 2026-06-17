@@ -121,11 +121,12 @@ export const ITEMS: Item[] = [
   { id: "ssd_512", name: "512GB SSD", type: "misc", icon: "ssd", sellPrice: 18 },
   { id: "ssd_2tb", name: "2TB SSD", type: "misc", icon: "ssd", sellPrice: 70 },
 
-  // ===== 電子部品 / 基板（はんだづけ） =====
+  // ===== 電子部品 / 電子工作品 =====
   { id: "components", name: "電子部品", type: "misc", icon: "components", sellPrice: 4 },
-  { id: "board_proto", name: "試作基板", type: "product", icon: "board", sellPrice: 22 },
-  { id: "board_main", name: "メイン基板", type: "product", icon: "board", sellPrice: 60 },
-  { id: "board_hd", name: "高密度基板", type: "product", icon: "board", sellPrice: 130 },
+  { id: "circuit", name: "自作回路", type: "product", icon: "board", sellPrice: 22 },
+  { id: "microcontroller", name: "マイコンボード", type: "product", icon: "embedded", sellPrice: 70 },
+  { id: "rpi_device", name: "Raspberry Pi 工作", type: "product", icon: "raspberrypi", sellPrice: 150 },
+  { id: "robot", name: "自作ロボット", type: "product", icon: "robot", sellPrice: 320 },
 
   // ===== 食材 (ショップ購入 → 料理) =====
   { id: "rice", name: "米", type: "misc", icon: "rice", sellPrice: 2 },
@@ -151,4 +152,4 @@ export const ITEMS: Item[] = [
   { id: "paid_leave", name: "有給", type: "food", icon: "leave", sellPrice: 50, heals: 60 },
 ];
 // 注: OSS活動/資格/評価/負債のような「抽象的な成果」はアイテム化しない（在庫に積む名詞はノイズ）。
-// 知的活動が生むのは commit のみ。アイテムを生むのは物理制作(料理/PC組立/はんだづけ)だけ。
+// 知的活動が生むのは commit のみ。アイテムを生むのは物理制作(料理/PC組立/電子工作)だけ。

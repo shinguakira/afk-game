@@ -52,6 +52,7 @@ import {
   SiLinux,
   SiGooglecloud,
   SiNginx,
+  SiRaspberrypi,
   SiGithub,
   SiNumpy,
   SiFastapi,
@@ -352,7 +353,9 @@ const ICONS: Record<string, IconType> = {
   healthcare: LuHeartPulse,
   legal: LuScale,
   public: LuBuilding,
-  soldering: LuCircuitBoard,
+  electronics: LuCircuitBoard,
+  raspberrypi: SiRaspberrypi,
+  robot: LuBot,
 
   // 装備: かばん
   bag: LuBackpack,
@@ -392,7 +395,7 @@ const BRAND_COLOR: Record<string, string> = {
   phoenix: "#FD4F00", ktor: "#3B8CFA", numpy: "#4DABCF", fastapi: "#10AA98",
   flask: "#CCCCCC", axios: "#7A52E8", jquery: "#2780B8",
   // infra/cloud
-  linux: "#F5C542", aws: "#FF9900", gcp: "#4285F4", nginx: "#2DA53F",
+  linux: "#F5C542", aws: "#FF9900", gcp: "#4285F4", nginx: "#2DA53F", raspberrypi: "#A22846",
 };
 
 export interface IconProps {
