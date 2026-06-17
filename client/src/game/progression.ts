@@ -79,6 +79,16 @@ function simPlayerSkill(
     xp: (state.skills[action.skill]?.xp ?? 0) + xp,
   };
   summary.xp[action.skill] = (summary.xp[action.skill] ?? 0) + xp;
+
+  // 副次XP（フレームワーク実装→領域など）。live(runSkillTick)と同じ計算で同時付与。
+  const also = action.xpAlso;
+  if (also) {
+    const alsoXp = also.xp * mult(eff, craft ? "xp.craft" : "xp.gather") * completions;
+    state.skills[also.skill] = {
+      xp: (state.skills[also.skill]?.xp ?? 0) + alsoXp,
+    };
+    summary.xp[also.skill] = (summary.xp[also.skill] ?? 0) + alsoXp;
+  }
 }
 
 /** 部下の並行生産をオフライン分まとめて適用（解析的）。 */

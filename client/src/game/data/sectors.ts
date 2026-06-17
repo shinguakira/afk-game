@@ -88,7 +88,7 @@ export const SECTOR_ACTIONS: GameAction[] = [
       time: 3700,
       xp: 32,
       inputs: { commit: 4 },
-      outputs: { product: 1 },
+      outputs: {},
     },
   ]),
   // 領域・プラットフォーム（フレームワークが主な伸び口。これは言語非依存のベース練習）
@@ -112,7 +112,7 @@ export const SECTOR_ACTIONS: GameAction[] = [
       time: 3600,
       xp: 34,
       inputs: { commit: 4 },
-      outputs: { product: 1 },
+      outputs: {},
     },
   ]),
   // 業界ドメイン（業務知識。当面は研究アクション。将来は案件討伐で伸びる設計）
@@ -136,7 +136,7 @@ export const SECTOR_ACTIONS: GameAction[] = [
       time: 3600,
       xp: 34,
       inputs: { commit: 4 },
-      outputs: { product: 1 },
+      outputs: {},
     },
   ]),
   // はんだづけ → 基板

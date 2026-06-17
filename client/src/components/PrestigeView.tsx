@@ -35,7 +35,7 @@ export function PrestigeView() {
             onClick={() => {
               if (
                 confirm(
-                  `全進捗（スキル/成果物/職種）をリセットして起業し、ストックを ${gain} 獲得します。よろしいですか？`,
+                  `全進捗（スキル/所持品/職種）をリセットして起業し、ストックを ${gain} 獲得します。よろしいですか？`,
                 )
               )
                 state.prestige();

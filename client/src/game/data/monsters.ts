@@ -29,7 +29,7 @@ export const MONSTERS: Monster[] = [
     xp: 22,
     goldMin: 8,
     goldMax: 18,
-    loot: [{ item: "product", chance: 0.2, min: 1, max: 1 }],
+    loot: [{ item: "commit", chance: 0.5, min: 1, max: 2 }],
   },
   {
     id: "spec_change",
@@ -59,7 +59,7 @@ export const MONSTERS: Monster[] = [
     goldMin: 18,
     goldMax: 40,
     loot: [
-      { item: "product", chance: 0.3, min: 1, max: 1 },
+      { item: "commit", chance: 0.4, min: 1, max: 2 },
       { item: "kudos", chance: 0.5, min: 1, max: 2 },
     ],
   },
@@ -90,7 +90,7 @@ export const MONSTERS: Monster[] = [
     goldMin: 40,
     goldMax: 90,
     loot: [
-      { item: "product", chance: 0.5, min: 1, max: 2 },
+      { item: "commit", chance: 0.6, min: 1, max: 3 },
       { item: "kudos", chance: 0.6, min: 1, max: 3 },
     ],
   },

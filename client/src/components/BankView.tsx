@@ -7,7 +7,7 @@ import { Icon } from "../ui/icons";
 
 const TYPE_LABEL: Record<ItemType, string> = {
   resource: "資源",
-  product: "プロダクト",
+  product: "制作物",
   weapon: "デバイス",
   food: "飲食物",
   misc: "アイテム",

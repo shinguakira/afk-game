@@ -1,9 +1,9 @@
 import type { Item } from "../types";
 
 export const ITEMS: Item[] = [
-  // ===== 資源 / 成果物 =====
+  // ===== 資源 =====
+  // commit = 仕事の成果単位。生産アクションの産出物であり、売却（金源）にも上位アクションの素材にもなる。
   { id: "commit", name: "コミット", type: "resource", icon: "commit", sellPrice: 2 },
-  { id: "product", name: "プロダクト", type: "product", icon: "product", sellPrice: 30 },
 
   // ===== 装備: 武器 (キーボード / マウス) =====
   {

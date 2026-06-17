@@ -43,7 +43,7 @@ export function OfflineModal() {
 
         {itemEntries.length > 0 && (
           <>
-            <h3 style={{ marginBottom: 4 }}>成果物</h3>
+            <h3 style={{ marginBottom: 4 }}>獲得アイテム</h3>
             {itemEntries.map(([id, v]) => (
               <div className="row-between" key={id}>
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}>

@@ -282,7 +282,7 @@ export function buildActions(): GameAction[] {
         outputs: { commit: 2 },
       });
     });
-    // frameworks: コミットを消費してプロダクトを産む。
+    // frameworks: コミット(基礎で書いた成果)を消費して、より大きな経験値に変える上位アクション。
     // プラットフォーム紐づけがあれば、言語(主)に加えて領域(副: 約60%)へも経験値が入る。
     for (const [name, level, icon, platform] of l.frameworks ?? []) {
       const fxp = 18 + level * 2.5;
@@ -299,7 +299,7 @@ export function buildActions(): GameAction[] {
           ? { xpAlso: { skill: `plat_${platform}`, xp: Math.round(fxp * 0.6) } }
           : {}),
         inputs: { commit: 3 + Math.floor(level / 4) },
-        outputs: { product: 1 },
+        outputs: {},
       });
     }
     // OSS コミット

@@ -2,6 +2,7 @@
 import { simulateOffline } from "./progression";
 import { getCombatStats } from "./combat";
 import { xpForLevel } from "./xp";
+import { ACTION_MAP } from "./data";
 import type { SaveState } from "./types";
 
 let failures = 0;
@@ -50,15 +51,19 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   check("summary commits", sum.items.commit ?? 0, 1200);
 }
 
-// 2) Framework action (React, under TypeScript) is commit-limited: 120/4 => 30 products.
+// 2) Framework action (React, under TypeScript): commit を消費して言語(主)＋領域(副)XPに変換。
+//    120 commits / 4 = 30 完了。product は廃止。副次で plat_web にも入る。
 {
   const s = freshState({
     active: { kind: "skill", actionId: "fw_ts_react" },
     bank: { commit: 120 },
   });
   simulateOffline(s, 3_600_000);
-  check("fw_ts_react products", s.bank.product ?? 0, 30);
-  check("fw_ts_react consumed commits", s.bank.commit ?? 0, 0);
+  const react = ACTION_MAP["fw_ts_react"];
+  check("fw_ts_react consumed all commits", s.bank.commit ?? 0, 0);
+  check("fw_ts_react no product item", s.bank.product ?? 0, 0);
+  check("fw_ts_react ts(言語) xp", s.skills.ts.xp, 30 * react.xp);
+  check("fw_ts_react plat_web(領域) xp", s.skills.plat_web?.xp ?? 0, 30 * (react.xpAlso?.xp ?? 0));
 }
 
 // 3) Combat: 1h on bugs yields a positive, capped amount with rewards.
@@ -87,7 +92,8 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   check("idle items", Object.keys(sum.items).length, 0);
 }
 
-// 5) Class modifier: SRE gives +35% craft speed => 35% more products.
+// 5) Class modifier: SRE gives +35% craft speed => 35% more framework completions => 35% more 言語XP.
+//    (framework は inputs を持つ craft 扱いなので craft 速度補正が効く。product 廃止につき XP 量で検証。)
 {
   const base = freshState({
     active: { kind: "skill", actionId: "fw_ts_react" },
@@ -100,10 +106,10 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   });
   simulateOffline(base, 600_000);
   simulateOffline(withSre, 600_000);
-  const ratio = (withSre.bank.product ?? 0) / (base.bank.product ?? 1);
+  const ratio = (withSre.skills.ts.xp ?? 0) / (base.skills.ts.xp ?? 1);
   const ok = Math.abs(ratio - 1.35) < 0.02;
   console.log(
-    `${ok ? "PASS" : "FAIL"}  SRE craft-speed ratio ≈1.35: base ${base.bank.product}, sre ${withSre.bank.product} (${ratio.toFixed(3)})`,
+    `${ok ? "PASS" : "FAIL"}  SRE craft-speed ratio ≈1.35 (言語xp): base ${base.skills.ts.xp.toFixed(0)}, sre ${withSre.skills.ts.xp.toFixed(0)} (${ratio.toFixed(3)})`,
   );
   if (!ok) failures++;
 }
