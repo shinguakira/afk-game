@@ -7,7 +7,7 @@ type Entry = [name: string, level: number, icon?: string];
 // 言語とは別軸の「領域・プラットフォーム(何を作るか)」。フレームワーク実装で副次獲得。
 // id は sectors.ts の PLATFORM と一致（スキルidは plat_${PlatformId}）。
 // ※業界ドメイン(金融/医療/法務…)はフレームワークでは伸びない別軸なのでここには含めない。
-export type PlatformId = "web" | "game" | "mobile" | "embedded" | "aidata";
+export type PlatformId = "web" | "game" | "mobile" | "embedded" | "ai" | "data";
 
 // フレームワークは言語(主)に加えてプラットフォーム(副)へも経験値を入れる橋渡し。
 // 4要素目に紐づくプラットフォームを指定（無いものは言語のみ＝特定領域に属さない汎用FW）。
@@ -48,7 +48,7 @@ const LANGS: LangSpec[] = [
     id: "python", name: "Python", group: "g_script", icon: "python",
     concepts: [["リスト内包表記", 3], ["デコレータ", 6], ["ジェネレータ", 8], ["GIL", 12]],
     libraries: [["Requests", 4], ["NumPy", 5, "numpy"], ["pandas", 7, "pandas"]],
-    frameworks: [["Flask", 6, "flask", "web"], ["Django", 9, "django", "web"], ["FastAPI", 10, "fastapi", "web"], ["scikit-learn", 12, "sklearn", "aidata"], ["PyTorch", 16, "pytorch", "aidata"], ["TensorFlow", 16, "tensorflow", "aidata"]],
+    frameworks: [["Flask", 6, "flask", "web"], ["Django", 9, "django", "web"], ["FastAPI", 10, "fastapi", "web"], ["scikit-learn", 12, "sklearn", "ai"], ["PyTorch", 16, "pytorch", "ai"], ["TensorFlow", 16, "tensorflow", "ai"]],
     oss: 16, cert: ["Python エンジニア認定", 36],
   },
   {
@@ -193,7 +193,7 @@ const LANGS: LangSpec[] = [
   {
     id: "julia", name: "Julia", group: "g_data", icon: "julia",
     concepts: [["多重ディスパッチ", 6], ["JIT コンパイル", 8]],
-    frameworks: [["Flux", 12, undefined, "aidata"]],
+    frameworks: [["Flux", 12, undefined, "ai"]],
     oss: 26,
   },
   {
