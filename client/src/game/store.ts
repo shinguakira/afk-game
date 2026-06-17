@@ -40,7 +40,7 @@ import {
 
 // Bump whenever the save schema changes incompatibly (e.g. skill ids renamed).
 // On mismatch we discard the old save and start fresh (no migrations yet).
-const SAVE_VERSION = 16;
+const SAVE_VERSION = 17;
 const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
@@ -375,16 +375,24 @@ export const useGame = create<GameStore>((set, get) => ({
     });
   },
 
-  // 畑に作物を植える（farming Lvを満たし、空き畑のみ）。以後は放置で育つ。
+  // 畑に作物を植える（farming Lv・空き畑・種を満たす）。種を消費。以後は放置で育つ。
+  // パースニップ(seed未指定)のみ種不要。
   plantCrop: (plotIndex, cropId) => {
     set((s) => {
       const spec = FARM_CROP_MAP[cropId];
       const plot = s.plots[plotIndex];
       if (!spec || !plot || plot.crop) return {};
       if (levelForXp(s.skills.farming?.xp ?? 0) < spec.level) return {};
+      let bank = s.bank;
+      if (spec.seed) {
+        if ((s.bank[spec.seed] ?? 0) < 1) return {}; // 種が無い
+        bank = { ...s.bank };
+        bank[spec.seed] = (bank[spec.seed] ?? 0) - 1;
+        if (bank[spec.seed] <= 0) delete bank[spec.seed];
+      }
       const plots = s.plots.slice();
       plots[plotIndex] = { crop: cropId, growth: 0 };
-      return { plots };
+      return { plots, bank };
     });
   },
 

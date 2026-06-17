@@ -136,12 +136,23 @@ export const ITEMS: Item[] = [
   { id: "veg", name: "野菜", type: "misc", icon: "veg", sellPrice: 2 },
   { id: "dough", name: "生地", type: "misc", icon: "dough", sellPrice: 3 },
   // 農業の収穫物（具体的な作物）。食べるとメンタル回復（生食なので控えめ）。料理素材にもなる。
+  { id: "parsnip", name: "パースニップ", type: "food", icon: "parsnip", sellPrice: 3, heals: 5 },
   { id: "tomato", name: "ミニトマト", type: "food", icon: "tomato", sellPrice: 4, heals: 6 },
   { id: "carrot", name: "にんじん", type: "food", icon: "carrot", sellPrice: 5, heals: 9 },
   { id: "edamame", name: "枝豆", type: "food", icon: "edamame", sellPrice: 7, heals: 12 },
   { id: "shiitake", name: "しいたけ", type: "food", icon: "shiitake", sellPrice: 9, heals: 16 },
   { id: "strawberry", name: "いちご", type: "food", icon: "strawberry", sellPrice: 12, heals: 20 },
   { id: "apple", name: "りんご", type: "food", icon: "apple", sellPrice: 15, heals: 26 },
+
+  // ===== 種（ショップで購入 → 農業で植える。パースニップは種不要） =====
+  { id: "seed_tomato", name: "ミニトマトの種", type: "misc", icon: "seed", sellPrice: 2 },
+  { id: "seed_rice", name: "稲の種もみ", type: "misc", icon: "seed", sellPrice: 2 },
+  { id: "seed_carrot", name: "にんじんの種", type: "misc", icon: "seed", sellPrice: 2 },
+  { id: "seed_edamame", name: "枝豆の種", type: "misc", icon: "seed", sellPrice: 3 },
+  { id: "seed_wheat", name: "小麦の種", type: "misc", icon: "seed", sellPrice: 3 },
+  { id: "seed_shiitake", name: "しいたけの菌床", type: "misc", icon: "seed", sellPrice: 4 },
+  { id: "seed_strawberry", name: "いちごの苗", type: "misc", icon: "seed", sellPrice: 5 },
+  { id: "seed_apple", name: "りんごの苗木", type: "misc", icon: "seed", sellPrice: 6 },
 
   // ===== 飲食物 (food / 回復) =====
   { id: "water", name: "水", type: "food", icon: "water", sellPrice: 1, heals: 3 },

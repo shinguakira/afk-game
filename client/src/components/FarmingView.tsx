@@ -24,29 +24,60 @@ function CropPicker({
   onClose: () => void;
 }) {
   const plant = useGame((s) => s.plantCrop);
+  const bank = useGame((s) => s.bank);
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h2 style={{ margin: "0 0 10px", fontSize: 18 }}>植える作物を選ぶ</h2>
-        <div className="store-grid">
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           {FARM_CROPS.map((c) => {
             const it = ITEM_MAP[c.id];
-            const locked = farmLevel < c.level;
+            const seedIt = c.seed ? ITEM_MAP[c.seed] : null;
+            const owned = c.seed ? bank[c.seed] ?? 0 : 0;
+            const lockedLv = farmLevel < c.level;
+            const noSeed = !!c.seed && owned < 1;
+            const disabled = lockedLv || noSeed;
             return (
               <button
                 key={c.id}
-                className={`store-tile ${locked ? "locked" : ""}`}
-                disabled={locked}
-                title={`${it?.name}: ${fmtTime(c.growMs)}で${c.yield}個`}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  gap: 10,
+                  width: "100%",
+                  padding: "8px 12px",
+                  background: "var(--panel, #1b2129)",
+                  border: "1px solid var(--border, #2a323c)",
+                  borderRadius: 8,
+                  opacity: disabled ? 0.5 : 1,
+                  cursor: disabled ? "not-allowed" : "pointer",
+                }}
+                disabled={disabled}
                 onClick={() => {
                   plant(plotIndex, c.id);
                   onClose();
                 }}
               >
-                <Icon name={it?.icon} size={36} />
-                <span className="price">
-                  {locked ? `Lv${c.level}` : `×${c.yield}`}
-                </span>
+                <Icon name={it?.icon} size={30} />
+                <div style={{ textAlign: "left", flex: 1 }}>
+                  <div style={{ fontWeight: 600 }}>{it?.name}</div>
+                  <div className="muted" style={{ fontSize: 12 }}>
+                    <Icon name="till" size={11} /> 育成 {fmtTime(c.growMs)} ・ 収穫 ×{c.yield}
+                  </div>
+                </div>
+                <div className="muted" style={{ fontSize: 12, textAlign: "right", whiteSpace: "nowrap" }}>
+                  {lockedLv ? (
+                    <span style={{ color: "var(--danger)" }}>Lv {c.level} 必要</span>
+                  ) : c.seed ? (
+                    <span style={{ color: noSeed ? "var(--danger)" : undefined }}>
+                      {seedIt?.name} {owned}
+                    </span>
+                  ) : (
+                    <span style={{ color: "var(--accent, #6ee7a8)" }}>種不要</span>
+                  )}
+                </div>
               </button>
             );
           })}

@@ -302,6 +302,20 @@ export const ITEM_ICONS: Record<string, R> = {
   ),
 
   // ===== 農産物（具体的な作物。lucideに無いので自作） =====
+  parsnip: svg(
+    <g>
+      <path d="M7.6 8.5L16.4 8.5L12 22z" fill="#ece2c8" stroke="#b8a878" strokeWidth="1.1" strokeLinejoin="round" />
+      <path d="M9.2 11.5h5.6M9.9 14.5h4.2M10.6 17.5h2.8" stroke="#b8a878" strokeWidth="0.9" strokeLinecap="round" />
+      <path d="M12 8.5V3.4M12 7.5L8.3 4M12 7.5l3.7-3.6" stroke="#3f8a37" strokeWidth="1.7" strokeLinecap="round" />
+    </g>,
+  ),
+  seed: svg(
+    <g fill="#b07d3a" stroke="#7c531f" strokeWidth="0.9">
+      <ellipse cx="8" cy="15.5" rx="2.8" ry="4.2" transform="rotate(-22 8 15.5)" />
+      <ellipse cx="15.5" cy="14.5" rx="2.8" ry="4.2" transform="rotate(20 15.5 14.5)" />
+      <ellipse cx="11.7" cy="9.5" rx="2.8" ry="4.2" transform="rotate(-3 11.7 9.5)" />
+    </g>,
+  ),
   tomato: svg(
     <g>
       <circle cx="12" cy="14.5" r="8.5" fill="#e8412f" stroke="#bf2d20" strokeWidth="1.2" />
