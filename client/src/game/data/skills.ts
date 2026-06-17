@@ -12,6 +12,7 @@ export const SKILLS: Skill[] = [
   // 業界ドメイン（誰のために）
   ...DOMAIN_SKILLS,
   // クラフト
+  { id: "farming", name: "農業", kind: "gather", category: "craft", icon: "farming" },
   { id: "cooking", name: "料理", kind: "craft", category: "craft", icon: "cooking" },
   { id: "pcbuild", name: "PC組み立て", kind: "craft", category: "craft", icon: "pcbuild" },
   ELECTRONICS_SKILL,

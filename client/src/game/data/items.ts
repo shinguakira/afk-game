@@ -128,13 +128,17 @@ export const ITEMS: Item[] = [
   { id: "rpi_device", name: "Raspberry Pi 工作", type: "product", icon: "raspberrypi", sellPrice: 150 },
   { id: "robot", name: "自作ロボット", type: "product", icon: "robot", sellPrice: 320 },
 
-  // ===== 食材 (ショップ購入 → 料理) =====
+  // ===== 食材 (米/野菜/生地は農業で自給可。肉/魚/麺はショップ) =====
   { id: "rice", name: "米", type: "misc", icon: "rice", sellPrice: 2 },
   { id: "noodles", name: "麺", type: "misc", icon: "noodles", sellPrice: 2 },
   { id: "meat", name: "肉", type: "misc", icon: "meat", sellPrice: 4 },
   { id: "fish_ing", name: "魚", type: "misc", icon: "fish_food", sellPrice: 4 },
   { id: "veg", name: "野菜", type: "misc", icon: "veg", sellPrice: 2 },
   { id: "dough", name: "生地", type: "misc", icon: "dough", sellPrice: 3 },
+  // 農業の収穫物（売却可。一部は将来レシピで使用）
+  { id: "mushroom", name: "きのこ", type: "misc", icon: "mushroom", sellPrice: 4 },
+  { id: "herb", name: "ハーブ", type: "misc", icon: "herb", sellPrice: 6 },
+  { id: "fruit", name: "果物", type: "misc", icon: "fruit", sellPrice: 7 },
 
   // ===== 飲食物 (food / 回復) =====
   { id: "water", name: "水", type: "food", icon: "water", sellPrice: 1, heals: 3 },

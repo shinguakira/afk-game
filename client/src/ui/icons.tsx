@@ -136,6 +136,8 @@ import {
   LuCupSoda,
   LuZap,
   LuWheat,
+  LuSprout,
+  LuApple,
   LuFish,
   LuSalad,
   LuCroissant,
@@ -280,6 +282,10 @@ const ICONS: Record<string, IconType> = {
   veg: LuSalad,
   dough: LuCroissant,
   leave: LuLeaf,
+  farming: LuSprout,
+  mushroom: LuSprout,
+  herb: LuLeaf,
+  fruit: LuApple,
 
   // combat stats
   debug: LuBug,

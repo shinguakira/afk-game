@@ -20,10 +20,21 @@ const PCBUILD: GameAction[] = [
   { id: "assemble_pc_high", skill: "pcbuild", name: "ハイエンドPCを組む", level: 16, time: 5000, xp: 150, inputs: { cpu_i9: 1, gpu_rtx4090: 1, ram_32: 1, ssd_2tb: 1 }, outputs: { pc_high: 1 } },
 ];
 
-// 全アクション = 言語ツリー(techtree) + インフラ/領域/ドメイン/電子工作(sectors) + 料理 + PC組み立て。
+// 農業: 作物を育てて収穫（素材不要のgather）。米/野菜/生地は料理の材料になり、自給ルートを作る。
+const FARMING: GameAction[] = [
+  { id: "farm_veg", skill: "farming", name: "野菜を育てる", level: 1, time: 2800, xp: 13, outputs: { veg: 1 } },
+  { id: "farm_rice", skill: "farming", name: "米を育てる", level: 2, time: 3000, xp: 16, outputs: { rice: 1 } },
+  { id: "farm_mushroom", skill: "farming", name: "きのこを栽培", level: 4, time: 3000, xp: 22, outputs: { mushroom: 1 } },
+  { id: "farm_wheat", skill: "farming", name: "小麦を育てて製粉", level: 6, time: 3200, xp: 28, outputs: { dough: 1 } },
+  { id: "farm_herb", skill: "farming", name: "ハーブを育てる", level: 8, time: 3400, xp: 34, outputs: { herb: 1 } },
+  { id: "farm_fruit", skill: "farming", name: "果物を育てる", level: 11, time: 3600, xp: 44, outputs: { fruit: 1 } },
+];
+
+// 全アクション = 言語ツリー(techtree) + インフラ/領域/ドメイン/電子工作(sectors) + 料理 + PC組み立て + 農業。
 export const ACTIONS: GameAction[] = [
   ...buildActions(),
   ...SECTOR_ACTIONS,
   ...COOKING,
   ...PCBUILD,
+  ...FARMING,
 ];
