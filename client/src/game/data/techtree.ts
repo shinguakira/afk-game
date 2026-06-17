@@ -1,4 +1,5 @@
 import type { GameAction, Skill } from "../types";
+import { LANG_URLS, TECH_URLS, CERT_URLS } from "./links";
 
 // 言語ごとの「傘下」コンテンツ。フレームワーク・ライブラリ・概念は
 // すべてその言語スキルのアクション(パターン)として生成される。
@@ -234,6 +235,7 @@ export function buildLangSkills(): Skill[] {
     tech: "language",
     category: "language",
     icon: l.icon ?? l.id,
+    url: LANG_URLS[l.id],
   }));
 }
 
@@ -279,6 +281,7 @@ export function buildActions(): GameAction[] {
         level,
         time: 3300,
         xp: 16 + level * 2,
+        url: TECH_URLS[name],
         outputs: { commit: 2 },
       });
     });
@@ -295,6 +298,7 @@ export function buildActions(): GameAction[] {
         level,
         time: 3400,
         xp: fxp,
+        url: TECH_URLS[name],
         ...(platform
           ? { xpAlso: { skill: `plat_${platform}`, xp: Math.round(fxp * 0.6) } }
           : {}),
@@ -325,6 +329,7 @@ export function buildActions(): GameAction[] {
       level: cert[1],
       time: 5200,
       xp: 100 + cert[1] * 3,
+      url: CERT_URLS[l.id],
       outputs: {},
     });
   }

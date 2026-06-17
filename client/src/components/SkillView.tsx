@@ -66,6 +66,17 @@ export function SkillView({ skillId }: { skillId: string }) {
             {skill.tech === "language" ? "言語" : "フレームワーク"}
           </span>
         )}
+        {skill.url && (
+          <a
+            href={skill.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="公式サイトを開く"
+            style={{ display: "inline-flex", alignItems: "center", gap: 3, marginLeft: 8, fontSize: 12, textDecoration: "none" }}
+          >
+            <Icon name="extlink" size={14} /> 公式
+          </a>
+        )}
       </h2>
       <div style={{ maxWidth: 420, marginBottom: 20 }}>
         <Bar
@@ -105,6 +116,18 @@ export function SkillView({ skillId }: { skillId: string }) {
                 >
                   <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     <Icon name={a.icon} size={16} /> {a.name}
+                    {a.url && (
+                      <a
+                        href={a.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="公式サイトを開く"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ display: "inline-flex", marginLeft: "auto" }}
+                      >
+                        <Icon name="extlink" size={14} />
+                      </a>
+                    )}
                   </h3>
                   <div className="meta">
                     {!unlocked && (

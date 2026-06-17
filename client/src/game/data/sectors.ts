@@ -1,4 +1,5 @@
 import type { GameAction, Skill } from "../types";
+import { INFRA_URLS } from "./links";
 
 // 言語以外の生産系スキル。3軸:
 //  - platform 領域・プラットフォーム(何を作るか): 技術選択で決まる。フレームワークで橋渡し獲得。
@@ -123,6 +124,7 @@ export const INFRA_SKILLS: Skill[] = INFRA_SPECS.map((s) => ({
   kind: "gather",
   category: "infra",
   icon: s.icon,
+  url: INFRA_URLS[s.id],
 }));
 
 export const PLATFORM_SKILLS: Skill[] = PLATFORM.map(([id, name, icon]) => ({

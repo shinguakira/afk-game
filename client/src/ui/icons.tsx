@@ -138,6 +138,7 @@ import {
   LuWheat,
   LuSprout,
   LuShovel,
+  LuExternalLink,
   LuFish,
   LuSalad,
   LuCroissant,
@@ -285,6 +286,7 @@ const ICONS: Record<string, IconType> = {
   farming: LuSprout,
   till: LuShovel,
   fertilizer: LuLeaf,
+  extlink: LuExternalLink,
   // 作物アイコンは itemIcons.tsx の自作SVG（ITEM_ICONS が優先）。近似の流用はしない。
 
   // combat stats
@@ -417,7 +419,7 @@ const BRAND_COLOR: Record<string, string> = {
   debug: "#60A5FA", impl: "#F87171", robust: "#34D399", mental: "#C084FC",
   // 案件・メタ
   projects: "#F87171", roadmap: "#FBBF24", career: "#34D399", prestige: "#C084FC",
-  funding: "#22C55E", bank: "#FBBF24", shop: "#38BDF8",
+  funding: "#22C55E", bank: "#FBBF24", shop: "#38BDF8", extlink: "#7DB3F0",
 };
 
 export interface IconProps {
