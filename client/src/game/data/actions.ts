@@ -20,14 +20,17 @@ const PCBUILD: GameAction[] = [
   { id: "assemble_pc_high", skill: "pcbuild", name: "ハイエンドPCを組む", level: 16, time: 5000, xp: 150, inputs: { cpu_i9: 1, gpu_rtx4090: 1, ram_32: 1, ssd_2tb: 1 }, outputs: { pc_high: 1 } },
 ];
 
-// 農業: 作物を育てて収穫（素材不要のgather）。米/野菜/生地は料理の材料になり、自給ルートを作る。
+// 農業: 作物を育てて収穫（素材不要のgather）。
+// 収穫物は具体的な作物＝食べてメンタル回復する食品。米/小麦(生地)は料理の素材にもなり自給ルートを作る。
 const FARMING: GameAction[] = [
-  { id: "farm_veg", skill: "farming", name: "野菜を育てる", level: 1, time: 2800, xp: 13, outputs: { veg: 1 } },
+  { id: "farm_tomato", skill: "farming", name: "ミニトマトを育てる", level: 1, time: 2800, xp: 13, outputs: { tomato: 1 } },
   { id: "farm_rice", skill: "farming", name: "米を育てる", level: 2, time: 3000, xp: 16, outputs: { rice: 1 } },
-  { id: "farm_mushroom", skill: "farming", name: "きのこを栽培", level: 4, time: 3000, xp: 22, outputs: { mushroom: 1 } },
+  { id: "farm_carrot", skill: "farming", name: "にんじんを育てる", level: 3, time: 3000, xp: 20, outputs: { carrot: 1 } },
+  { id: "farm_edamame", skill: "farming", name: "枝豆を育てる", level: 5, time: 3200, xp: 26, outputs: { edamame: 1 } },
   { id: "farm_wheat", skill: "farming", name: "小麦を育てて製粉", level: 6, time: 3200, xp: 28, outputs: { dough: 1 } },
-  { id: "farm_herb", skill: "farming", name: "ハーブを育てる", level: 8, time: 3400, xp: 34, outputs: { herb: 1 } },
-  { id: "farm_fruit", skill: "farming", name: "果物を育てる", level: 11, time: 3600, xp: 44, outputs: { fruit: 1 } },
+  { id: "farm_shiitake", skill: "farming", name: "しいたけを栽培", level: 8, time: 3400, xp: 36, outputs: { shiitake: 1 } },
+  { id: "farm_strawberry", skill: "farming", name: "いちごを育てる", level: 10, time: 3600, xp: 44, outputs: { strawberry: 1 } },
+  { id: "farm_apple", skill: "farming", name: "りんごを育てる", level: 13, time: 3800, xp: 54, outputs: { apple: 1 } },
 ];
 
 // 全アクション = 言語ツリー(techtree) + インフラ/領域/ドメイン/電子工作(sectors) + 料理 + PC組み立て + 農業。

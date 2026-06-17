@@ -135,10 +135,13 @@ export const ITEMS: Item[] = [
   { id: "fish_ing", name: "魚", type: "misc", icon: "fish_food", sellPrice: 4 },
   { id: "veg", name: "野菜", type: "misc", icon: "veg", sellPrice: 2 },
   { id: "dough", name: "生地", type: "misc", icon: "dough", sellPrice: 3 },
-  // 農業の収穫物（売却可。一部は将来レシピで使用）
-  { id: "mushroom", name: "きのこ", type: "misc", icon: "mushroom", sellPrice: 4 },
-  { id: "herb", name: "ハーブ", type: "misc", icon: "herb", sellPrice: 6 },
-  { id: "fruit", name: "果物", type: "misc", icon: "fruit", sellPrice: 7 },
+  // 農業の収穫物（具体的な作物）。食べるとメンタル回復（生食なので控えめ）。料理素材にもなる。
+  { id: "tomato", name: "ミニトマト", type: "food", icon: "tomato", sellPrice: 4, heals: 6 },
+  { id: "carrot", name: "にんじん", type: "food", icon: "carrot", sellPrice: 5, heals: 9 },
+  { id: "edamame", name: "枝豆", type: "food", icon: "edamame", sellPrice: 7, heals: 12 },
+  { id: "shiitake", name: "しいたけ", type: "food", icon: "shiitake", sellPrice: 9, heals: 16 },
+  { id: "strawberry", name: "いちご", type: "food", icon: "strawberry", sellPrice: 12, heals: 20 },
+  { id: "apple", name: "りんご", type: "food", icon: "apple", sellPrice: 15, heals: 26 },
 
   // ===== 飲食物 (food / 回復) =====
   { id: "water", name: "水", type: "food", icon: "water", sellPrice: 1, heals: 3 },

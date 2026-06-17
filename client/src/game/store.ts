@@ -39,7 +39,7 @@ import {
 
 // Bump whenever the save schema changes incompatibly (e.g. skill ids renamed).
 // On mismatch we discard the old save and start fresh (no migrations yet).
-const SAVE_VERSION = 14;
+const SAVE_VERSION = 15;
 const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
