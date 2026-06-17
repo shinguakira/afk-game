@@ -1,6 +1,9 @@
 import type { GameAction, Skill } from "../types";
 
-// 言語以外の生産系スキル: インフラ・クラウド / ドメイン業界。
+// 言語以外の生産系スキル。3軸:
+//  - platform 領域・プラットフォーム(何を作るか): 技術選択で決まる。フレームワークで橋渡し獲得。
+//  - infra    インフラ・基盤(どこで動かすか): 言語非依存の独立ツール軸。
+//  - domain   業界ドメイン(誰のために作るか): 業務知識。言語/プラットフォーム非依存。将来は案件駆動。
 // それぞれ「基礎アクション(→コミット)」と「応用アクション(コミット消費→プロダクト)」を持つ。
 
 const INFRA: [id: string, name: string, icon: string][] = [
@@ -13,15 +16,22 @@ const INFRA: [id: string, name: string, icon: string][] = [
   ["nginx", "Nginx", "nginx"],
 ];
 
-const DOMAIN: [id: string, name: string, icon: string][] = [
+// 領域・プラットフォーム = 何を作るか。フレームワーク(techtree)が主な伸び口。
+const PLATFORM: [id: string, name: string, icon: string][] = [
   ["web", "Web", "web"],
   ["game", "ゲーム", "game"],
   ["mobile", "モバイル", "mobile"],
   ["embedded", "組み込み", "embedded"],
   ["aidata", "AI・データ", "ai_data"],
+];
+
+// 業界ドメイン = 誰のために作るか。言語にもプラットフォームにも依存しない業務知識。
+const DOMAIN: [id: string, name: string, icon: string][] = [
   ["fintech", "金融 (FinTech)", "fintech"],
-  ["ec", "EC", "ec"],
-  ["healthcare", "医療", "healthcare"],
+  ["ec", "EC・小売", "ec"],
+  ["healthcare", "医療・ヘルスケア", "healthcare"],
+  ["legal", "法務・リーガル", "legal"],
+  ["public", "公共・行政", "public"],
 ];
 
 export const INFRA_SKILLS: Skill[] = INFRA.map(([id, name, icon]) => ({
@@ -29,6 +39,14 @@ export const INFRA_SKILLS: Skill[] = INFRA.map(([id, name, icon]) => ({
   name,
   kind: "gather",
   category: "infra",
+  icon,
+}));
+
+export const PLATFORM_SKILLS: Skill[] = PLATFORM.map(([id, name, icon]) => ({
+  id: `plat_${id}`,
+  name,
+  kind: "gather",
+  category: "platform",
   icon,
 }));
 
@@ -73,12 +91,36 @@ export const SECTOR_ACTIONS: GameAction[] = [
       outputs: { product: 1 },
     },
   ]),
-  // ドメイン業界
+  // 領域・プラットフォーム（フレームワークが主な伸び口。これは言語非依存のベース練習）
+  ...PLATFORM.flatMap(([id, name, icon]): GameAction[] => [
+    {
+      id: `plat_${id}_learn`,
+      skill: `plat_${id}`,
+      name: `${name}の基礎を学ぶ`,
+      icon,
+      level: 1,
+      time: 3000,
+      xp: 15,
+      outputs: { commit: 1 },
+    },
+    {
+      id: `plat_${id}_build`,
+      skill: `plat_${id}`,
+      name: `${name}システムを構築`,
+      icon,
+      level: 8,
+      time: 3600,
+      xp: 34,
+      inputs: { commit: 4 },
+      outputs: { product: 1 },
+    },
+  ]),
+  // 業界ドメイン（業務知識。当面は研究アクション。将来は案件討伐で伸びる設計）
   ...DOMAIN.flatMap(([id, name, icon]): GameAction[] => [
     {
       id: `dom_${id}_study`,
       skill: `dom_${id}`,
-      name: `${name}業界を研究`,
+      name: `${name}の業務を研究`,
       icon,
       level: 1,
       time: 3000,
@@ -88,7 +130,7 @@ export const SECTOR_ACTIONS: GameAction[] = [
     {
       id: `dom_${id}_expert`,
       skill: `dom_${id}`,
-      name: `${name}の専門案件`,
+      name: `${name}のドメイン分析`,
       icon,
       level: 8,
       time: 3600,

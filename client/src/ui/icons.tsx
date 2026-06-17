@@ -152,6 +152,9 @@ import {
   LuLandmark,
   LuHeartPulse,
   LuCircuitBoard,
+  LuLayers,
+  LuScale,
+  LuBuilding,
 } from "react-icons/lu";
 
 // Central icon registry. Data files reference these string ids (no JSX in data).
@@ -328,9 +331,10 @@ const ICONS: Record<string, IconType> = {
   wellness: LuLeaf,
   delivery: LuFlame,
 
-  // カテゴリ / インフラ / ドメイン
+  // カテゴリ / 領域 / インフラ / 業界ドメイン
+  platform: LuLayers,
   infra: LuServer,
-  domain: LuFactory,
+  domain: LuBriefcase,
   linux: SiLinux,
   aws: LuCloud,
   gcp: SiGooglecloud,
@@ -343,6 +347,8 @@ const ICONS: Record<string, IconType> = {
   fintech: LuLandmark,
   ec: LuShoppingCart,
   healthcare: LuHeartPulse,
+  legal: LuScale,
+  public: LuBuilding,
   soldering: LuCircuitBoard,
 
   // 装備: かばん

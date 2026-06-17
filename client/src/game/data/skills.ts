@@ -1,13 +1,15 @@
 import type { Skill } from "../types";
 import { buildLangSkills } from "./techtree";
-import { INFRA_SKILLS, DOMAIN_SKILLS, SOLDERING_SKILL } from "./sectors";
+import { INFRA_SKILLS, PLATFORM_SKILLS, DOMAIN_SKILLS, SOLDERING_SKILL } from "./sectors";
 
 export const SKILLS: Skill[] = [
   // 言語（techtree から生成）
   ...buildLangSkills(),
-  // インフラ・クラウド
+  // 領域・プラットフォーム（何を作るか）
+  ...PLATFORM_SKILLS,
+  // インフラ・基盤（どこで動かすか）
   ...INFRA_SKILLS,
-  // ドメイン・業界
+  // 業界ドメイン（誰のために）
   ...DOMAIN_SKILLS,
   // クラフト
   { id: "cooking", name: "料理", kind: "craft", category: "craft", icon: "cooking" },

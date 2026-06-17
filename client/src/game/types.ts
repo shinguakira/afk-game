@@ -40,8 +40,12 @@ export interface Item {
 
 export type SkillKind = "gather" | "craft" | "combat";
 
-/** サイドバーの大分類。 */
-export type SkillCategory = "language" | "infra" | "domain" | "craft" | "combat";
+/** サイドバーの大分類。
+ *  language=言語(どう書く) / platform=領域・プラットフォーム(何を作る) /
+ *  infra=インフラ・基盤(どこで動かす) / domain=業界ドメイン(誰のために) /
+ *  craft=クラフト / combat=現場力。 */
+export type SkillCategory =
+  | "language" | "platform" | "infra" | "domain" | "craft" | "combat";
 
 export interface Skill {
   id: SkillId;
@@ -79,6 +83,9 @@ export interface GameAction {
   time: number;
   /** XP granted to `skill` per completion. */
   xp: number;
+  /** 副次的に経験値が入るスキル。完了ごとに `skill`(主)に加えてこちらにも入る。
+   *  例: フレームワーク実装は言語(主)＋ドメイン(副)。概念は分離・獲得は同時。 */
+  xpAlso?: { skill: SkillId; xp: number };
   /** Items consumed per completion (craft actions). */
   inputs?: Partial<Record<ItemId, number>>;
   /** Items produced per completion. */

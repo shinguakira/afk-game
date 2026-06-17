@@ -111,6 +111,12 @@ export function SkillView({ skillId }: { skillId: string }) {
                       <span style={{ color: "var(--danger)" }}>Lv {a.level} 必要 · </span>
                     )}
                     {(a.time / 1000).toFixed(1)}s · {Math.round(a.xp)} xp
+                    {a.xpAlso && SKILL_MAP[a.xpAlso.skill] && (
+                      <span className="tag" style={{ marginLeft: 6 }}>
+                        <Icon name={SKILL_MAP[a.xpAlso.skill].icon} size={11} />{" "}
+                        {SKILL_MAP[a.xpAlso.skill].name} +{Math.round(a.xpAlso.xp)}
+                      </span>
+                    )}
                   </div>
                   <div className="io">
                     {a.inputs && (

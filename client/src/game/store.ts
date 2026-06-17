@@ -462,6 +462,7 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
   let progress = s.actionProgress + dt;
   const bank = { ...s.bank };
   let xpGained = 0;
+  let completions = 0;
   let stopped = false;
   let guard = 1000;
 
@@ -485,10 +486,16 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
       bank[id] = (bank[id] ?? 0) + (q as number);
     }
     xpGained += xpPer;
+    completions++;
     progress -= effTime;
   }
 
-  const skills =
+  // 副次XP: フレームワーク実装などは言語(主)に加えてドメイン(副)へも入る（概念は分離・獲得は同時）。
+  const also = action.xpAlso;
+  const alsoXp =
+    also && completions > 0 ? completions * also.xp * mult(eff, xpKey) : 0;
+
+  let skills =
     xpGained > 0
       ? {
           ...s.skills,
@@ -497,6 +504,12 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
           },
         }
       : s.skills;
+  if (also && alsoXp > 0) {
+    skills = {
+      ...skills,
+      [also.skill]: { xp: (s.skills[also.skill]?.xp ?? 0) + alsoXp },
+    };
+  }
 
   set({ bank, skills, actionProgress: progress, active: stopped ? null : s.active });
   if (xpGained > 0) {
@@ -506,6 +519,15 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
       s.skills[action.skill]?.xp ?? 0,
       skills[action.skill]?.xp ?? 0,
       action.skill,
+    );
+  }
+  if (also && alsoXp > 0) {
+    get().flashXp(also.skill, Math.round(alsoXp));
+    toastLevelUp(
+      get,
+      s.skills[also.skill]?.xp ?? 0,
+      skills[also.skill]?.xp ?? 0,
+      also.skill,
     );
   }
   if (stopped) get().pushLog(`素材切れ: ${action.name}`);
