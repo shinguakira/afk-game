@@ -3,6 +3,7 @@ import { simulateOffline } from "./progression";
 import { getCombatStats } from "./combat";
 import { xpForLevel } from "./xp";
 import { ACTION_MAP } from "./data";
+import { FARM_CROP_MAP } from "./data/farming";
 import type { SaveState } from "./types";
 
 let failures = 0;
@@ -192,11 +193,12 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
 
 // 9) 農業: 作物は active と独立に放置で育つ（オフラインでも成長、上限でキャップ）。
 {
-  const s = freshState({ plots: [{ crop: "tomato", growth: 0 }] }); // tomato growMs=45s
-  simulateOffline(s, 30_000); // 30s 経過
-  check("plot grows offline (30s)", Math.round(s.plots[0].growth), 30_000);
-  simulateOffline(s, 60_000); // さらに60s → 45sでキャップ
-  check("plot growth caps at growMs", s.plots[0].growth, 45_000);
+  const tg = FARM_CROP_MAP["tomato"].growMs;
+  const s = freshState({ plots: [{ crop: "tomato", growth: 0 }] });
+  simulateOffline(s, Math.round(tg / 3)); // 1/3 経過
+  check("plot grows offline", Math.round(s.plots[0].growth), Math.round(tg / 3));
+  simulateOffline(s, tg); // 超過分 → growMs でキャップ
+  check("plot growth caps at growMs", s.plots[0].growth, tg);
 }
 
 console.log(failures === 0 ? "\nALL PASS" : `\n${failures} FAILURE(S)`);

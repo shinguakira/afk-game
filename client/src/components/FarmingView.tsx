@@ -10,8 +10,12 @@ import { Icon } from "../ui/icons";
 
 function fmtTime(ms: number): string {
   const sec = Math.ceil(ms / 1000);
-  if (sec < 60) return `${sec}s`;
-  return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
+  if (sec < 60) return `${sec}秒`;
+  const min = Math.floor(sec / 60);
+  if (min < 60) return `${min}分`;
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  return m ? `${h}時間${m}分` : `${h}時間`;
 }
 
 function CropPicker({

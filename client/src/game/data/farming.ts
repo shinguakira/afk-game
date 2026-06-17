@@ -14,17 +14,18 @@ export interface FarmCrop {
   seed?: string; // 植えるのに必要な種アイテムid（消費）。未指定＝種不要（パースニップのみ）
 }
 
+// 放置ゲームとして成長は長尺（最短30分〜6時間）。手入れ(active=farming)で ×2.5 加速、オフラインも進む。
 export const FARM_CROPS: FarmCrop[] = [
-  // パースニップだけは種が無くても植えられる（スターター作物）。
-  { id: "parsnip", level: 1, growMs: 40_000, yield: 3, xp: 18 },
-  { id: "tomato", level: 1, growMs: 45_000, yield: 3, xp: 20, seed: "seed_tomato" },
-  { id: "rice", level: 2, growMs: 60_000, yield: 4, xp: 26, seed: "seed_rice" },
-  { id: "carrot", level: 3, growMs: 55_000, yield: 3, xp: 30, seed: "seed_carrot" },
-  { id: "edamame", level: 5, growMs: 70_000, yield: 3, xp: 40, seed: "seed_edamame" },
-  { id: "dough", level: 6, growMs: 80_000, yield: 3, xp: 46, seed: "seed_wheat" }, // 小麦→製粉
-  { id: "shiitake", level: 8, growMs: 95_000, yield: 3, xp: 58, seed: "seed_shiitake" },
-  { id: "strawberry", level: 10, growMs: 115_000, yield: 4, xp: 72, seed: "seed_strawberry" },
-  { id: "apple", level: 13, growMs: 145_000, yield: 5, xp: 96, seed: "seed_apple" },
+  // パースニップだけは種が無くても植えられる（スターター作物・4時間で大量収穫）。
+  { id: "parsnip", level: 1, growMs: 14_400_000, yield: 8, xp: 120 }, // 4時間
+  { id: "tomato", level: 1, growMs: 1_800_000, yield: 3, xp: 25, seed: "seed_tomato" }, // 30分(最短)
+  { id: "rice", level: 2, growMs: 2_700_000, yield: 4, xp: 42, seed: "seed_rice" }, // 45分
+  { id: "carrot", level: 3, growMs: 3_600_000, yield: 5, xp: 60, seed: "seed_carrot" }, // 1時間
+  { id: "edamame", level: 5, growMs: 5_400_000, yield: 6, xp: 92, seed: "seed_edamame" }, // 1.5時間
+  { id: "dough", level: 6, growMs: 7_200_000, yield: 7, xp: 130, seed: "seed_wheat" }, // 2時間 小麦→製粉
+  { id: "shiitake", level: 8, growMs: 10_800_000, yield: 9, xp: 200, seed: "seed_shiitake" }, // 3時間
+  { id: "strawberry", level: 10, growMs: 14_400_000, yield: 11, xp: 300, seed: "seed_strawberry" }, // 4時間
+  { id: "apple", level: 13, growMs: 21_600_000, yield: 15, xp: 460, seed: "seed_apple" }, // 6時間
 ];
 
 export const FARM_CROP_MAP: Record<string, FarmCrop> = Object.fromEntries(
