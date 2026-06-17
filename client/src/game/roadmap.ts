@@ -102,7 +102,7 @@ export const MILESTONES: Milestone[] = [
   {
     id: "savings_100k",
     title: "貯金 ¥100,000",
-    hint: "サービス化・案件で円を 10万 貯める",
+    hint: "運用収入・案件で円を 10万 貯める",
     axis: "money",
     check: (s) => s.gold >= 100_000,
     reward: { gold: 5000 },
