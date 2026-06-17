@@ -300,4 +300,55 @@ export const ITEM_ICONS: Record<string, R> = {
       <circle cx="12" cy="18" r="1.3" fill="#f2c14e" />
     </g>,
   ),
+
+  // ===== 農産物（具体的な作物。lucideに無いので自作） =====
+  tomato: svg(
+    <g>
+      <circle cx="12" cy="14.5" r="8.5" fill="#e8412f" stroke="#bf2d20" strokeWidth="1.2" />
+      <ellipse cx="8.6" cy="11.4" rx="2.3" ry="1.5" fill="#ff8a72" opacity="0.55" />
+      <path d="M12 7l1.7 2.6 3-.7-1.3 2.8 1.3 2.8-3-.7L12 16.2l-1.7-2.5-3 .7 1.3-2.8-1.3-2.8 3 .7z" fill="#43933a" stroke="#2e6a28" strokeWidth="0.7" strokeLinejoin="round" />
+      <path d="M12 7.5V3.5" stroke="#2e6a28" strokeWidth="1.5" strokeLinecap="round" />
+    </g>,
+  ),
+  carrot: svg(
+    <g>
+      <path d="M7.3 8.5L16.7 8.5L12 22z" fill="#ef7d22" stroke="#c75f12" strokeWidth="1.1" strokeLinejoin="round" />
+      <path d="M9 11.5h6M9.8 14.5h4.4M10.6 17.5h2.8" stroke="#c75f12" strokeWidth="0.9" strokeLinecap="round" />
+      <path d="M12 8.5V3.4M12 7.5L8.3 4M12 7.5l3.7-3.6" stroke="#3f8a37" strokeWidth="1.7" strokeLinecap="round" />
+    </g>,
+  ),
+  edamame: svg(
+    <g transform="rotate(-28 12 12)">
+      <rect x="3" y="9" width="18" height="6" rx="3" fill="#7cb342" stroke="#4e7d22" strokeWidth="1.2" />
+      <circle cx="8" cy="12" r="1.9" fill="#aed581" />
+      <circle cx="12" cy="12" r="1.9" fill="#aed581" />
+      <circle cx="16" cy="12" r="1.9" fill="#aed581" />
+    </g>,
+  ),
+  shiitake: svg(
+    <g>
+      <rect x="9.5" y="12" width="5" height="9" rx="2" fill="#e8d5b0" stroke="#b89a6a" strokeWidth="1" />
+      <path d="M3 12.5C3 5 21 5 21 12.5C21 14.5 3 14.5 3 12.5z" fill="#7a4a2b" stroke="#5a3520" strokeWidth="1.2" />
+      <path d="M6 11.4l2-2M10 11l1.5-2.3M14 11l1.5-2.3M18 11.4l-2-2" stroke="#5a3520" strokeWidth="0.8" strokeLinecap="round" />
+    </g>,
+  ),
+  strawberry: svg(
+    <g>
+      <path d="M12 21.5C5.5 18 3.5 12 5.7 8.6C8 5.6 16 5.6 18.3 8.6C20.5 12 18.5 18 12 21.5z" fill="#e63950" stroke="#b3243c" strokeWidth="1.1" />
+      <path d="M6 8.2q3-3 6-2.4q3-0.6 6 2.4q-3 1.1-6 0.5q-3 0.6-6-0.5z" fill="#43933a" stroke="#2e6a28" strokeWidth="0.7" />
+      <path d="M12 5.8V2.9" stroke="#2e6a28" strokeWidth="1.4" strokeLinecap="round" />
+      <g fill="#ffd24a">
+        <circle cx="9" cy="11.2" r="0.6" /><circle cx="12" cy="12.6" r="0.6" /><circle cx="15" cy="11.2" r="0.6" />
+        <circle cx="10.4" cy="14.6" r="0.6" /><circle cx="13.6" cy="14.6" r="0.6" /><circle cx="12" cy="17" r="0.6" />
+      </g>
+    </g>,
+  ),
+  apple: svg(
+    <g>
+      <path d="M12 7.5C9.5 5.5 4 6 3.6 12C3.2 17.2 7 22 12 20.8C17 22 20.8 17.2 20.4 12C20 6 14.5 5.5 12 7.5z" fill="#e23b2e" stroke="#b52a20" strokeWidth="1.1" />
+      <ellipse cx="8" cy="11.5" rx="1.9" ry="3" fill="#ff7a63" opacity="0.5" />
+      <path d="M12.4 7C12.4 4.3 13.4 3.2 15.2 3" stroke="#7a4a2b" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+      <path d="M13 4.6q2.6-2 4.6-1q-0.8 2.8-3.7 2.3z" fill="#43933a" stroke="#2e6a28" strokeWidth="0.6" />
+    </g>,
+  ),
 };

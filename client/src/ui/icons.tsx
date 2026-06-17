@@ -137,9 +137,6 @@ import {
   LuZap,
   LuWheat,
   LuSprout,
-  LuApple,
-  LuCherry,
-  LuCarrot,
   LuFish,
   LuSalad,
   LuCroissant,
@@ -285,12 +282,7 @@ const ICONS: Record<string, IconType> = {
   dough: LuCroissant,
   leave: LuLeaf,
   farming: LuSprout,
-  tomato: LuCherry,
-  carrot: LuCarrot,
-  edamame: LuSprout,
-  shiitake: LuLeaf,
-  strawberry: LuCherry,
-  apple: LuApple,
+  // 作物アイコンは itemIcons.tsx の自作SVG（ITEM_ICONS が優先）。近似の流用はしない。
 
   // combat stats
   debug: LuBug,
