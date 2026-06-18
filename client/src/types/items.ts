@@ -1,4 +1,3 @@
-import type { ItemId } from "./ids";
 import type { Modifier } from "./effects";
 
 export type ItemType = "resource" | "product" | "weapon" | "food" | "misc";
@@ -22,7 +21,7 @@ export interface EquipDef {
 }
 
 export interface Item {
-  id: ItemId;
+  id: string;
   name: string;
   type: ItemType;
   icon?: string;

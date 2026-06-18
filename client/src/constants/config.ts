@@ -1,5 +1,4 @@
 // ゲームエンジンの調整用定数を一箇所に集約（散在していた数値を定数化）。
-import type { ItemId } from "../types/ids";
 
 // ---- セーブ / ループ ----
 /** セーブ構造を非互換に変えたら上げる。不一致なら旧セーブを破棄して新規開始。 */
@@ -25,7 +24,7 @@ export const SHOP_MARKUP = 2;
 /** 開始時の所持金。 */
 export const STARTING_GOLD = 25;
 /** 開始時の所持アイテム。 */
-export const STARTING_BANK: Record<ItemId, number> = { coffee: 10 };
+export const STARTING_BANK: Record<string, number> = { coffee: 10 };
 /** メンタルLv1あたりの最大HP。 */
 export const HP_PER_MENTAL_LEVEL = 10;
 

@@ -1,5 +1,3 @@
-import type { ActionId, ItemId, SkillId } from "./ids";
-
 export type SkillKind = "gather" | "craft" | "combat";
 
 /** サイドバーの大分類。
@@ -9,7 +7,7 @@ export type SkillKind = "gather" | "craft" | "combat";
 export type SkillCategory = "language" | "platform" | "infra" | "domain" | "craft" | "combat";
 
 export interface Skill {
-  id: SkillId;
+  id: string;
   name: string;
   /** gather=生産系, craft=制作系, combat=現場力(戦闘ステ)。エンジンの速度/XP補正に使用。 */
   kind: SkillKind;
@@ -27,8 +25,8 @@ export type ActionCategory = "base" | "concept" | "library" | "framework" | "oss
 
 /** A repeatable training action: gather a resource or craft an item. */
 export interface GameAction {
-  id: ActionId;
-  skill: SkillId;
+  id: string;
+  skill: string;
   name: string;
   /** 言語スキル内での表示分類。 */
   category?: ActionCategory;
@@ -44,9 +42,9 @@ export interface GameAction {
   url?: string;
   /** 副次的に経験値が入るスキル。完了ごとに `skill`(主)に加えてこちらにも入る。
    *  例: フレームワーク実装は言語(主)＋ドメイン(副)。概念は分離・獲得は同時。 */
-  xpAlso?: { skill: SkillId; xp: number };
+  xpAlso?: { skill: string; xp: number };
   /** Items consumed per completion (craft actions). */
-  inputs?: Partial<Record<ItemId, number>>;
+  inputs?: Partial<Record<string, number>>;
   /** Items produced per completion. */
-  outputs: Partial<Record<ItemId, number>>;
+  outputs: Partial<Record<string, number>>;
 }

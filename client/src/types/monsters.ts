@@ -1,7 +1,5 @@
-import type { ItemId, MonsterId } from "./ids";
-
 export interface LootDrop {
-  item: ItemId;
+  item: string;
   /** Drop chance 0..1. */
   chance: number;
   min: number;
@@ -9,7 +7,7 @@ export interface LootDrop {
 }
 
 export interface Monster {
-  id: MonsterId;
+  id: string;
   name: string;
   icon: string;
   hp: number;

@@ -1,22 +1,21 @@
-import type { ActionId, ItemId, MonsterId, SkillId } from "./ids";
 import type { EquipSlot } from "./items";
 
 export type ActiveAction =
-  | { kind: "skill"; actionId: ActionId }
-  | { kind: "combat"; monsterId: MonsterId }
+  | { kind: "skill"; actionId: string }
+  | { kind: "combat"; monsterId: string }
   | null;
 
 /** 農業の畑1区画。作物を植えると growth(ms) が経過時間で増え、growMs で収穫可。
  *  作物の成長は放置で進む（能動アクションとは独立）。手入れ中は成長が加速する。 */
 export interface PlotState {
-  crop: ItemId | null;
+  crop: string | null;
   growth: number;
 }
 
 export interface SaveState {
   version: number;
-  skills: Record<SkillId, { xp: number }>;
-  bank: Record<ItemId, number>;
+  skills: Record<string, { xp: number }>;
+  bank: Record<string, number>;
   /** 農業の畑（放置で育つ）。 */
   plots: PlotState[];
   gold: number;
@@ -31,8 +30,8 @@ export interface SaveState {
   /** 達成済みマイルストーン id（キャリア・ロードマップ）。 */
   milestones: string[];
   /** スロット → 装備中アイテム id。 */
-  equipment: Partial<Record<EquipSlot, ItemId>>;
-  selectedFood: ItemId | null;
+  equipment: Partial<Record<EquipSlot, string>>;
+  selectedFood: string | null;
   /** プレイヤー名（オンボーディングで入力）。 */
   playerName: string;
   /** 得意な言語id（開始時ブースト）。 */
@@ -50,7 +49,7 @@ export interface SaveState {
 
 export interface OfflineSummary {
   ms: number;
-  xp: Record<SkillId, number>;
-  items: Record<ItemId, number>;
+  xp: Record<string, number>;
+  items: Record<string, number>;
   gold: number;
 }
