@@ -1,7 +1,7 @@
-import { useGame } from "../game/store";
-import { SKILL_MAP } from "../game/data";
-import { TUTORIAL_STEPS } from "../game/data/tutorial";
-import { Icon } from "../ui/icons";
+import { useGame } from "../store";
+import { SKILL_MAP } from "../constants/maps";
+import { TUTORIAL_STEPS } from "../constants/tutorial";
+import { Icon } from "./icons";
 
 export function TutorialOverlay() {
   const step = useGame((s) => s.tutorialStep);

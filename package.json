@@ -12,13 +12,14 @@
     "dev:server": "npm -w server run dev",
     "dev:client": "npm -w client run dev",
     "build": "npm -w client run build",
+    "test": "npm -w client run test",
     "start": "npm -w server run start",
     "tauri": "tauri",
     "desktop": "tauri dev",
     "desktop:build": "tauri build",
-    "lint": "oxlint client/src server/src",
-    "format": "oxfmt client/src server/src",
-    "format:check": "oxfmt --check client/src server/src",
+    "lint": "oxlint client/src client/test server/src",
+    "format": "oxfmt client/src client/test server/src",
+    "format:check": "oxfmt --check client/src client/test server/src",
     "knip": "knip"
   },
   "devDependencies": {

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useGame } from "../game/store";
-import { SKILLS_BY_CATEGORY } from "../game/data";
-import { toggleInSet } from "../game/util";
-import { Icon } from "../ui/icons";
+import { useGame } from "../store";
+import { SKILLS_BY_CATEGORY } from "../constants/maps";
+import { toggleInSet } from "../lib/util";
+import { Icon } from "./icons";
 
 const LANGS = SKILLS_BY_CATEGORY["language"] ?? [];
 

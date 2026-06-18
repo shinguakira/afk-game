@@ -1,9 +1,10 @@
-import { useGame } from "../game/store";
-import { COMBAT_STAT_IDS, CLASS_MAP } from "../game/data";
-import { levelForXp } from "../game/xp";
-import { currentRank } from "../game/rank";
-import { firstIncomplete, AXIS_META } from "../game/roadmap";
-import { Icon } from "../ui/icons";
+import { useGame } from "../store";
+import { CLASS_MAP } from "../constants/maps";
+import { COMBAT_STAT_IDS } from "../constants/skills";
+import { levelForXp } from "../lib/xp";
+import { currentRank } from "../lib/rank";
+import { firstIncomplete, AXIS_META } from "../lib/roadmap";
+import { Icon } from "./icons";
 
 export function LogPanel() {
   const log = useGame((s) => s.log);

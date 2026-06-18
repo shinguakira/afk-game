@@ -1,7 +1,7 @@
-import { useGame } from "../game/store";
-import { MILESTONES, AXIS_META, firstIncomplete } from "../game/roadmap";
-import { formatNumber } from "../ui/format";
-import { Icon } from "../ui/icons";
+import { useGame } from "../store";
+import { MILESTONES, AXIS_META, firstIncomplete } from "../lib/roadmap";
+import { formatNumber } from "../lib/format";
+import { Icon } from "./icons";
 
 export function RoadmapView() {
   const milestones = useGame((s) => s.milestones);

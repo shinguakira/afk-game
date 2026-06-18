@@ -2,8 +2,8 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "workspaces": {
     "client": {
-      "entry": ["src/game/offline.test.ts"],
-      "project": "src/**/*.{ts,tsx}"
+      "entry": ["test/**/*.test.ts"],
+      "project": "{src,test}/**/*.{ts,tsx}"
     },
     "server": {
       "project": "src/**/*.ts"

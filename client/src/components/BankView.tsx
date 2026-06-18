@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useGame } from "../game/store";
-import { ITEM_MAP } from "../game/data";
-import type { ItemType } from "../game/types";
-import { formatNumber } from "../ui/format";
-import { Icon } from "../ui/icons";
+import { useGame } from "../store";
+import { ITEM_MAP } from "../constants/maps";
+import type { ItemType } from "../types/items";
+import { formatNumber } from "../lib/format";
+import { Icon } from "./icons";
 
 const TYPE_LABEL: Record<ItemType, string> = {
   resource: "資源",

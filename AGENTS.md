@@ -14,12 +14,17 @@
 
 ## その他の確立済み規約
 
+- **バレルファイル禁止**。再エクスポートだけの `index.ts`（`export * from "./x"` 等）を作らない。
+  各シンボルは定義元モジュールから直接 import する（例: `from "../constants/items"`、`from "../constants"` ではない）。
+  ルックアップマップ等の派生値は「それを計算する実体モジュール」（例 `constants/maps.ts`）に置く。
+- **フォルダ構成**: `src/{app,components,store,lib,constants,types}`。loose な .ts を src 直下に置かない。
+  型は `types/` にドメイン別でまとめ（type と interface は同列に扱う）、重複させない。
 - **絵文字をUIに使わない**。アイコンは lucide / simple-icons / 自作SVG のいずれか。
-- データ変更で**経済やアイテム集合が変わったら** `client/src/game/store.ts` の `SAVE_VERSION` を上げる。
-- 変更後は必ず通す:
+- データ変更で**経済やアイテム集合が変わったら** `client/src/constants/config.ts` の `SAVE_VERSION` を上げる。
+- 変更後は必ず通す（ルートで）:
   - `cd client && npx tsc --noEmit`
-  - `npx tsx src/game/offline.test.ts`（`ALL PASS` 必須）
-  - `npx vite build`
+  - `npm test`（vitest・`client/test/`。全 pass 必須）
+  - `npm run build`
 - コミット前に整形＆Lintを通す（ルートで）:
   - `npm run format`（oxfmt・既定で書込）
   - `npm run lint`（oxlint・警告ゼロを維持）

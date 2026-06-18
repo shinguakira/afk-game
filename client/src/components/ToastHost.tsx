@@ -1,6 +1,6 @@
-import { useGame } from "../game/store";
-import { SKILL_MAP } from "../game/data";
-import { Icon } from "../ui/icons";
+import { useGame } from "../store";
+import { SKILL_MAP } from "../constants/maps";
+import { Icon } from "./icons";
 
 // 画面下中央: XP獲得インジケータ（Melvor風）＋ レベルアップ/目標達成トースト。
 export function ToastHost() {

@@ -1,9 +1,10 @@
-import { useGame } from "../game/store";
-import { ITEM_MAP, MONSTERS, MONSTER_MAP } from "../game/data";
-import { getCombatStats } from "../game/combat";
+import { useGame } from "../store";
+import { ITEM_MAP, MONSTER_MAP } from "../constants/maps";
+import { MONSTERS } from "../constants/monsters";
+import { getCombatStats } from "../lib/combat";
 import { Bar } from "./Bar";
 import { TimerBar } from "./TimerBar";
-import { Icon } from "../ui/icons";
+import { Icon } from "./icons";
 
 export function CombatView() {
   const state = useGame();
