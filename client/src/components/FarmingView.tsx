@@ -39,9 +39,12 @@ function CropPicker({
   }).sort((a, b) => Number(b.plantable) - Number(a.plantable) || a.c.level - b.c.level);
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+      onClick={onClose}
+    >
       <div
-        className="modal"
+        className="w-[min(440px,92vw)] rounded-[14px] border border-border bg-panel p-6"
         onClick={(e) => e.stopPropagation()}
         style={{ width: "min(580px, 94vw)" }}
       >
@@ -83,7 +86,7 @@ function CropPicker({
                 <div style={{ fontWeight: 600, fontSize: 12.5, textAlign: "center" }}>
                   {it?.name}
                 </div>
-                <div className="muted" style={{ fontSize: 11 }}>
+                <div className="text-muted" style={{ fontSize: 11 }}>
                   {fmtTime(c.growMs)} ・ ×{c.yield}
                 </div>
                 <div style={{ fontSize: 11, fontWeight: 600 }}>
@@ -121,10 +124,10 @@ export function FarmingView() {
 
   return (
     <div>
-      <h2 className="section-title">
+      <h2 className="mb-1 flex items-center gap-2 text-lg">
         <Icon name="farming" size={22} /> 農業
       </h2>
-      <p className="section-sub">
+      <p className="mb-4 text-[13px] text-muted">
         作物は<strong>畑で放置成長</strong>。土を整える・水やり・肥料をまく＝
         <strong>手入れ（能動）</strong>で farming 経験値が入り、手入れ中は全畑の成長が加速。
       </p>
@@ -143,16 +146,24 @@ export function FarmingView() {
       </div>
 
       <h3 style={{ display: "flex", alignItems: "center", gap: 6, margin: "0 0 10px" }}>
-        <Icon name="farming" size={16} /> 畑{tending && <span className="tag">手入れ中 ×2.5</span>}
+        <Icon name="farming" size={16} /> 畑
+        {tending && (
+          <span className="mr-1 my-0.5 inline-block rounded-md border border-border bg-panel px-1.5 py-px text-[11px]">
+            手入れ中 ×2.5
+          </span>
+        )}
       </h3>
-      <div className="grid" style={{ marginBottom: 22 }}>
+      <div
+        className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3"
+        style={{ marginBottom: 22 }}
+      >
         {state.plots.map((p, i) => {
           if (!p.crop) {
             return (
-              <div key={i} className="card">
+              <div key={i} className="rounded-[10px] border border-border bg-panel2 p-3">
                 <h3 style={{ color: "var(--muted)" }}>空き畑</h3>
                 <button
-                  className="primary"
+                  className="border-accent bg-accent font-semibold text-[#06101f]"
                   style={{ width: "100%", marginTop: 8 }}
                   onClick={() => setPlanting(i)}
                 >
@@ -165,18 +176,21 @@ export function FarmingView() {
           const it = ITEM_MAP[p.crop];
           const ready = p.growth >= spec.growMs;
           return (
-            <div key={i} className={`card ${ready ? "selected" : ""}`}>
+            <div
+              key={i}
+              className={`rounded-[10px] border bg-panel2 p-3 ${ready ? "border-accent2" : "border-border"}`}
+            >
               <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <Icon name={it?.icon} size={18} /> {it?.name}
               </h3>
-              <div className="meta">
+              <div className="mb-2 text-xs text-muted">
                 {ready ? "収穫できます" : `あと ${fmtTime(spec.growMs - p.growth)}`} ・ ×
                 {spec.yield}
               </div>
               <Bar kind="xp" value={Math.min(1, p.growth / spec.growMs)} />
               {ready ? (
                 <button
-                  className="primary"
+                  className="border-accent bg-accent font-semibold text-[#06101f]"
                   style={{ width: "100%", marginTop: 8 }}
                   onClick={() => state.harvestPlot(i)}
                 >
@@ -195,19 +209,19 @@ export function FarmingView() {
       <h3 style={{ display: "flex", alignItems: "center", gap: 6, margin: "0 0 10px" }}>
         <Icon name="till" size={16} /> 手入れ（能動・経験値＋成長加速）
       </h3>
-      <div className="grid">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
         {tendActions.map((a) => {
           const unlocked = level >= a.level;
           const isActive = state.active?.kind === "skill" && state.active.actionId === a.id;
           return (
             <div
               key={a.id}
-              className={`card ${!unlocked ? "locked" : ""} ${isActive ? "selected" : ""}`}
+              className={`rounded-[10px] border bg-panel2 p-3 ${!unlocked ? "opacity-50" : ""} ${isActive ? "border-accent2" : "border-border"}`}
             >
               <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <Icon name={a.icon} size={16} /> {a.name}
               </h3>
-              <div className="meta">
+              <div className="mb-2 text-xs text-muted">
                 {!unlocked && <span style={{ color: "var(--danger)" }}>Lv {a.level} 必要 · </span>}
                 {(a.time / 1000).toFixed(1)}s · {a.xp} xp
               </div>
@@ -215,7 +229,7 @@ export function FarmingView() {
                 <>
                   <TimerBar periodMs={a.time} running />
                   <button
-                    className="danger"
+                    className="border-danger text-danger"
                     style={{ width: "100%", marginTop: 8 }}
                     onClick={() => state.stop()}
                   >
@@ -224,7 +238,7 @@ export function FarmingView() {
                 </>
               ) : (
                 <button
-                  className="primary"
+                  className="border-accent bg-accent font-semibold text-[#06101f]"
                   style={{ width: "100%", marginTop: 8 }}
                   disabled={!unlocked}
                   onClick={() => state.startAction(a.id)}

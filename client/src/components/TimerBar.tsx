@@ -19,14 +19,14 @@ export const TimerBar = memo(function TimerBar({ periodMs, running, label }: Tim
   return (
     <div>
       {label && (
-        <div className="bar-label">
+        <div className="mb-[3px] flex justify-between text-[11px] text-muted">
           <span>{label}</span>
           <span />
         </div>
       )}
-      <div className="bar action">
+      <div className="relative h-2.5 overflow-hidden rounded-md border border-border bg-panel">
         <span
-          className={running ? "timer" : ""}
+          className={`absolute inset-0 origin-left rounded-md bg-accent ${running ? "animate-bar-fill" : ""}`}
           style={running ? { animationDuration: `${periodMs}ms` } : { transform: "scaleX(0)" }}
         />
       </div>

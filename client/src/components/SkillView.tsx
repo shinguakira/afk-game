@@ -28,7 +28,10 @@ const CATEGORY_ICON: Record<ActionCategory, string> = {
 function ioTags(io: Partial<Record<string, number>> | undefined) {
   if (!io) return null;
   return Object.entries(io).map(([id, q]) => (
-    <span className="tag" key={id}>
+    <span
+      className="mr-1 my-0.5 inline-block rounded-md border border-border bg-panel px-1.5 py-px text-[11px]"
+      key={id}
+    >
       <Icon name={ITEM_MAP[id]?.icon} size={11} /> {q}× {ITEM_MAP[id]?.name ?? id}
     </span>
   ));
@@ -52,10 +55,10 @@ export function SkillView({ skillId }: { skillId: string }) {
 
   return (
     <div>
-      <h2 className="section-title">
+      <h2 className="mb-1 flex items-center gap-2 text-lg">
         <Icon name={skill.icon} size={22} /> {skill.name}
         {skill.tech && (
-          <span className="muted" style={{ fontSize: 13, marginLeft: 8 }}>
+          <span className="text-muted" style={{ fontSize: 13, marginLeft: 8 }}>
             {skill.tech === "language" ? "言語" : "フレームワーク"}
           </span>
         )}
@@ -98,7 +101,7 @@ export function SkillView({ skillId }: { skillId: string }) {
               <Icon name={CATEGORY_ICON[cat]} size={16} /> {CATEGORY_LABEL[cat]}
             </h3>
           )}
-          <div className="grid">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
             {byCat.get(cat)!.map((a) => {
               const unlocked = level >= a.level;
               const isActive = state.active?.kind === "skill" && state.active.actionId === a.id;
@@ -109,7 +112,7 @@ export function SkillView({ skillId }: { skillId: string }) {
               return (
                 <div
                   key={a.id}
-                  className={`card ${!unlocked ? "locked" : ""} ${isActive ? "selected" : ""}`}
+                  className={`rounded-[10px] border bg-panel2 p-3 ${!unlocked ? "opacity-50" : ""} ${isActive ? "border-accent2" : "border-border"}`}
                 >
                   <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     <Icon name={a.icon} size={16} /> {a.name}
@@ -126,28 +129,31 @@ export function SkillView({ skillId }: { skillId: string }) {
                       </a>
                     )}
                   </h3>
-                  <div className="meta">
+                  <div className="mb-2 text-xs text-muted">
                     {!unlocked && (
                       <span style={{ color: "var(--danger)" }}>Lv {a.level} 必要 · </span>
                     )}
                     {(a.time / 1000).toFixed(1)}s · {Math.round(a.xp)} xp
                     {a.xpAlso && SKILL_MAP[a.xpAlso.skill] && (
-                      <span className="tag" style={{ marginLeft: 6 }}>
+                      <span
+                        className="mr-1 my-0.5 inline-block rounded-md border border-border bg-panel px-1.5 py-px text-[11px]"
+                        style={{ marginLeft: 6 }}
+                      >
                         <Icon name={SKILL_MAP[a.xpAlso.skill].icon} size={11} />{" "}
                         {SKILL_MAP[a.xpAlso.skill].name} +{Math.round(a.xpAlso.xp)}
                       </span>
                     )}
                   </div>
-                  <div className="io">
+                  <div className="mb-2 text-xs">
                     {a.inputs && (
                       <div>
-                        <span className="muted">消費: </span>
+                        <span className="text-muted">消費: </span>
                         {ioTags(a.inputs)}
                       </div>
                     )}
                     {a.outputs && Object.keys(a.outputs).length > 0 && (
                       <div>
-                        <span className="muted">産出: </span>
+                        <span className="text-muted">産出: </span>
                         {ioTags(a.outputs)}
                       </div>
                     )}
@@ -158,7 +164,7 @@ export function SkillView({ skillId }: { skillId: string }) {
                       <TimerBar periodMs={a.time} running />
                       <button
                         style={{ marginTop: 8, width: "100%" }}
-                        className="danger"
+                        className="border-danger text-danger"
                         onClick={() => state.stop()}
                       >
                         中断
@@ -166,7 +172,7 @@ export function SkillView({ skillId }: { skillId: string }) {
                     </>
                   ) : (
                     <button
-                      className="primary"
+                      className="border-accent bg-accent font-semibold text-[#06101f]"
                       style={{ width: "100%" }}
                       disabled={!unlocked || !canCraft}
                       onClick={() => state.startAction(a.id)}

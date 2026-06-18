@@ -99,23 +99,32 @@ function BuyModal({ id, onClose }: { id: string; onClose: () => void }) {
   const buy = (q: number) => state.buyItem(id, q);
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+      onClick={onClose}
+    >
+      <div
+        className="w-[min(440px,92vw)] rounded-[14px] border border-border bg-panel p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-          <div className="store-tile" style={{ width: 56, height: 56, cursor: "default" }}>
+          <div
+            className="relative flex aspect-square items-center justify-center rounded-lg border border-border bg-panel2 p-0 hover:border-accent"
+            style={{ width: 56, height: 56, cursor: "default" }}
+          >
             <Icon name={it.icon} size={44} />
           </div>
           <div>
             <h2 style={{ margin: 0, fontSize: 18 }}>{it.name}</h2>
-            <div className="muted" style={{ fontSize: 12 }}>
+            <div className="text-muted" style={{ fontSize: 12 }}>
               単価 ¥{formatNumber(price)} ・ 所持 {owned}
               {it.heals ? ` ・ メンタル+${it.heals}` : ""}
             </div>
           </div>
         </div>
 
-        <div className="row-between" style={{ margin: "10px 0" }}>
-          <span className="muted">所持金</span>
+        <div className="flex items-center justify-between" style={{ margin: "10px 0" }}>
+          <span className="text-muted">所持金</span>
           <span style={{ color: "var(--gold)" }}>¥{formatNumber(state.gold)}</span>
         </div>
 
@@ -123,7 +132,7 @@ function BuyModal({ id, onClose }: { id: string; onClose: () => void }) {
           {QTYS.map((q) => (
             <button
               key={q}
-              className="primary"
+              className="border-accent bg-accent font-semibold text-[#06101f]"
               disabled={state.gold < price * q}
               onClick={() => buy(q)}
             >
@@ -151,10 +160,10 @@ export function ShopView() {
 
   return (
     <div>
-      <h2 className="section-title">
+      <h2 className="mb-1 flex items-center gap-2 text-lg">
         <Icon name="shop" size={22} /> ショップ
       </h2>
-      <p className="section-sub">
+      <p className="mb-4 text-[13px] text-muted">
         所持 <span style={{ color: "var(--gold)" }}>¥{formatNumber(state.gold)}</span>。
         アイテムを選んで購入。
       </p>
@@ -164,19 +173,23 @@ export function ShopView() {
           <h3 style={{ display: "flex", alignItems: "center", gap: 6, margin: "0 0 8px" }}>
             <Icon name={sec.icon} size={16} /> {sec.title}
           </h3>
-          <div className="store-grid">
+          <div className="grid max-w-[600px] grid-cols-[repeat(auto-fill,minmax(64px,1fr))] gap-2">
             {sec.items.map((id) => {
               const it = ITEM_MAP[id];
               if (!it) return null;
               return (
                 <button
                   key={id}
-                  className="store-tile"
+                  className="relative flex aspect-square items-center justify-center rounded-lg border border-border bg-panel2 p-0 hover:border-accent"
                   title={`${it.name} ¥${shopPrice(it.sellPrice)}`}
                   onClick={() => setBuying(id)}
                 >
-                  <Icon name={it.icon} size={40} />
-                  <span className="price">¥{formatNumber(shopPrice(it.sellPrice))}</span>
+                  <span className="flex h-4/5 w-4/5 items-center justify-center [&_svg]:h-full [&_svg]:w-full">
+                    <Icon name={it.icon} size={40} />
+                  </span>
+                  <span className="absolute inset-x-0 bottom-0 rounded-b-[7px] bg-black/50 py-px text-center text-[9px] font-bold text-gold">
+                    ¥{formatNumber(shopPrice(it.sellPrice))}
+                  </span>
                 </button>
               );
             })}

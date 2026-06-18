@@ -12,17 +12,17 @@ export function OfflineModal() {
   const itemEntries = Object.entries(summary.items).filter(([, v]) => v !== 0);
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+      <div className="w-[min(440px,92vw)] rounded-[14px] border border-border bg-panel p-6">
         <h2>おかえりなさい</h2>
-        <p className="muted">
+        <p className="text-muted">
           <strong>{formatDuration(summary.ms)}</strong> ぶん業務が進みました。成果:
         </p>
 
         {summary.gold > 0 && (
-          <div className="row-between" style={{ margin: "8px 0" }}>
+          <div className="flex items-center justify-between" style={{ margin: "8px 0" }}>
             <span>給料</span>
-            <span className="gain">+¥{formatNumber(summary.gold)}</span>
+            <span className="text-accent2">+¥{formatNumber(summary.gold)}</span>
           </div>
         )}
 
@@ -30,12 +30,12 @@ export function OfflineModal() {
           <>
             <h3 style={{ marginBottom: 4 }}>経験値</h3>
             {xpEntries.map(([id, v]) => (
-              <div className="row-between" key={id}>
+              <div className="flex items-center justify-between" key={id}>
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <Icon name={SKILL_MAP[id]?.icon} size={14} />
                   {SKILL_MAP[id]?.name ?? id}
                 </span>
-                <span className="gain">+{formatNumber(v)}</span>
+                <span className="text-accent2">+{formatNumber(v)}</span>
               </div>
             ))}
           </>
@@ -45,7 +45,7 @@ export function OfflineModal() {
           <>
             <h3 style={{ marginBottom: 4 }}>獲得アイテム</h3>
             {itemEntries.map(([id, v]) => (
-              <div className="row-between" key={id}>
+              <div className="flex items-center justify-between" key={id}>
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <Icon name={ITEM_MAP[id]?.icon} size={14} />
                   {ITEM_MAP[id]?.name ?? id}
@@ -60,10 +60,14 @@ export function OfflineModal() {
         )}
 
         {xpEntries.length === 0 && itemEntries.length === 0 && summary.gold === 0 && (
-          <p className="muted">…ほぼ無し。作業が止まっていたようです（素材切れ？）。</p>
+          <p className="text-muted">…ほぼ無し。作業が止まっていたようです（素材切れ？）。</p>
         )}
 
-        <button className="primary" style={{ width: "100%", marginTop: 16 }} onClick={dismiss}>
+        <button
+          className="border-accent bg-accent font-semibold text-[#06101f]"
+          style={{ width: "100%", marginTop: 16 }}
+          onClick={dismiss}
+        >
           受け取る
         </button>
       </div>

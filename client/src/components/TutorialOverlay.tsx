@@ -37,7 +37,7 @@ export function TutorialOverlay() {
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
         <Icon name="roadmap" size={18} />
         <strong style={{ fontSize: 15 }}>{sub(s.title)}</strong>
-        <span className="muted" style={{ marginLeft: "auto", fontSize: 12 }}>
+        <span className="text-muted" style={{ marginLeft: "auto", fontSize: 12 }}>
           {step + 1} / {TUTORIAL_STEPS.length}
         </span>
       </div>
@@ -48,7 +48,10 @@ export function TutorialOverlay() {
         </button>
         <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
           {step > 0 && <button onClick={() => setStep(step - 1)}>戻る</button>}
-          <button className="primary" onClick={() => (last ? end() : setStep(step + 1))}>
+          <button
+            className="border-accent bg-accent font-semibold text-[#06101f]"
+            onClick={() => (last ? end() : setStep(step + 1))}
+          >
             {last ? "はじめる" : "次へ"}
           </button>
         </div>

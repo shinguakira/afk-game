@@ -18,23 +18,21 @@ export function TopBar() {
   }
 
   return (
-    <div className="topbar">
-      <span className="title">
+    <div className="flex flex-wrap items-center gap-[18px] border-b border-border bg-panel px-4 py-2.5">
+      <span className="text-base font-bold tracking-[0.5px]">
         <Icon name="company" size={18} /> Idle Engineer
       </span>
-      <span style={{ fontSize: 13 }}>
+      <span className="text-[13px]">
         {state.playerName && <strong>{state.playerName}</strong>}
-        <span className="muted"> ・ {currentRank(state).name}</span>
+        <span className="text-muted"> ・ {currentRank(state).name}</span>
       </span>
 
-      <div className="stat">
-        <span className="gold" style={{ fontWeight: 700 }}>
-          ¥
-        </span>
-        <span className="gold">{formatNumber(state.gold)}</span>
+      <div className="flex items-center gap-1.5 text-sm">
+        <span className="font-bold text-gold">¥</span>
+        <span className="font-semibold text-gold">{formatNumber(state.gold)}</span>
       </div>
 
-      <div className="stat" style={{ minWidth: 160 }}>
+      <div className="flex min-w-[160px] items-center gap-1.5 text-sm">
         <Icon name="mental" title="メンタル" />
         <Bar
           kind="hp"
@@ -43,15 +41,15 @@ export function TopBar() {
         />
       </div>
 
-      <div className="stat">
-        <span className="muted">業務:</span>
+      <div className="flex items-center gap-1.5 text-sm">
+        <span className="text-muted">業務:</span>
         <strong>{activeLabel}</strong>
       </div>
 
-      <div className="spacer" />
+      <div className="flex-1" />
 
       {state.active && (
-        <button className="danger" onClick={() => state.stop()}>
+        <button className="border-danger text-danger" onClick={() => state.stop()}>
           <Icon name="stop" size={14} /> 中断
         </button>
       )}
@@ -62,7 +60,7 @@ export function TopBar() {
         <Icon name="save" size={14} /> 保存
       </button>
       <button
-        className="danger"
+        className="border-danger text-danger"
         onClick={() => {
           if (confirm("全進捗を消して退職（最初から）しますか？")) void state.hardReset();
         }}

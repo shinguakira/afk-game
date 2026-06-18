@@ -52,14 +52,16 @@ export function EquipView() {
 
   return (
     <div>
-      <h2 className="section-title">
+      <h2 className="mb-1 flex items-center gap-2 text-lg">
         <Icon name="company" size={22} /> 装備
       </h2>
-      <p className="section-sub">スロットをクリックして、所持アイテムから装備します。</p>
+      <p className="mb-4 text-[13px] text-muted">
+        スロットをクリックして、所持アイテムから装備します。
+      </p>
 
-      <div className="equip-doll">
+      <div className="mt-2 grid max-w-[460px] gap-2.5 [grid-template-areas:'._hair_.'_'weapon_figure_body'_'bag_figure_pc'_'avatar_figure_food'] [grid-template-columns:84px_1fr_84px] [grid-template-rows:auto_repeat(3,84px)]">
         {/* 中央の人物 */}
-        <div className="equip-figure" style={{ gridArea: "figure" }}>
+        <div className="flex items-center justify-center" style={{ gridArea: "figure" }}>
           <svg width="120" height="180" viewBox="0 0 60 90">
             <circle cx="30" cy="16" r="11" fill="#3a4554" stroke="#5a6a7a" strokeWidth="1.5" />
             <path
@@ -79,16 +81,18 @@ export function EquipView() {
           return (
             <button
               key={slot}
-              className={`equip-slot ${it ? "filled" : ""}`}
+              className={`flex cursor-pointer flex-col items-center justify-center gap-0.5 rounded-[10px] border bg-panel2 p-1 hover:border-accent ${it ? "border-accent2" : "border-border"}`}
               style={{ gridArea: area }}
               onClick={() => setPicking(slot)}
               title={label}
             >
-              <span className="eslot-label">{label}</span>
-              <div className="eslot-icon">
+              <span className="text-[10px] text-muted">{label}</span>
+              <div
+                className={`flex h-[38px] items-center justify-center ${it ? "" : "opacity-40"}`}
+              >
                 <Icon name={it ? it.icon : icon} size={it ? 34 : 22} />
               </div>
-              <span className="eslot-name">{it ? it.name : "空き"}</span>
+              <span className="max-w-20 truncate text-[10px]">{it ? it.name : "空き"}</span>
             </button>
           );
         })}
@@ -96,12 +100,20 @@ export function EquipView() {
 
       {/* スロットのピッカー（モーダル） */}
       {picking && (
-        <div className="modal-backdrop" onClick={() => setPicking(null)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2 style={{ marginTop: 0 }}>{SLOTS.find((s) => s.slot === picking)?.label} を選ぶ</h2>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+          onClick={() => setPicking(null)}
+        >
+          <div
+            className="w-[min(440px,92vw)] rounded-[14px] border border-border bg-panel p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="mt-0 mb-2 text-lg font-bold">
+              {SLOTS.find((s) => s.slot === picking)?.label} を選ぶ
+            </h2>
 
             <button
-              className="nav-item"
+              className="mb-1 flex w-full items-center gap-2.5 border border-transparent px-3 py-2 text-left hover:bg-panel2"
               style={{ width: "100%", marginBottom: 8 }}
               onClick={() => {
                 doUnequip(picking);
@@ -121,14 +133,14 @@ export function EquipView() {
               }}
             >
               {optionsFor(picking).length === 0 && (
-                <span className="muted" style={{ fontSize: 13 }}>
+                <span className="text-muted" style={{ fontSize: 13 }}>
                   所持しているアイテムがありません（ショップ/制作で入手）。
                 </span>
               )}
               {optionsFor(picking).map((it) => (
                 <button
                   key={it.id}
-                  className={`nav-item ${equippedId(picking) === it.id ? "selected" : ""}`}
+                  className={`mb-1 flex w-full items-center gap-2.5 border px-3 py-2 text-left hover:bg-panel2 ${equippedId(picking) === it.id ? "border-accent2" : "border-border"}`}
                   onClick={() => {
                     doEquip(picking, it.id);
                     setPicking(null);
@@ -136,9 +148,9 @@ export function EquipView() {
                 >
                   <Icon name={it.icon} size={20} />
                   <span style={{ flex: 1, textAlign: "left" }}>
-                    {it.name} <span className="muted">×{state.bank[it.id]}</span>
+                    {it.name} <span className="text-muted">×{state.bank[it.id]}</span>
                   </span>
-                  <span className="muted" style={{ fontSize: 11 }}>
+                  <span className="text-muted" style={{ fontSize: 11 }}>
                     {bonusText(it.id)}
                   </span>
                 </button>

@@ -1,285 +1,27 @@
-:root {
-  --bg: #0f1216;
-  --panel: #181d24;
-  --panel-2: #1f2630;
-  --border: #2a323d;
-  --text: #e6e9ee;
-  --muted: #8b95a3;
-  --accent: #4f9dff;
-  --accent-2: #6ee7a8;
-  --gold: #f2c14e;
-  --danger: #ff6b6b;
-  --xp: #7c5cff;
-  --hp: #45c46a;
-  --enemy: #e05656;
-  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+@import "tailwindcss";
+
+/* テーマトークン（utilityが生成される: bg-bg, text-muted, border-border, bg-accent2 ...） */
+@theme {
+  --color-bg: #0f1216;
+  --color-panel: #181d24;
+  --color-panel2: #1f2630;
+  --color-border: #2a323d;
+  --color-text: #e6e9ee;
+  --color-muted: #8b95a3;
+  --color-accent: #4f9dff;
+  --color-accent2: #6ee7a8;
+  --color-gold: #f2c14e;
+  --color-danger: #ff6b6b;
+  --color-xp: #7c5cff;
+  --color-hp: #45c46a;
+  --color-enemy: #e05656;
+  --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --animate-bar-fill: bar-fill linear infinite;
+  --animate-toast-in: toast-in 0.22s ease;
+  --animate-xp-pulse: xp-pulse 0.18s ease;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-/* スリムなスクロールバー（細いピル型・トラック透明・ホバーで明るく） */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #3a4452 transparent;
-}
-*::-webkit-scrollbar {
-  width: 11px;
-  height: 11px;
-}
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-*::-webkit-scrollbar-thumb {
-  background: #39424f;
-  border-radius: 999px;
-  border: 3px solid transparent;
-  background-clip: padding-box;
-  transition: background-color 0.15s;
-}
-*::-webkit-scrollbar-thumb:hover {
-  background: #55657d;
-  border-width: 2px;
-  background-clip: padding-box;
-}
-*::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-}
-
-button {
-  font-family: inherit;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  background: var(--panel-2);
-  color: var(--text);
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 13px;
-  transition:
-    background 0.12s,
-    border-color 0.12s,
-    opacity 0.12s;
-}
-button:hover:not(:disabled) {
-  border-color: var(--accent);
-}
-button:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-button.primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #06101f;
-  font-weight: 600;
-}
-button.danger {
-  border-color: var(--danger);
-  color: var(--danger);
-}
-button.active {
-  border-color: var(--accent-2);
-  box-shadow: 0 0 0 1px var(--accent-2) inset;
-}
-
-/* ---- layout ---- */
-.app {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  height: 100vh;
-}
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 10px 16px;
-  background: var(--panel);
-  border-bottom: 1px solid var(--border);
-  flex-wrap: wrap;
-}
-.topbar .title {
-  font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 0.5px;
-}
-.topbar .spacer {
-  flex: 1;
-}
-.stat {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-}
-.stat .gold {
-  color: var(--gold);
-  font-weight: 600;
-}
-
-.body {
-  display: grid;
-  grid-template-columns: 210px 1fr 280px;
-  min-height: 0;
-}
-.sidebar {
-  background: var(--panel);
-  border-right: 1px solid var(--border);
-  padding: 10px;
-  overflow-y: auto;
-}
-.main {
-  padding: 16px;
-  overflow-y: auto;
-}
-.rightbar {
-  background: var(--panel);
-  border-left: 1px solid var(--border);
-  padding: 12px;
-  overflow-y: auto;
-}
-
-.nav-group-title {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--muted);
-  margin: 12px 6px 6px;
-}
-
-/* Section label (言語 / フレームワーク / 現場力 / その他) */
-.nav-section {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: var(--accent);
-  margin: 14px 6px 4px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
-}
-
-/* Collapsible group header */
-.nav-group {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  width: 100%;
-  text-align: left;
-  background: transparent;
-  border: 1px solid transparent;
-  color: var(--text);
-  font-size: 12px;
-  padding: 6px 6px;
-  margin-bottom: 2px;
-  border-radius: 6px;
-}
-.nav-group:hover {
-  background: var(--panel-2);
-}
-.nav-group .cnt {
-  margin-left: auto;
-  font-size: 10px;
-  color: var(--muted);
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0 6px;
-}
-.nav-item.sub {
-  padding-left: 18px;
-}
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  text-align: left;
-  margin-bottom: 4px;
-  background: transparent;
-  border: 1px solid transparent;
-}
-.nav-item:hover {
-  background: var(--panel-2);
-}
-.nav-item.selected {
-  background: var(--panel-2);
-  border-color: var(--accent);
-}
-.nav-item .lvl {
-  margin-left: auto;
-  font-size: 11px;
-  color: var(--muted);
-}
-.nav-item .ic {
-  font-size: 18px;
-}
-
-/* ---- cards ---- */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 12px;
-}
-.card {
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
-}
-.card.locked {
-  opacity: 0.5;
-}
-.card.selected {
-  border-color: var(--accent-2);
-}
-.card h3 {
-  margin: 0 0 4px;
-  font-size: 15px;
-}
-.card .meta {
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 8px;
-}
-.card .io {
-  font-size: 12px;
-  margin-bottom: 8px;
-}
-.tag {
-  display: inline-block;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 1px 6px;
-  margin: 2px 4px 2px 0;
-  font-size: 11px;
-}
-
-/* ---- progress bars ---- */
-.bar {
-  position: relative;
-  height: 10px;
-  background: var(--panel);
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-.bar > span {
-  position: absolute;
-  inset: 0;
-  transform-origin: left;
-  border-radius: 6px;
-  /* Glide value bars (HP / XP / enemy HP) between 100ms state updates. */
-  transition: transform 0.15s linear;
-}
-/* Time-based bars fill smoothly on a CSS loop, decoupled from the JS tick. */
-@keyframes barFill {
+@keyframes bar-fill {
   from {
     transform: scaleX(0);
   }
@@ -287,308 +29,7 @@ button.active {
     transform: scaleX(1);
   }
 }
-.bar > span.timer {
-  transition: none;
-  animation: barFill linear infinite;
-}
-.bar.xp > span {
-  background: var(--xp);
-}
-.bar.action > span {
-  background: var(--accent);
-}
-.bar.hp > span {
-  background: var(--hp);
-}
-.bar.enemy > span {
-  background: var(--enemy);
-}
-.bar-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: var(--muted);
-  margin-bottom: 3px;
-}
-
-.section-title {
-  font-size: 18px;
-  margin: 0 0 4px;
-}
-.section-sub {
-  color: var(--muted);
-  font-size: 13px;
-  margin: 0 0 16px;
-}
-
-/* ---- bank ---- */
-.bank-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 8px;
-}
-.bank-item {
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px;
-  font-size: 13px;
-}
-.bank-item .name {
-  font-weight: 600;
-}
-.bank-item .qty {
-  color: var(--accent-2);
-}
-.bank-item .row {
-  display: flex;
-  gap: 6px;
-  margin-top: 6px;
-}
-.bank-item button {
-  padding: 4px 8px;
-  font-size: 11px;
-}
-
-/* ---- storage (Melvor風アイテムグリッド) ---- */
-.store-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
-  gap: 8px;
-  max-width: 600px;
-}
-.store-tile {
-  position: relative;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0;
-}
-/* アイコン（Iconのラッパーspan）をタイルの約80%まで拡大して埋める */
-.store-tile > span:not(.qty) {
-  width: 80%;
-  height: 80%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.store-tile > span:not(.qty) > svg {
-  width: 100%;
-  height: 100%;
-}
-.store-tile:hover {
-  border-color: var(--accent);
-}
-.store-tile.selected {
-  border-color: var(--accent-2);
-  box-shadow: 0 0 0 1px var(--accent-2) inset;
-}
-.store-tile .qty {
-  position: absolute;
-  right: 3px;
-  bottom: 2px;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--accent-2);
-  background: rgba(0, 0, 0, 0.55);
-  border-radius: 4px;
-  padding: 0 3px;
-}
-.store-tile .price {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  text-align: center;
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--gold);
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 0 0 7px 7px;
-  padding: 1px 0;
-}
-
-/* ---- equipment paper-doll ---- */
-.equip-doll {
-  display: grid;
-  grid-template-columns: 84px 1fr 84px;
-  grid-template-rows: auto repeat(3, 84px);
-  gap: 10px;
-  max-width: 460px;
-  margin-top: 8px;
-  grid-template-areas:
-    ".      hair   ."
-    "weapon figure body"
-    "bag    figure pc"
-    "avatar figure food";
-}
-.equip-figure {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.equip-slot {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 4px;
-  cursor: pointer;
-}
-.equip-slot:hover {
-  border-color: var(--accent);
-}
-.equip-slot.filled {
-  border-color: var(--accent-2);
-}
-.equip-slot .eslot-label {
-  font-size: 10px;
-  color: var(--muted);
-}
-.equip-slot .eslot-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 38px;
-}
-.equip-slot.filled .eslot-icon {
-  opacity: 1;
-}
-.equip-slot:not(.filled) .eslot-icon {
-  opacity: 0.4;
-}
-.equip-slot .eslot-name {
-  font-size: 10px;
-  max-width: 80px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* ---- combat ---- */
-.combat-arena {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-.fighter {
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  text-align: center;
-}
-.fighter .big-ic {
-  font-size: 48px;
-}
-.fighter h3 {
-  margin: 6px 0;
-}
-
-/* ---- log ---- */
-.log {
-  font-size: 12px;
-  line-height: 1.6;
-}
-.log .entry {
-  color: var(--muted);
-  border-bottom: 1px solid var(--border);
-  padding: 3px 0;
-}
-
-/* ---- modal ---- */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 50;
-}
-.modal {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 24px;
-  width: min(440px, 92vw);
-}
-.modal h2 {
-  margin-top: 0;
-}
-.muted {
-  color: var(--muted);
-}
-
-/* ---- toasts (Melvor風スナックバー・下中央) ---- */
-.toast-host {
-  position: fixed;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-  gap: 8px;
-  z-index: 100;
-  pointer-events: none;
-}
-.toast {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
-  animation: toastIn 0.22s ease;
-}
-.xp-flash {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--muted);
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 4px 12px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
-  animation: xpPulse 0.18s ease;
-}
-.xp-flash strong {
-  color: var(--xp);
-}
-@keyframes xpPulse {
-  from {
-    transform: scale(0.9);
-    opacity: 0.5;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-.toast.level {
-  border-left-color: var(--xp);
-}
-.toast.goal {
-  border-left-color: var(--accent-2);
-}
-@keyframes toastIn {
+@keyframes toast-in {
   from {
     opacity: 0;
     transform: translateY(12px);
@@ -598,46 +39,76 @@ button.active {
     transform: none;
   }
 }
+@keyframes xp-pulse {
+  from {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
-/* ---- sidebar status block ---- */
-.status {
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px;
-  margin-bottom: 8px;
-}
-.status .srow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  margin-bottom: 6px;
-}
-.status .sname {
-  font-weight: 700;
-  font-size: 13px;
-}
-.status .sgold {
-  color: var(--gold);
-  font-weight: 700;
-}
-.status .sstats {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 6px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.row-between {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.gain {
-  color: var(--accent-2);
-}
-.loss {
-  color: var(--danger);
+/* 要素ベースの基本スタイル（クラス名ではない）。 */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+  }
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+  /* 見出しの既定サイズ（Tailwind preflight が消すので復元。クラス名ではなく要素ベース）。 */
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  button {
+    cursor: pointer;
+    border: 1px solid var(--color-border);
+    background: var(--color-panel2);
+    color: var(--color-text);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    transition:
+      background 0.12s,
+      border-color 0.12s,
+      opacity 0.12s;
+  }
+  button:hover:not(:disabled) {
+    border-color: var(--color-accent);
+  }
+  button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* スリムなスクロールバー（細いピル型・透明トラック・ホバーで明るく） */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #39424f transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: #39424f;
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: #55657d;
+  }
 }

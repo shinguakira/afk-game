@@ -40,8 +40,8 @@ export default function App() {
 
   if (!ready) {
     return (
-      <div style={{ display: "grid", placeItems: "center", height: "100vh" }}>
-        <div className="muted">セーブを読み込み中…</div>
+      <div className="grid h-screen place-items-center">
+        <div className="text-muted">セーブを読み込み中…</div>
       </div>
     );
   }
@@ -59,12 +59,12 @@ export default function App() {
   else main = <CombatView />;
 
   return (
-    <div className="app">
+    <div className="grid h-screen grid-rows-[auto_1fr]">
       <TopBar />
-      <div className="body">
+      <div className="grid min-h-0 grid-cols-[210px_1fr_280px]">
         <Sidebar tab={tab} setTab={setTab} />
-        <div className="main">{main}</div>
-        <div className="rightbar">
+        <div className="overflow-y-auto p-4">{main}</div>
+        <div className="overflow-y-auto border-l border-border bg-panel p-3">
           <LogPanel />
         </div>
       </div>

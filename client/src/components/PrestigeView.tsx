@@ -11,25 +11,28 @@ export function PrestigeView() {
 
   return (
     <div>
-      <h2 className="section-title">
+      <h2 className="mb-1 flex items-center gap-2 text-lg">
         <Icon name="prestige" size={22} /> 起業
       </h2>
-      <p className="section-sub">
+      <p className="mb-4 text-[13px] text-muted">
         独立して全てをリセットし、永続通貨「ストック」を獲得。経営ツリーで全実行が恒久的に強化されます（リセットしても残る）。
       </p>
 
-      <div className="card" style={{ marginBottom: 16, maxWidth: 480 }}>
-        <div className="row-between" style={{ marginBottom: 8 }}>
+      <div
+        className="rounded-[10px] border border-border bg-panel2 p-3"
+        style={{ marginBottom: 16, maxWidth: 480 }}
+      >
+        <div className="flex items-center justify-between" style={{ marginBottom: 8 }}>
           <span>
             所持ストック{" "}
             <strong style={{ color: "var(--gold)" }}>{formatNumber(state.prestigePoints)}</strong>
           </span>
-          <span className="muted">通算起業 {state.prestigeCount} 回</span>
+          <span className="text-muted">通算起業 {state.prestigeCount} 回</span>
         </div>
-        <div className="row-between" style={{ alignItems: "center" }}>
-          <span className="muted">今起業すると ストック +{gain}</span>
+        <div className="flex items-center justify-between" style={{ alignItems: "center" }}>
+          <span className="text-muted">今起業すると ストック +{gain}</span>
           <button
-            className="primary"
+            className="border-accent bg-accent font-semibold text-[#06101f]"
             onClick={() => {
               if (
                 confirm(
@@ -43,30 +46,36 @@ export function PrestigeView() {
           </button>
         </div>
         {underPrepared && (
-          <div className="muted" style={{ fontSize: 12, marginTop: 8, color: "var(--danger)" }}>
+          <div
+            className="text-muted"
+            style={{ fontSize: 12, marginTop: 8, color: "var(--danger)" }}
+          >
             注意: 準備不足での起業はストックが少なく、再スタートが厳しくなります（シニア以上推奨）。
           </div>
         )}
       </div>
 
       <h3 style={{ margin: "0 0 10px" }}>経営ツリー（永続強化）</h3>
-      <div className="grid">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
         {PRESTIGE_UPGRADES.map((up) => {
           const lvl = state.prestigeUpgrades[up.id] ?? 0;
           const maxed = lvl >= up.maxLevel;
           const cost = maxed ? 0 : up.cost(lvl + 1);
           const affordable = !maxed && state.prestigePoints >= cost;
           return (
-            <div key={up.id} className={`card ${lvl > 0 ? "selected" : ""}`}>
-              <div className="row-between">
+            <div
+              key={up.id}
+              className={`rounded-[10px] border bg-panel2 p-3 ${lvl > 0 ? "border-accent2" : "border-border"}`}
+            >
+              <div className="flex items-center justify-between">
                 <h3 style={{ margin: 0 }}>
                   <Icon name={up.icon} size={18} /> {up.name}
                 </h3>
-                <span className="muted">
+                <span className="text-muted">
                   Lv {lvl}/{up.maxLevel}
                 </span>
               </div>
-              <div className="meta" style={{ marginTop: 4 }}>
+              <div className="mb-2 text-xs text-muted" style={{ marginTop: 4 }}>
                 {up.desc}
               </div>
               <button

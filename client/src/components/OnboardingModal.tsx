@@ -63,12 +63,15 @@ export function OnboardingModal() {
   const [interest, setInterest] = useState<Set<string>>(new Set());
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal" style={{ width: "min(620px, 94vw)" }}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+      <div
+        className="w-[min(440px,92vw)] rounded-[14px] border border-border bg-panel p-6"
+        style={{ width: "min(620px, 94vw)" }}
+      >
         {step === 0 && (
           <>
             <h2 style={{ margin: "0 0 6px" }}>ようこそ Idle Engineer へ</h2>
-            <p className="muted" style={{ marginTop: 0 }}>
+            <p className="text-muted" style={{ marginTop: 0 }}>
               無名のコーダーが、技術を極め・金を稼ぎ、起業して伝説になる放置RPG。
               まずはあなたのことを教えてください。
             </p>
@@ -93,7 +96,10 @@ export function OnboardingModal() {
               }}
             />
             <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}>
-              <button className="primary" onClick={() => setStep(1)}>
+              <button
+                className="border-accent bg-accent font-semibold text-[#06101f]"
+                onClick={() => setStep(1)}
+              >
                 次へ
               </button>
             </div>
@@ -103,7 +109,7 @@ export function OnboardingModal() {
         {step === 1 && (
           <>
             <h2 style={{ margin: "0 0 6px" }}>得意な言語は?</h2>
-            <p className="muted" style={{ marginTop: 0 }}>
+            <p className="text-muted" style={{ marginTop: 0 }}>
               1つ選んでください。<strong>開始時にレベルが入り</strong>
               、チュートリアルもこの言語で進めます。
             </p>
@@ -114,7 +120,11 @@ export function OnboardingModal() {
             />
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
               <button onClick={() => setStep(0)}>戻る</button>
-              <button className="primary" disabled={!main} onClick={() => setStep(2)}>
+              <button
+                className="border-accent bg-accent font-semibold text-[#06101f]"
+                disabled={!main}
+                onClick={() => setStep(2)}
+              >
                 次へ
               </button>
             </div>
@@ -124,7 +134,7 @@ export function OnboardingModal() {
         {step === 2 && (
           <>
             <h2 style={{ margin: "0 0 6px" }}>興味のある言語は?（複数可）</h2>
-            <p className="muted" style={{ marginTop: 0 }}>
+            <p className="text-muted" style={{ marginTop: 0 }}>
               これから伸ばしたい言語を選択。少しブーストが入り、サイドバーで目印が付きます。スキップも可。
             </p>
             <LangGrid
@@ -134,7 +144,10 @@ export function OnboardingModal() {
             />
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
               <button onClick={() => setStep(1)}>戻る</button>
-              <button className="primary" onClick={() => complete(name, main!, [...interest])}>
+              <button
+                className="border-accent bg-accent font-semibold text-[#06101f]"
+                onClick={() => complete(name, main!, [...interest])}
+              >
                 はじめる
               </button>
             </div>

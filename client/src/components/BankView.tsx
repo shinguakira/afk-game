@@ -23,24 +23,31 @@ export function BankView() {
 
   return (
     <div>
-      <h2 className="section-title">
+      <h2 className="mb-1 flex items-center gap-2 text-lg">
         <Icon name="bank" size={22} /> ストレージ
       </h2>
-      <p className="section-sub">{entries.length} 種類のアイテム。タイルを選んで装備/売却。</p>
+      <p className="mb-4 text-[13px] text-muted">
+        {entries.length} 種類のアイテム。タイルを選んで装備/売却。
+      </p>
 
       {/* 選択中アイテムの詳細＆操作 */}
       {sel && (
-        <div className="card" style={{ marginBottom: 14, maxWidth: 520 }}>
-          <div className="row-between">
+        <div
+          className="rounded-[10px] border border-border bg-panel2 p-3"
+          style={{ marginBottom: 14, maxWidth: 520 }}
+        >
+          <div className="flex items-center justify-between">
             <strong style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <Icon name={sel.icon} size={18} /> {sel.name}
-              <span className="muted" style={{ fontSize: 11 }}>
+              <span className="text-muted" style={{ fontSize: 11 }}>
                 ×{formatNumber(selQty)}
               </span>
             </strong>
-            <span className="tag">{TYPE_LABEL[sel.type]}</span>
+            <span className="mr-1 my-0.5 inline-block rounded-md border border-border bg-panel px-1.5 py-px text-[11px]">
+              {TYPE_LABEL[sel.type]}
+            </span>
           </div>
-          <div className="muted" style={{ fontSize: 12, margin: "6px 0" }}>
+          <div className="text-muted" style={{ fontSize: 12, margin: "6px 0" }}>
             {sel.heals ? `メンタル回復 +${sel.heals} · ` : ""}
             {sel.equip?.weapon
               ? `実装+${sel.equip.weapon.strengthBonus} 精度+${sel.equip.weapon.attackBonus} · `
@@ -49,7 +56,10 @@ export function BankView() {
           </div>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {sel.equip && (
-              <button className="primary" onClick={() => state.equip(sel.id)}>
+              <button
+                className="border-accent bg-accent font-semibold text-[#06101f]"
+                onClick={() => state.equip(sel.id)}
+              >
                 装備
               </button>
             )}
@@ -66,21 +76,27 @@ export function BankView() {
         </div>
       )}
 
-      {entries.length === 0 && <p className="muted">まだ何もありません。生産から始めましょう。</p>}
+      {entries.length === 0 && (
+        <p className="text-muted">まだ何もありません。生産から始めましょう。</p>
+      )}
 
-      <div className="store-grid">
+      <div className="grid max-w-[600px] grid-cols-[repeat(auto-fill,minmax(64px,1fr))] gap-2">
         {entries.map(([id, qty]) => {
           const it = ITEM_MAP[id];
           if (!it) return null;
           return (
             <button
               key={id}
-              className={`store-tile ${selected === id ? "selected" : ""}`}
+              className={`relative flex aspect-square items-center justify-center rounded-lg border bg-panel2 p-0 hover:border-accent ${selected === id ? "border-accent2" : "border-border"}`}
               title={it.name}
               onClick={() => setSelected(id)}
             >
-              <Icon name={it.icon} size={40} />
-              <span className="qty">{formatNumber(qty)}</span>
+              <span className="flex h-4/5 w-4/5 items-center justify-center [&_svg]:h-full [&_svg]:w-full">
+                <Icon name={it.icon} size={40} />
+              </span>
+              <span className="absolute right-[3px] bottom-0.5 rounded bg-black/55 px-[3px] text-[10px] font-bold text-accent2">
+                {formatNumber(qty)}
+              </span>
             </button>
           );
         })}
