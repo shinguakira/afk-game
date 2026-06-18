@@ -19,6 +19,9 @@
   ルックアップマップ等の派生値は「それを計算する実体モジュール」（例 `constants/maps.ts`）に置く。
 - **動的インポート禁止**。`await import(...)` も `import(...).X` 型クエリも使わない。静的な top-level `import` / `import type` のみ。
 - **string エイリアス型を作らない**。`type ItemId = string` のような素の primitive への命名再代入は禁止。直接 `string` を使う。
+- **値が予測できる（有限集合の）ものは `string` ではなく literal union を使う**。例: `kind: "skill" | "combat"`、`slot: "weapon" | ...`。
+  固定enum（種別/スロット/カテゴリ/効果キー）は union 必須。一方、コンテンツで増える id（item/skill/言語 id 等）や自由入力（名前/URL）は `string` のままで良い。
+  有限集合がデータ配列にあるなら `(typeof ARR)[number]["id"]` で導出（ただし types/ にデータを import しない＝循環回避のためデータ側で導出）。
 - **フォルダ構成**: `src/{app,components,store,lib,constants,types}`。loose な .ts を src 直下に置かない。
   型は `types/` にドメイン別で分割（items/skills/monsters/save/effects/ui…）。1つの `index.ts` に詰めない。type と interface は同列に扱い、重複させない。
 - **絵文字をUIに使わない**。アイコンは lucide / simple-icons / 自作SVG のいずれか。
