@@ -19,6 +19,34 @@
   box-sizing: border-box;
 }
 
+/* スリムなスクロールバー（細いピル型・トラック透明・ホバーで明るく） */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3a4452 transparent;
+}
+*::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: #39424f;
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.15s;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #55657d;
+  border-width: 2px;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 body {
   margin: 0;
   background: var(--bg);
