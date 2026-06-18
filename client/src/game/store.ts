@@ -25,6 +25,7 @@ import { PRESTIGE_MAP } from "./data";
 import { levelForXp, xpForLevel } from "./xp";
 import { STARTING_MENTAL_LEVEL, STAT } from "./data/skills";
 import { FARM_CROP_MAP, TEND_BOOST, PLOT_COUNT } from "./data/farming";
+import { TUTORIAL_STEPS } from "./data/tutorial";
 import {
   enemyHitChance,
   getCombatStats,
@@ -40,7 +41,7 @@ import {
 
 // Bump whenever the save schema changes incompatibly (e.g. skill ids renamed).
 // On mismatch we discard the old save and start fresh (no migrations yet).
-const SAVE_VERSION = 18;
+const SAVE_VERSION = 19;
 const TICK_MS = 100;
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;
@@ -93,6 +94,10 @@ function makeStartingState(): SaveState {
     milestones: [],
     equipment: {},
     selectedFood: "coffee",
+    playerName: "",
+    mainLang: null,
+    interestLangs: [],
+    onboarded: false,
     playerHp: maxHp,
     active: null,
     actionProgress: 0,
@@ -114,6 +119,10 @@ function pickSaveState(s: GameStore): SaveState {
     milestones: s.milestones,
     equipment: s.equipment,
     selectedFood: s.selectedFood,
+    playerName: s.playerName,
+    mainLang: s.mainLang,
+    interestLangs: s.interestLangs,
+    onboarded: s.onboarded,
     playerHp: s.playerHp,
     active: s.active,
     actionProgress: s.actionProgress,
@@ -134,8 +143,14 @@ interface GameStore extends SaveState {
   xpFlash: XpFlash | null;
   offlineSummary: OfflineSummary | null;
   ready: boolean;
+  /** チュートリアルの現在ステップ。-1 = 非表示。 */
+  tutorialStep: number;
 
   init: () => Promise<void>;
+  completeOnboarding: (name: string, mainLang: string, interestLangs: string[]) => void;
+  setTutorialStep: (n: number) => void;
+  endTutorial: () => void;
+  restartTutorial: () => void;
   pushToast: (t: Omit<Toast, "id">) => void;
   flashXp: (skillId: string, amount: number) => void;
   tick: (dt: number) => void;
@@ -169,6 +184,7 @@ export const useGame = create<GameStore>((set, get) => ({
   xpFlash: null,
   offlineSummary: null,
   ready: false,
+  tutorialStep: -1,
 
   pushLog: (msg) =>
     set((s) => ({ log: [msg, ...s.log].slice(0, LOG_LIMIT) })),
@@ -234,6 +250,39 @@ export const useGame = create<GameStore>((set, get) => ({
       flushSaveOnUnload(pickSaveState(get()));
     });
   },
+
+  // 初回オンボーディング確定: 名前・得意/興味言語を保存し、得意言語に開始ブースト。
+  completeOnboarding: (name, mainLang, interestLangs) => {
+    const s = get();
+    const skills = { ...s.skills };
+    if (mainLang && skills[mainLang]) {
+      skills[mainLang] = { xp: Math.max(skills[mainLang].xp, xpForLevel(5)) }; // フレームワーク解禁手前まで
+    }
+    for (const id of interestLangs) {
+      if (id !== mainLang && skills[id]) {
+        skills[id] = { xp: Math.max(skills[id].xp, xpForLevel(2)) };
+      }
+    }
+    set({
+      playerName: name.trim() || "名無しエンジニア",
+      mainLang,
+      interestLangs,
+      onboarded: true,
+      skills,
+      tutorialStep: 0, // 続けてチュートリアル開始
+    });
+    void get().saveNow();
+  },
+
+  setTutorialStep: (n) => {
+    if (n < 0 || n >= TUTORIAL_STEPS.length) {
+      get().endTutorial();
+      return;
+    }
+    set({ tutorialStep: n });
+  },
+  endTutorial: () => set({ tutorialStep: -1 }),
+  restartTutorial: () => set({ tutorialStep: 0 }),
 
   tick: (dt) => {
     const s = get();

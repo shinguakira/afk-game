@@ -15,15 +15,28 @@ import { RoadmapView } from "./components/RoadmapView";
 import { ToastHost } from "./components/ToastHost";
 import { LogPanel } from "./components/LogPanel";
 import { OfflineModal } from "./components/OfflineModal";
+import { OnboardingModal } from "./components/OnboardingModal";
+import { TutorialOverlay } from "./components/TutorialOverlay";
+import { TUTORIAL_STEPS } from "./game/data/tutorial";
 
 export default function App() {
   const init = useGame((s) => s.init);
   const ready = useGame((s) => s.ready);
+  const onboarded = useGame((s) => s.onboarded);
+  const tutorialStep = useGame((s) => s.tutorialStep);
+  const mainLang = useGame((s) => s.mainLang);
   const [tab, setTab] = useState<Tab>("js");
 
   useEffect(() => {
     void init();
   }, [init]);
+
+  // チュートリアル: ステップに応じて実際の画面へ切り替える（"@main" = 得意言語）。
+  useEffect(() => {
+    if (tutorialStep < 0 || tutorialStep >= TUTORIAL_STEPS.length) return;
+    const t = TUTORIAL_STEPS[tutorialStep].tab;
+    setTab(t === "@main" ? mainLang ?? "js" : t);
+  }, [tutorialStep, mainLang]);
 
   if (!ready) {
     return (
@@ -57,6 +70,8 @@ export default function App() {
       </div>
       <OfflineModal />
       <ToastHost />
+      {ready && !onboarded && <OnboardingModal />}
+      <TutorialOverlay />
     </div>
   );
 }

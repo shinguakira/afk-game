@@ -61,6 +61,8 @@ function StatusBlock() {
 
 export function Sidebar({ tab, setTab }: SidebarProps) {
   const skills = useGame((s) => s.skills);
+  const mainLang = useGame((s) => s.mainLang);
+  const interestLangs = useGame((s) => s.interestLangs);
 
   // アクティブスキルの所属カテゴリを初期展開。
   const activeCat = SKILL_MAP[tab]?.category;
@@ -87,6 +89,11 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
     >
       <Icon name={icon} size={16} />
       <span>{name}</span>
+      {id === mainLang ? (
+        <span title="得意言語" style={{ color: "#ffce54" }}>★</span>
+      ) : interestLangs.includes(id) ? (
+        <span title="興味あり" style={{ color: "#6ee7a8" }}>●</span>
+      ) : null}
       <span className="lvl">{levelForXp(skills[id]?.xp ?? 0)}</span>
     </button>
   );

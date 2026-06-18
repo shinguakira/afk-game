@@ -162,6 +162,14 @@ export interface SaveState {
   /** スロット → 装備中アイテム id。 */
   equipment: Partial<Record<EquipSlot, ItemId>>;
   selectedFood: ItemId | null;
+  /** プレイヤー名（オンボーディングで入力）。 */
+  playerName: string;
+  /** 得意な言語id（開始時ブースト）。 */
+  mainLang: string | null;
+  /** 興味のある言語id（少量ブースト＋サイドバーで強調）。 */
+  interestLangs: string[];
+  /** 初回オンボーディング完了済みか。 */
+  onboarded: boolean;
   playerHp: number;
   active: ActiveAction;
   /** Carry-over progress on the current skill action (ms). */

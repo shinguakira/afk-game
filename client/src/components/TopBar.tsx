@@ -22,8 +22,9 @@ export function TopBar() {
       <span className="title">
         <Icon name="company" size={18} /> Idle Engineer
       </span>
-      <span className="muted" style={{ fontSize: 13 }}>
-        {currentRank(state).name}
+      <span style={{ fontSize: 13 }}>
+        {state.playerName && <strong>{state.playerName}</strong>}
+        <span className="muted"> ・ {currentRank(state).name}</span>
       </span>
 
       <div className="stat">
@@ -52,6 +53,9 @@ export function TopBar() {
           <Icon name="stop" size={14} /> 中断
         </button>
       )}
+      <button onClick={() => state.restartTutorial()} title="チュートリアルをもう一度">
+        <Icon name="roadmap" size={14} /> 使い方
+      </button>
       <button onClick={() => void state.saveNow()}>
         <Icon name="save" size={14} /> 保存
       </button>
