@@ -8,6 +8,7 @@ import {
   COMBAT_STAT_IDS,
 } from "../game/data";
 import { levelForXp } from "../game/xp";
+import { toggleInSet } from "../game/util";
 import { currentRank } from "../game/rank";
 import { getCombatStats } from "../game/combat";
 import { Icon } from "../ui/icons";
@@ -85,13 +86,7 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
     if (activeCat) setOpen((s) => (s.has(activeCat) ? s : new Set(s).add(activeCat)));
   }, [activeCat]);
 
-  const toggle = (id: string) =>
-    setOpen((s) => {
-      const n = new Set(s);
-      if (n.has(id)) n.delete(id);
-      else n.add(id);
-      return n;
-    });
+  const toggle = (id: string) => setOpen((s) => toggleInSet(s, id));
 
   const navSkill = (id: string, name: string, icon: string) => (
     <button

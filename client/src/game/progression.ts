@@ -1,9 +1,10 @@
 import type { OfflineSummary, SaveState } from "./types";
-import { ACTION_MAP, isCraftAction, ITEM_MAP, MONSTER_MAP, STAT } from "./data";
-import { FARM_CROP_MAP, TEND_BOOST } from "./data/farming";
+import { ACTION_MAP, ITEM_MAP, MONSTER_MAP, STAT } from "./data";
+import { FARM_CROP_MAP } from "./data/farming";
 import { avgEnemyDamage, avgPlayerDamage, getCombatStats } from "./combat";
 import { getEffects } from "./effects";
 import { type Effects, mult } from "./modifiers";
+import { actionTiming, plotGrowthRate } from "./timing";
 
 /** Combat XP split: accuracy/damage/defence each get 1/3, mental 1/3 on top. */
 export function grantCombatXp(skills: SaveState["skills"], totalXp: number): SaveState["skills"] {
@@ -36,9 +37,7 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
 /** オフライン中の作物成長。手入れ中(active=farming)なら加速。収穫はしない（成長のみ）。 */
 function simPlots(state: SaveState, ms: number): void {
   if (!state.plots) return;
-  const tending =
-    state.active?.kind === "skill" && ACTION_MAP[state.active.actionId]?.skill === "farming";
-  const rate = tending ? TEND_BOOST : 1;
+  const rate = plotGrowthRate(state);
   for (const p of state.plots) {
     if (!p.crop) continue;
     const spec = FARM_CROP_MAP[p.crop];
@@ -52,9 +51,7 @@ function simPlayerSkill(state: SaveState, ms: number, summary: OfflineSummary, e
   const action = ACTION_MAP[state.active.actionId];
   if (!action) return;
 
-  const craft = isCraftAction(action);
-  const effTime = action.time / mult(eff, craft ? "speed.craft" : "speed.gather");
-  const xpPer = action.xp * mult(eff, craft ? "xp.craft" : "xp.gather");
+  const { isCraft, effTime, xpPer } = actionTiming(action, eff);
 
   let completions = Math.floor((ms + state.actionProgress) / effTime);
 
@@ -92,7 +89,7 @@ function simPlayerSkill(state: SaveState, ms: number, summary: OfflineSummary, e
   // 副次XP（フレームワーク実装→領域など）。live(runSkillTick)と同じ計算で同時付与。
   const also = action.xpAlso;
   if (also) {
-    const alsoXp = also.xp * mult(eff, craft ? "xp.craft" : "xp.gather") * completions;
+    const alsoXp = also.xp * mult(eff, isCraft ? "xp.craft" : "xp.gather") * completions;
     state.skills[also.skill] = {
       xp: (state.skills[also.skill]?.xp ?? 0) + alsoXp,
     };

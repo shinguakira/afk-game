@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useGame } from "../game/store";
 import { SKILLS_BY_CATEGORY } from "../game/data";
+import { toggleInSet } from "../game/util";
 import { Icon } from "../ui/icons";
 
 const LANGS = SKILLS_BY_CATEGORY["language"] ?? [];
@@ -128,14 +129,7 @@ export function OnboardingModal() {
             </p>
             <LangGrid
               selected={interest}
-              onToggle={(id) =>
-                setInterest((s) => {
-                  const n = new Set(s);
-                  if (n.has(id)) n.delete(id);
-                  else n.add(id);
-                  return n;
-                })
-              }
+              onToggle={(id) => setInterest((s) => toggleInSet(s, id))}
               multi
             />
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
