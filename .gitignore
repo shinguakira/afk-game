@@ -5,3 +5,7 @@ server/data/
 *.log
 .DS_Store
 .env
+
+# Tauri (Rust build artifacts / generated bindings)
+src-tauri/target/
+src-tauri/gen/
