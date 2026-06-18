@@ -20,6 +20,10 @@
   - `cd client && npx tsc --noEmit`
   - `npx tsx src/game/offline.test.ts`（`ALL PASS` 必須）
   - `npx vite build`
+- コミット前に整形＆Lintを通す（ルートで）:
+  - `npm run format`（oxfmt・既定で書込）
+  - `npm run lint`（oxlint・警告ゼロを維持）
+  - `npm run knip`（不要なexport/依存/ファイルの検出。型のみのexportは許容）
 - 設計判断・仕様変更は `docs/SPEC.md` に記録する。
 - スキル知識の4軸（言語 / 領域・プラットフォーム / インフラ・基盤 / 業界ドメイン）と
   「知的活動が生むのは commit のみ・アイテムを生むのは物理制作のみ」の原則を崩さない（詳細は SPEC §0-11b〜e）。

@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { useGame } from "../game/store";
-import { CATEGORIES, SKILL_MAP, SKILLS_BY_CATEGORY, CLASS_MAP, COMBAT_STAT_IDS } from "../game/data";
+import {
+  CATEGORIES,
+  SKILL_MAP,
+  SKILLS_BY_CATEGORY,
+  CLASS_MAP,
+  COMBAT_STAT_IDS,
+} from "../game/data";
 import { levelForXp } from "../game/xp";
 import { currentRank } from "../game/rank";
 import { getCombatStats } from "../game/combat";
@@ -51,9 +57,15 @@ function StatusBlock() {
         label="メンタル"
       />
       <div className="sstats">
-        <span><Icon name="impl" size={11} /> 実装 {stats.maxHit}</span>
-        <span><Icon name="debug" size={11} /> 精度 {stats.attackRating}</span>
-        <span><Icon name="robust" size={11} /> 堅牢 {stats.defenceRating}</span>
+        <span>
+          <Icon name="impl" size={11} /> 実装 {stats.maxHit}
+        </span>
+        <span>
+          <Icon name="debug" size={11} /> 精度 {stats.attackRating}
+        </span>
+        <span>
+          <Icon name="robust" size={11} /> 堅牢 {stats.defenceRating}
+        </span>
       </div>
     </div>
   );
@@ -70,14 +82,14 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
     () => new Set(activeCat ? [activeCat] : ["language"]),
   );
   useEffect(() => {
-    if (activeCat)
-      setOpen((s) => (s.has(activeCat) ? s : new Set(s).add(activeCat)));
+    if (activeCat) setOpen((s) => (s.has(activeCat) ? s : new Set(s).add(activeCat)));
   }, [activeCat]);
 
   const toggle = (id: string) =>
     setOpen((s) => {
       const n = new Set(s);
-      n.has(id) ? n.delete(id) : n.add(id);
+      if (n.has(id)) n.delete(id);
+      else n.add(id);
       return n;
     });
 
@@ -90,9 +102,13 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
       <Icon name={icon} size={16} />
       <span>{name}</span>
       {id === mainLang ? (
-        <span title="得意言語" style={{ color: "#ffce54" }}>★</span>
+        <span title="得意言語" style={{ color: "#ffce54" }}>
+          ★
+        </span>
       ) : interestLangs.includes(id) ? (
-        <span title="興味あり" style={{ color: "#6ee7a8" }}>●</span>
+        <span title="興味あり" style={{ color: "#6ee7a8" }}>
+          ●
+        </span>
       ) : null}
       <span className="lvl">{levelForXp(skills[id]?.xp ?? 0)}</span>
     </button>

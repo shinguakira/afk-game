@@ -14,9 +14,7 @@ export function RoadmapView() {
       <h2 className="section-title">
         <Icon name="career" size={22} /> ロードマップ
       </h2>
-      <p className="section-sub">
-        キャリアの目標を順に達成しよう。常に「次の目標」が示されます。
-      </p>
+      <p className="section-sub">キャリアの目標を順に達成しよう。常に「次の目標」が示されます。</p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 620 }}>
         {MILESTONES.map((m) => {
@@ -33,7 +31,11 @@ export function RoadmapView() {
                 <strong style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <Icon name={isDone ? "kudos" : ax.icon} size={16} />
                   {m.title}
-                  {isDone && <span className="muted" style={{ fontSize: 11 }}>達成済み</span>}
+                  {isDone && (
+                    <span className="muted" style={{ fontSize: 11 }}>
+                      達成済み
+                    </span>
+                  )}
                   {isCurrent && (
                     <span style={{ fontSize: 11, color: "var(--accent-2)" }}>← 今ここ</span>
                   )}

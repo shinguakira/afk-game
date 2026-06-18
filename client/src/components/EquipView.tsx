@@ -35,7 +35,7 @@ export function EquipView() {
   const [picking, setPicking] = useState<SlotKey | null>(null);
 
   const equippedId = (slot: SlotKey): string | undefined =>
-    slot === "food" ? state.selectedFood ?? undefined : state.equipment[slot];
+    slot === "food" ? (state.selectedFood ?? undefined) : state.equipment[slot];
 
   const optionsFor = (slot: SlotKey) =>
     ITEMS.filter((it) =>
@@ -61,7 +61,10 @@ export function EquipView() {
         <div className="equip-figure" style={{ gridArea: "figure" }}>
           <svg width="120" height="180" viewBox="0 0 60 90">
             <circle cx="30" cy="16" r="11" fill="#3a4554" stroke="#5a6a7a" strokeWidth="1.5" />
-            <path d="M14 40c0-9 7-15 16-15s16 6 16 15v22a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4z" fill="#3a4554" />
+            <path
+              d="M14 40c0-9 7-15 16-15s16 6 16 15v22a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4z"
+              fill="#3a4554"
+            />
             <rect x="12" y="40" width="6" height="26" rx="3" fill="#3a4554" />
             <rect x="42" y="40" width="6" height="26" rx="3" fill="#3a4554" />
             <rect x="20" y="66" width="8" height="22" rx="3" fill="#2f3a48" />
@@ -94,9 +97,7 @@ export function EquipView() {
       {picking && (
         <div className="modal-backdrop" onClick={() => setPicking(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2 style={{ marginTop: 0 }}>
-              {SLOTS.find((s) => s.slot === picking)?.label} を選ぶ
-            </h2>
+            <h2 style={{ marginTop: 0 }}>{SLOTS.find((s) => s.slot === picking)?.label} を選ぶ</h2>
 
             <button
               className="nav-item"
@@ -109,7 +110,15 @@ export function EquipView() {
               <Icon name="stop" size={14} /> 外す
             </button>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 6, maxHeight: 320, overflowY: "auto" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+                maxHeight: 320,
+                overflowY: "auto",
+              }}
+            >
               {optionsFor(picking).length === 0 && (
                 <span className="muted" style={{ fontSize: 13 }}>
                   所持しているアイテムがありません（ショップ/制作で入手）。
@@ -128,7 +137,9 @@ export function EquipView() {
                   <span style={{ flex: 1, textAlign: "left" }}>
                     {it.name} <span className="muted">×{state.bank[it.id]}</span>
                   </span>
-                  <span className="muted" style={{ fontSize: 11 }}>{bonusText(it.id)}</span>
+                  <span className="muted" style={{ fontSize: 11 }}>
+                    {bonusText(it.id)}
+                  </span>
                 </button>
               ))}
             </div>

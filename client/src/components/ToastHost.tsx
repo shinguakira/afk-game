@@ -11,10 +11,9 @@ export function ToastHost() {
     xpFlash &&
     (xpFlash.skillId === "combat"
       ? "現場力"
-      : SKILL_MAP[xpFlash.skillId]?.name ?? xpFlash.skillId);
+      : (SKILL_MAP[xpFlash.skillId]?.name ?? xpFlash.skillId));
   const flashIcon =
-    xpFlash &&
-    (xpFlash.skillId === "combat" ? "impl" : SKILL_MAP[xpFlash.skillId]?.icon);
+    xpFlash && (xpFlash.skillId === "combat" ? "impl" : SKILL_MAP[xpFlash.skillId]?.icon);
 
   return (
     <div className="toast-host">

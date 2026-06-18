@@ -28,7 +28,9 @@ export function TopBar() {
       </span>
 
       <div className="stat">
-        <span className="gold" style={{ fontWeight: 700 }}>¥</span>
+        <span className="gold" style={{ fontWeight: 700 }}>
+          ¥
+        </span>
         <span className="gold">{formatNumber(state.gold)}</span>
       </div>
 

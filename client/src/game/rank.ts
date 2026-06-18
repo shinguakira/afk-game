@@ -27,7 +27,7 @@ export function totalLevel(state: SaveState): number {
   return sum;
 }
 
-export function rankForTotal(total: number): Rank {
+function rankForTotal(total: number): Rank {
   let r = RANKS[0];
   for (const rank of RANKS) if (total >= rank.total) r = rank;
   return r;
@@ -41,4 +41,3 @@ export function nextRank(state: SaveState): Rank | null {
   const cur = currentRank(state);
   return RANKS[cur.index + 1] ?? null;
 }
-

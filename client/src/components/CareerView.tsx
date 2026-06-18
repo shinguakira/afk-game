@@ -11,9 +11,7 @@ export function CareerView() {
   const next = nextRank(state);
   const total = totalLevel(state);
 
-  const progress = next
-    ? (total - rank.total) / (next.total - rank.total)
-    : 1;
+  const progress = next ? (total - rank.total) / (next.total - rank.total) : 1;
 
   return (
     <div>
@@ -30,16 +28,13 @@ export function CareerView() {
           <strong style={{ fontSize: 16 }}>
             {rank.name}
             <span className="muted" style={{ fontWeight: 400 }}>
-              {" "}（総合 {total}）
+              {" "}
+              （総合 {total}）
             </span>
           </strong>
           {next && <span className="muted">次: {next.name}</span>}
         </div>
-        <Bar
-          kind="xp"
-          value={progress}
-          right={next ? `${total} / ${next.total}` : "最高位"}
-        />
+        <Bar kind="xp" value={progress} right={next ? `${total} / ${next.total}` : "最高位"} />
         <div className="muted" style={{ fontSize: 11, marginTop: 8 }}>
           昇進ライン: {RANKS.map((r) => r.name).join(" → ")}
         </div>
@@ -63,9 +58,7 @@ export function CareerView() {
                 <div className="meta">上位職 · 要 {RANKS[c.requiresRank].name}</div>
               )}
               <div className="io" style={{ minHeight: 44 }}>
-                {c.modifiers.length === 0 && (
-                  <span className="muted">補正なし</span>
-                )}
+                {c.modifiers.length === 0 && <span className="muted">補正なし</span>}
                 {c.modifiers.map((m, i) => (
                   <span
                     className="tag"

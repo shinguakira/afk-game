@@ -44,8 +44,7 @@ export type SkillKind = "gather" | "craft" | "combat";
  *  language=言語(どう書く) / platform=領域・プラットフォーム(何を作る) /
  *  infra=インフラ・基盤(どこで動かす) / domain=業界ドメイン(誰のために) /
  *  craft=クラフト / combat=現場力。 */
-export type SkillCategory =
-  | "language" | "platform" | "infra" | "domain" | "craft" | "combat";
+export type SkillCategory = "language" | "platform" | "infra" | "domain" | "craft" | "combat";
 
 export interface Skill {
   id: SkillId;
@@ -62,13 +61,7 @@ export interface Skill {
 }
 
 /** アクションの種別（言語スキル内の表示グループ）。 */
-export type ActionCategory =
-  | "base"
-  | "concept"
-  | "library"
-  | "framework"
-  | "oss"
-  | "cert";
+export type ActionCategory = "base" | "concept" | "library" | "framework" | "oss" | "cert";
 
 /** A repeatable training action: gather a resource or craft an item. */
 export interface GameAction {

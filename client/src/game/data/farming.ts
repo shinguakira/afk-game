@@ -45,7 +45,34 @@ export const TEND_BOOST = 2.5;
 
 /** 手入れ＝能動アクション（farming XP＋手入れ中は成長加速）。 */
 export const FARMING_TEND: GameAction[] = [
-  { id: "farm_till", skill: "farming", name: "土を整える", icon: "till", level: 1, time: 2800, xp: 12, outputs: {} },
-  { id: "farm_water", skill: "farming", name: "水やりをする", icon: "water", level: 1, time: 2600, xp: 10, outputs: {} },
-  { id: "farm_fertilize", skill: "farming", name: "肥料をまく", icon: "fertilizer", level: 4, time: 3200, xp: 22, outputs: {} },
+  {
+    id: "farm_till",
+    skill: "farming",
+    name: "土を整える",
+    icon: "till",
+    level: 1,
+    time: 2800,
+    xp: 12,
+    outputs: {},
+  },
+  {
+    id: "farm_water",
+    skill: "farming",
+    name: "水やりをする",
+    icon: "water",
+    level: 1,
+    time: 2600,
+    xp: 10,
+    outputs: {},
+  },
+  {
+    id: "farm_fertilize",
+    skill: "farming",
+    name: "肥料をまく",
+    icon: "fertilizer",
+    level: 4,
+    time: 3200,
+    xp: 22,
+    outputs: {},
+  },
 ];

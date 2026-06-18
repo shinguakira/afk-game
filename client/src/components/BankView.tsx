@@ -19,16 +19,14 @@ export function BankView() {
   const [selected, setSelected] = useState<string | null>(null);
 
   const sel = selected ? ITEM_MAP[selected] : null;
-  const selQty = selected ? state.bank[selected] ?? 0 : 0;
+  const selQty = selected ? (state.bank[selected] ?? 0) : 0;
 
   return (
     <div>
       <h2 className="section-title">
         <Icon name="bank" size={22} /> ストレージ
       </h2>
-      <p className="section-sub">
-        {entries.length} 種類のアイテム。タイルを選んで装備/売却。
-      </p>
+      <p className="section-sub">{entries.length} 種類のアイテム。タイルを選んで装備/売却。</p>
 
       {/* 選択中アイテムの詳細＆操作 */}
       {sel && (
@@ -36,7 +34,9 @@ export function BankView() {
           <div className="row-between">
             <strong style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <Icon name={sel.icon} size={18} /> {sel.name}
-              <span className="muted" style={{ fontSize: 11 }}>×{formatNumber(selQty)}</span>
+              <span className="muted" style={{ fontSize: 11 }}>
+                ×{formatNumber(selQty)}
+              </span>
             </strong>
             <span className="tag">{TYPE_LABEL[sel.type]}</span>
           </div>
@@ -66,9 +66,7 @@ export function BankView() {
         </div>
       )}
 
-      {entries.length === 0 && (
-        <p className="muted">まだ何もありません。生産から始めましょう。</p>
-      )}
+      {entries.length === 0 && <p className="muted">まだ何もありません。生産から始めましょう。</p>}
 
       <div className="store-grid">
         {entries.map(([id, qty]) => {

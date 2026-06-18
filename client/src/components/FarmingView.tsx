@@ -32,13 +32,11 @@ function CropPicker({
 
   // 植えられるもの（Lv充足＋種あり/種不要）を先頭に、次にLv順。数が増えても上に使える作物が並ぶ。
   const rows = FARM_CROPS.map((c) => {
-    const owned = c.seed ? bank[c.seed] ?? 0 : 0;
+    const owned = c.seed ? (bank[c.seed] ?? 0) : 0;
     const lockedLv = farmLevel < c.level;
     const noSeed = !!c.seed && owned < 1;
     return { c, owned, lockedLv, noSeed, plantable: !lockedLv && !noSeed };
-  }).sort((a, b) =>
-    Number(b.plantable) - Number(a.plantable) || a.c.level - b.c.level,
-  );
+  }).sort((a, b) => Number(b.plantable) - Number(a.plantable) || a.c.level - b.c.level);
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -119,8 +117,7 @@ export function FarmingView() {
 
   const tendActions = ACTIONS_BY_SKILL["farming"] ?? [];
   const active = state.active;
-  const tending =
-    active?.kind === "skill" && tendActions.some((a) => a.id === active.actionId);
+  const tending = active?.kind === "skill" && tendActions.some((a) => a.id === active.actionId);
 
   return (
     <div>
@@ -173,7 +170,8 @@ export function FarmingView() {
                 <Icon name={it?.icon} size={18} /> {it?.name}
               </h3>
               <div className="meta">
-                {ready ? "収穫できます" : `あと ${fmtTime(spec.growMs - p.growth)}`} ・ ×{spec.yield}
+                {ready ? "収穫できます" : `あと ${fmtTime(spec.growMs - p.growth)}`} ・ ×
+                {spec.yield}
               </div>
               <Bar kind="xp" value={Math.min(1, p.growth / spec.growMs)} />
               {ready ? (
@@ -200,10 +198,12 @@ export function FarmingView() {
       <div className="grid">
         {tendActions.map((a) => {
           const unlocked = level >= a.level;
-          const isActive =
-            state.active?.kind === "skill" && state.active.actionId === a.id;
+          const isActive = state.active?.kind === "skill" && state.active.actionId === a.id;
           return (
-            <div key={a.id} className={`card ${!unlocked ? "locked" : ""} ${isActive ? "selected" : ""}`}>
+            <div
+              key={a.id}
+              className={`card ${!unlocked ? "locked" : ""} ${isActive ? "selected" : ""}`}
+            >
               <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <Icon name={a.icon} size={16} /> {a.name}
               </h3>
@@ -238,11 +238,7 @@ export function FarmingView() {
       </div>
 
       {planting !== null && (
-        <CropPicker
-          plotIndex={planting}
-          farmLevel={level}
-          onClose={() => setPlanting(null)}
-        />
+        <CropPicker plotIndex={planting} farmLevel={level} onClose={() => setPlanting(null)} />
       )}
     </div>
   );

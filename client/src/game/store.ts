@@ -1,12 +1,5 @@
 import { create } from "zustand";
-import type {
-  ActionId,
-  EquipSlot,
-  ItemId,
-  MonsterId,
-  OfflineSummary,
-  SaveState,
-} from "./types";
+import type { ActionId, EquipSlot, ItemId, MonsterId, OfflineSummary, SaveState } from "./types";
 import {
   ACTION_MAP,
   CLASS_MAP,
@@ -26,18 +19,9 @@ import { levelForXp, xpForLevel } from "./xp";
 import { STARTING_MENTAL_LEVEL, STAT } from "./data/skills";
 import { FARM_CROP_MAP, TEND_BOOST, PLOT_COUNT } from "./data/farming";
 import { TUTORIAL_STEPS } from "./data/tutorial";
-import {
-  enemyHitChance,
-  getCombatStats,
-  playerHitChance,
-} from "./combat";
+import { enemyHitChance, getCombatStats, playerHitChance } from "./combat";
 import { grantCombatXp, simulateOffline } from "./progression";
-import {
-  deleteSave,
-  flushSaveOnUnload,
-  loadSave,
-  writeSave,
-} from "./persistence";
+import { deleteSave, flushSaveOnUnload, loadSave, writeSave } from "./persistence";
 
 // Bump whenever the save schema changes incompatibly (e.g. skill ids renamed).
 // On mismatch we discard the old save and start fresh (no migrations yet).
@@ -186,8 +170,7 @@ export const useGame = create<GameStore>((set, get) => ({
   ready: false,
   tutorialStep: -1,
 
-  pushLog: (msg) =>
-    set((s) => ({ log: [msg, ...s.log].slice(0, LOG_LIMIT) })),
+  pushLog: (msg) => set((s) => ({ log: [msg, ...s.log].slice(0, LOG_LIMIT) })),
 
   pushToast: (t) => {
     const id = ++toastSeq;
@@ -212,9 +195,7 @@ export const useGame = create<GameStore>((set, get) => ({
     // Discard incompatible saves from before a schema change.
     const loaded = raw && raw.version === SAVE_VERSION ? raw : null;
     if (raw && !loaded) {
-      console.warn(
-        `[save] discarding incompatible save (v${raw.version} != v${SAVE_VERSION})`,
-      );
+      console.warn(`[save] discarding incompatible save (v${raw.version} != v${SAVE_VERSION})`);
     }
     const base = loaded ?? makeStartingState();
     // Merge in any skills added since the save was written.
@@ -377,9 +358,7 @@ export const useGame = create<GameStore>((set, get) => ({
       playerTimer: 0,
       enemyTimer: 0,
     });
-    get().pushLog(
-      `🚀 独立して起業！ ストック +${gain}（通算 ${s.prestigeCount + 1} 回）`,
-    );
+    get().pushLog(`🚀 独立して起業！ ストック +${gain}（通算 ${s.prestigeCount + 1} 回）`);
   },
 
   buyPrestigeUpgrade: (id) => {
@@ -521,12 +500,7 @@ type SetFn = (partial: Partial<GameStore>) => void;
 type GetFn = () => GameStore;
 
 /** スキルがレベルアップしていたらトーストを出す。 */
-function toastLevelUp(
-  get: GetFn,
-  oldXp: number,
-  newXp: number,
-  skillId: string,
-): void {
+function toastLevelUp(get: GetFn, oldXp: number, newXp: number, skillId: string): void {
   const before = levelForXp(oldXp);
   const after = levelForXp(newXp);
   if (after > before) {
@@ -543,9 +517,7 @@ function toastLevelUp(
 function advancePlots(set: SetFn, get: GetFn, dt: number): void {
   const s = get();
   if (!s.plots?.some((p) => p.crop)) return;
-  const tending =
-    s.active?.kind === "skill" &&
-    ACTION_MAP[s.active.actionId]?.skill === "farming";
+  const tending = s.active?.kind === "skill" && ACTION_MAP[s.active.actionId]?.skill === "farming";
   const rate = tending ? TEND_BOOST : 1;
   let changed = false;
   const plots = s.plots.map((p) => {
@@ -585,9 +557,7 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
   while (progress >= effTime && guard-- > 0) {
     // Craft actions need their inputs available.
     if (action.inputs) {
-      const ok = Object.entries(action.inputs).every(
-        ([id, q]) => (bank[id] ?? 0) >= (q as number),
-      );
+      const ok = Object.entries(action.inputs).every(([id, q]) => (bank[id] ?? 0) >= (q as number));
       if (!ok) {
         stopped = true;
         progress = 0;
@@ -608,8 +578,7 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
 
   // 副次XP: フレームワーク実装などは言語(主)に加えてドメイン(副)へも入る（概念は分離・獲得は同時）。
   const also = action.xpAlso;
-  const alsoXp =
-    also && completions > 0 ? completions * also.xp * mult(eff, xpKey) : 0;
+  const alsoXp = also && completions > 0 ? completions * also.xp * mult(eff, xpKey) : 0;
 
   let skills =
     xpGained > 0
@@ -630,21 +599,11 @@ function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
   set({ bank, skills, actionProgress: progress, active: stopped ? null : s.active });
   if (xpGained > 0) {
     get().flashXp(action.skill, Math.round(xpGained));
-    toastLevelUp(
-      get,
-      s.skills[action.skill]?.xp ?? 0,
-      skills[action.skill]?.xp ?? 0,
-      action.skill,
-    );
+    toastLevelUp(get, s.skills[action.skill]?.xp ?? 0, skills[action.skill]?.xp ?? 0, action.skill);
   }
   if (also && alsoXp > 0) {
     get().flashXp(also.skill, Math.round(alsoXp));
-    toastLevelUp(
-      get,
-      s.skills[also.skill]?.xp ?? 0,
-      skills[also.skill]?.xp ?? 0,
-      also.skill,
-    );
+    toastLevelUp(get, s.skills[also.skill]?.xp ?? 0, skills[also.skill]?.xp ?? 0, also.skill);
   }
   if (stopped) get().pushLog(`素材切れ: ${action.name}`);
 }
@@ -715,11 +674,7 @@ function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
         playerHp -= randInt(1, monster.maxHit);
       }
       // Auto-eat below half HP.
-      if (
-        playerHp <= stats.maxHp * 0.5 &&
-        s.selectedFood &&
-        (bank[s.selectedFood] ?? 0) > 0
-      ) {
+      if (playerHp <= stats.maxHp * 0.5 && s.selectedFood && (bank[s.selectedFood] ?? 0) > 0) {
         const food = ITEM_MAP[s.selectedFood];
         if (food?.heals) {
           bank[s.selectedFood] = (bank[s.selectedFood] ?? 0) - 1;

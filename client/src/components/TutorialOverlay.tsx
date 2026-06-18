@@ -43,7 +43,9 @@ export function TutorialOverlay() {
       </div>
       <p style={{ margin: "0 0 12px", fontSize: 13.5, lineHeight: 1.6 }}>{sub(s.body)}</p>
       <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-        <button onClick={end} style={{ fontSize: 12 }}>スキップ</button>
+        <button onClick={end} style={{ fontSize: 12 }}>
+          スキップ
+        </button>
         <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
           {step > 0 && <button onClick={() => setStep(step - 1)}>戻る</button>}
           <button className="primary" onClick={() => (last ? end() : setStep(step + 1))}>

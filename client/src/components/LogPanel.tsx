@@ -15,10 +15,8 @@ export function LogPanel() {
 
   // Engineer level = avg of the four combat stats.
   const combatLevel = Math.floor(
-    COMBAT_STAT_IDS.reduce(
-      (sum, id) => sum + levelForXp(skills[id]?.xp ?? 0),
-      0,
-    ) / COMBAT_STAT_IDS.length,
+    COMBAT_STAT_IDS.reduce((sum, id) => sum + levelForXp(skills[id]?.xp ?? 0), 0) /
+      COMBAT_STAT_IDS.length,
   );
   const bankCount = Object.values(bank).filter((q) => q > 0).length;
   const rank = currentRank(useGame.getState());
@@ -29,10 +27,7 @@ export function LogPanel() {
     <div>
       <h3 style={{ marginTop: 0 }}>次の目標</h3>
       {goal ? (
-        <div
-          className="card"
-          style={{ marginBottom: 14, padding: "10px 12px" }}
-        >
+        <div className="card" style={{ marginBottom: 14, padding: "10px 12px" }}>
           <strong style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <Icon name={AXIS_META[goal.axis].icon} size={15} />
             {goal.title}

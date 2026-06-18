@@ -71,24 +71,30 @@ export function OnboardingModal() {
               無名のコーダーが、技術を極め・金を稼ぎ、起業して伝説になる放置RPG。
               まずはあなたのことを教えてください。
             </p>
-            <label style={{ display: "block", fontSize: 13, marginBottom: 6 }}>
-              エンジニア名
-            </label>
+            <label style={{ display: "block", fontSize: 13, marginBottom: 6 }}>エンジニア名</label>
             <input
               autoFocus
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="例: あきら"
               maxLength={20}
-              onKeyDown={(e) => { if (e.key === "Enter") setStep(1); }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") setStep(1);
+              }}
               style={{
-                width: "100%", padding: "10px 12px", fontSize: 15,
-                background: "var(--panel, #1b2129)", color: "inherit",
-                border: "1px solid var(--border, #2a323c)", borderRadius: 8,
+                width: "100%",
+                padding: "10px 12px",
+                fontSize: 15,
+                background: "var(--panel, #1b2129)",
+                color: "inherit",
+                border: "1px solid var(--border, #2a323c)",
+                borderRadius: 8,
               }}
             />
             <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}>
-              <button className="primary" onClick={() => setStep(1)}>次へ</button>
+              <button className="primary" onClick={() => setStep(1)}>
+                次へ
+              </button>
             </div>
           </>
         )}
@@ -97,7 +103,8 @@ export function OnboardingModal() {
           <>
             <h2 style={{ margin: "0 0 6px" }}>得意な言語は?</h2>
             <p className="muted" style={{ marginTop: 0 }}>
-              1つ選んでください。<strong>開始時にレベルが入り</strong>、チュートリアルもこの言語で進めます。
+              1つ選んでください。<strong>開始時にレベルが入り</strong>
+              、チュートリアルもこの言語で進めます。
             </p>
             <LangGrid
               selected={new Set(main ? [main] : [])}
@@ -106,7 +113,9 @@ export function OnboardingModal() {
             />
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
               <button onClick={() => setStep(0)}>戻る</button>
-              <button className="primary" disabled={!main} onClick={() => setStep(2)}>次へ</button>
+              <button className="primary" disabled={!main} onClick={() => setStep(2)}>
+                次へ
+              </button>
             </div>
           </>
         )}
@@ -122,7 +131,8 @@ export function OnboardingModal() {
               onToggle={(id) =>
                 setInterest((s) => {
                   const n = new Set(s);
-                  n.has(id) ? n.delete(id) : n.add(id);
+                  if (n.has(id)) n.delete(id);
+                  else n.add(id);
                   return n;
                 })
               }
@@ -130,10 +140,7 @@ export function OnboardingModal() {
             />
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
               <button onClick={() => setStep(1)}>戻る</button>
-              <button
-                className="primary"
-                onClick={() => complete(name, main!, [...interest])}
-              >
+              <button className="primary" onClick={() => complete(name, main!, [...interest])}>
                 はじめる
               </button>
             </div>

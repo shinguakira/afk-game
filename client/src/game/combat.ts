@@ -30,12 +30,10 @@ export function getCombatStats(state: SaveState): CombatStats {
   const eff = getEffects(state);
 
   const maxHit = Math.floor(
-    (1 + strengthLevel * 0.4 + (weapon?.strengthBonus ?? 0)) *
-      mult(eff, "power.maxHit"),
+    (1 + strengthLevel * 0.4 + (weapon?.strengthBonus ?? 0)) * mult(eff, "power.maxHit"),
   );
   const attackRating = Math.round(
-    (2 + attackLevel * 2 + (weapon?.attackBonus ?? 0)) *
-      mult(eff, "power.accuracy"),
+    (2 + attackLevel * 2 + (weapon?.attackBonus ?? 0)) * mult(eff, "power.accuracy"),
   );
   const defenceRating = Math.round((5 + defenceLevel * 2) * mult(eff, "power.defence"));
   // 速度補正は大きいほど速い → 攻撃間隔を割る。

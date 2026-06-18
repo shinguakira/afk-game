@@ -62,7 +62,10 @@ button {
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 13px;
-  transition: background 0.12s, border-color 0.12s, opacity 0.12s;
+  transition:
+    background 0.12s,
+    border-color 0.12s,
+    opacity 0.12s;
 }
 button:hover:not(:disabled) {
   border-color: var(--accent);

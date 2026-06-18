@@ -15,11 +15,7 @@ interface TimerBarProps {
  * React re-touches the node every tick and restarts the CSS animation (it would
  * sit stuck at 0%). It only re-renders when periodMs/running/label actually change.
  */
-export const TimerBar = memo(function TimerBar({
-  periodMs,
-  running,
-  label,
-}: TimerBarProps) {
+export const TimerBar = memo(function TimerBar({ periodMs, running, label }: TimerBarProps) {
   return (
     <div>
       {label && (
@@ -31,11 +27,7 @@ export const TimerBar = memo(function TimerBar({
       <div className="bar action">
         <span
           className={running ? "timer" : ""}
-          style={
-            running
-              ? { animationDuration: `${periodMs}ms` }
-              : { transform: "scaleX(0)" }
-          }
+          style={running ? { animationDuration: `${periodMs}ms` } : { transform: "scaleX(0)" }}
         />
       </div>
     </div>

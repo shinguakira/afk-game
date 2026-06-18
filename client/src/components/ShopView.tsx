@@ -8,7 +8,16 @@ const SECTIONS: { title: string; icon: string; items: string[] }[] = [
   {
     title: "飲食物",
     icon: "coffee",
-    items: ["water", "coffee", "cola", "onigiri", "cupramen", "energy_drink", "bento", "paid_leave"],
+    items: [
+      "water",
+      "coffee",
+      "cola",
+      "onigiri",
+      "cupramen",
+      "energy_drink",
+      "bento",
+      "paid_leave",
+    ],
   },
   {
     title: "食材（料理用）",
@@ -19,16 +28,38 @@ const SECTIONS: { title: string; icon: string; items: string[] }[] = [
     title: "種・苗（農業用）",
     icon: "seed",
     items: [
-      "seed_tomato", "seed_rice", "seed_carrot", "seed_edamame",
-      "seed_wheat", "seed_shiitake", "seed_strawberry", "seed_apple",
-      "seed_mint", "seed_ginger", "seed_lemon", "seed_grape",
-      "seed_coffee", "seed_ginseng",
+      "seed_tomato",
+      "seed_rice",
+      "seed_carrot",
+      "seed_edamame",
+      "seed_wheat",
+      "seed_shiitake",
+      "seed_strawberry",
+      "seed_apple",
+      "seed_mint",
+      "seed_ginger",
+      "seed_lemon",
+      "seed_grape",
+      "seed_coffee",
+      "seed_ginseng",
     ],
   },
   {
     title: "PCパーツ・電子部品",
     icon: "cpu",
-    items: ["cpu_celeron", "cpu_i5", "cpu_i9", "gpu_igpu", "gpu_rtx4060", "gpu_rtx4090", "ram_8", "ram_32", "ssd_512", "ssd_2tb", "components"],
+    items: [
+      "cpu_celeron",
+      "cpu_i5",
+      "cpu_i9",
+      "gpu_igpu",
+      "gpu_rtx4060",
+      "gpu_rtx4090",
+      "ram_8",
+      "ram_32",
+      "ssd_512",
+      "ssd_2tb",
+      "components",
+    ],
   },
   {
     title: "デバイス",
@@ -38,7 +69,21 @@ const SECTIONS: { title: string; icon: string; items: string[] }[] = [
   {
     title: "ウェア・かばん・アイコン",
     icon: "shirt",
-    items: ["tshirt", "hoodie", "workwear", "suit", "backpack", "tote", "bizbag", "neat_hair", "afro", "ponytail", "av_cat", "av_pixel", "av_anime"],
+    items: [
+      "tshirt",
+      "hoodie",
+      "workwear",
+      "suit",
+      "backpack",
+      "tote",
+      "bizbag",
+      "neat_hair",
+      "afro",
+      "ponytail",
+      "av_cat",
+      "av_pixel",
+      "av_anime",
+    ],
   },
 ];
 
@@ -86,10 +131,7 @@ function BuyModal({ id, onClose }: { id: string; onClose: () => void }) {
             </button>
           ))}
           {maxAffordable > 1 && (
-            <button
-              disabled={maxAffordable <= 0}
-              onClick={() => buy(maxAffordable)}
-            >
+            <button disabled={maxAffordable <= 0} onClick={() => buy(maxAffordable)}>
               最大 {maxAffordable}個
             </button>
           )}

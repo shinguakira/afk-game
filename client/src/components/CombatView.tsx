@@ -36,11 +36,7 @@ export function CombatView() {
               right={`${Math.ceil(state.playerHp)}/${stats.maxHp}`}
             />
             <div style={{ marginTop: 8 }}>
-              <TimerBar
-                periodMs={stats.weaponSpeed}
-                running={inCombat}
-                label="Attack"
-              />
+              <TimerBar periodMs={stats.weaponSpeed} running={inCombat} label="Attack" />
             </div>
           </div>
           <div className="fighter">
@@ -54,11 +50,7 @@ export function CombatView() {
               right={`${Math.max(0, Math.ceil(state.enemyHp))}/${monster.hp}`}
             />
             <div style={{ marginTop: 8 }}>
-              <TimerBar
-                periodMs={monster.speed}
-                running={inCombat}
-                label="Attack"
-              />
+              <TimerBar periodMs={monster.speed} running={inCombat} label="Attack" />
             </div>
           </div>
         </div>
@@ -67,8 +59,7 @@ export function CombatView() {
       {/* Monster picker */}
       <div className="grid">
         {MONSTERS.map((m) => {
-          const isActive =
-            state.active?.kind === "combat" && state.active.monsterId === m.id;
+          const isActive = state.active?.kind === "combat" && state.active.monsterId === m.id;
           return (
             <div key={m.id} className={`card ${isActive ? "selected" : ""}`}>
               <h3>
@@ -84,14 +75,12 @@ export function CombatView() {
                     {ITEM_MAP[d.item]?.name ?? d.item}
                   </span>
                 ))}
-                <span className="tag">¥{m.goldMin}-{m.goldMax}</span>
+                <span className="tag">
+                  ¥{m.goldMin}-{m.goldMax}
+                </span>
               </div>
               {isActive ? (
-                <button
-                  className="danger"
-                  style={{ width: "100%" }}
-                  onClick={() => state.stop()}
-                >
+                <button className="danger" style={{ width: "100%" }} onClick={() => state.stop()}>
                   中断
                 </button>
               ) : (

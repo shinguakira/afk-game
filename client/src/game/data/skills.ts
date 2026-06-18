@@ -31,11 +31,6 @@ export const STAT = {
   mental: "mental",
 } as const;
 
-export const COMBAT_STAT_IDS = [
-  STAT.accuracy,
-  STAT.damage,
-  STAT.defence,
-  STAT.mental,
-] as const;
+export const COMBAT_STAT_IDS = [STAT.accuracy, STAT.damage, STAT.defence, STAT.mental] as const;
 
 export const STARTING_MENTAL_LEVEL = 10;

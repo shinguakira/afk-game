@@ -59,17 +59,11 @@ export function OfflineModal() {
           </>
         )}
 
-        {xpEntries.length === 0 &&
-          itemEntries.length === 0 &&
-          summary.gold === 0 && (
-            <p className="muted">…ほぼ無し。作業が止まっていたようです（素材切れ？）。</p>
-          )}
+        {xpEntries.length === 0 && itemEntries.length === 0 && summary.gold === 0 && (
+          <p className="muted">…ほぼ無し。作業が止まっていたようです（素材切れ？）。</p>
+        )}
 
-        <button
-          className="primary"
-          style={{ width: "100%", marginTop: 16 }}
-          onClick={dismiss}
-        >
+        <button className="primary" style={{ width: "100%", marginTop: 16 }} onClick={dismiss}>
           受け取る
         </button>
       </div>

@@ -81,9 +81,7 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
   });
   const sum = simulateOffline(s, 3_600_000);
   const gotXp = s.skills.impl.xp > 0;
-  console.log(
-    `${gotXp ? "PASS" : "FAIL"}  combat 1h gained 実装力 xp: ${s.skills.impl.xp}`,
-  );
+  console.log(`${gotXp ? "PASS" : "FAIL"}  combat 1h gained 実装力 xp: ${s.skills.impl.xp}`);
   if (!gotXp) failures++;
   console.log(
     `      combat 1h: gold +${sum.gold}, commit +${s.bank.commit ?? 0}, mental ${s.playerHp}`,
@@ -123,13 +121,20 @@ function freshState(over: Partial<SaveState> = {}): SaveState {
 // 6) Class modifiers flow into combat stats: QA +40% 堅牢性, security +20% HP.
 {
   const none = getCombatStats(
-    freshState({ skills: { robust: { xp: xpForLevel(20) }, mental: { xp: xpForLevel(20) } } as any }),
+    freshState({
+      skills: { robust: { xp: xpForLevel(20) }, mental: { xp: xpForLevel(20) } } as any,
+    }),
   );
   const qa = getCombatStats(
-    freshState({ jobClass: "qa", skills: { robust: { xp: xpForLevel(20) }, mental: { xp: xpForLevel(20) } } as any }),
+    freshState({
+      jobClass: "qa",
+      skills: { robust: { xp: xpForLevel(20) }, mental: { xp: xpForLevel(20) } } as any,
+    }),
   );
   check("QA defence +40%", qa.defenceRating, Math.round(none.defenceRating * 1.4));
-  const sec = getCombatStats(freshState({ jobClass: "security", skills: { mental: { xp: xpForLevel(20) } } as any }));
+  const sec = getCombatStats(
+    freshState({ jobClass: "security", skills: { mental: { xp: xpForLevel(20) } } as any }),
+  );
   const plain = getCombatStats(freshState({ skills: { mental: { xp: xpForLevel(20) } } as any }));
   check("Security maxHp +20%", sec.maxHp, Math.floor(plain.maxHp * 1.2));
 }

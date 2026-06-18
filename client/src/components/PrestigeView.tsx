@@ -22,9 +22,7 @@ export function PrestigeView() {
         <div className="row-between" style={{ marginBottom: 8 }}>
           <span>
             所持ストック{" "}
-            <strong style={{ color: "var(--gold)" }}>
-              {formatNumber(state.prestigePoints)}
-            </strong>
+            <strong style={{ color: "var(--gold)" }}>{formatNumber(state.prestigePoints)}</strong>
           </span>
           <span className="muted">通算起業 {state.prestigeCount} 回</span>
         </div>
@@ -59,10 +57,7 @@ export function PrestigeView() {
           const cost = maxed ? 0 : up.cost(lvl + 1);
           const affordable = !maxed && state.prestigePoints >= cost;
           return (
-            <div
-              key={up.id}
-              className={`card ${lvl > 0 ? "selected" : ""}`}
-            >
+            <div key={up.id} className={`card ${lvl > 0 ? "selected" : ""}`}>
               <div className="row-between">
                 <h3 style={{ margin: 0 }}>
                   <Icon name={up.icon} size={18} /> {up.name}

@@ -15,10 +15,17 @@
     "start": "npm -w server run start",
     "tauri": "tauri",
     "desktop": "tauri dev",
-    "desktop:build": "tauri build"
+    "desktop:build": "tauri build",
+    "lint": "oxlint client/src server/src",
+    "format": "oxfmt client/src server/src",
+    "format:check": "oxfmt --check client/src server/src",
+    "knip": "knip"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "knip": "^6.17.1",
+    "oxfmt": "^0.55.0",
+    "oxlint": "^1.70.0"
   }
 }

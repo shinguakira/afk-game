@@ -35,7 +35,7 @@ export default function App() {
   useEffect(() => {
     if (tutorialStep < 0 || tutorialStep >= TUTORIAL_STEPS.length) return;
     const t = TUTORIAL_STEPS[tutorialStep].tab;
-    setTab(t === "@main" ? mainLang ?? "js" : t);
+    setTab(t === "@main" ? (mainLang ?? "js") : t);
   }, [tutorialStep, mainLang]);
 
   if (!ready) {

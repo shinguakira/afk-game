@@ -7,14 +7,7 @@ import { Bar } from "./Bar";
 import { TimerBar } from "./TimerBar";
 import { Icon } from "../ui/icons";
 
-const CATEGORY_ORDER: ActionCategory[] = [
-  "base",
-  "concept",
-  "library",
-  "framework",
-  "oss",
-  "cert",
-];
+const CATEGORY_ORDER: ActionCategory[] = ["base", "concept", "library", "framework", "oss", "cert"];
 const CATEGORY_LABEL: Record<ActionCategory, string> = {
   base: "基礎",
   concept: "概念",
@@ -52,7 +45,7 @@ export function SkillView({ skillId }: { skillId: string }) {
   const byCat = new Map<ActionCategory, GameAction[]>();
   for (const a of actions) {
     // 言語以外(料理/PC組み立て)は1グループにまとめる。
-    const c = isLang ? a.category ?? "base" : "base";
+    const c = isLang ? (a.category ?? "base") : "base";
     if (!byCat.has(c)) byCat.set(c, []);
     byCat.get(c)!.push(a);
   }
@@ -72,7 +65,14 @@ export function SkillView({ skillId }: { skillId: string }) {
             target="_blank"
             rel="noopener noreferrer"
             title="公式サイトを開く"
-            style={{ display: "inline-flex", alignItems: "center", gap: 3, marginLeft: 8, fontSize: 12, textDecoration: "none" }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 3,
+              marginLeft: 8,
+              fontSize: 12,
+              textDecoration: "none",
+            }}
           >
             <Icon name="extlink" size={14} /> 公式
           </a>
@@ -101,13 +101,10 @@ export function SkillView({ skillId }: { skillId: string }) {
           <div className="grid">
             {byCat.get(cat)!.map((a) => {
               const unlocked = level >= a.level;
-              const isActive =
-                state.active?.kind === "skill" && state.active.actionId === a.id;
+              const isActive = state.active?.kind === "skill" && state.active.actionId === a.id;
               const canCraft =
                 !a.inputs ||
-                Object.entries(a.inputs).every(
-                  ([id, q]) => (state.bank[id] ?? 0) >= (q as number),
-                );
+                Object.entries(a.inputs).every(([id, q]) => (state.bank[id] ?? 0) >= (q as number));
 
               return (
                 <div

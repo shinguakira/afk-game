@@ -6,10 +6,7 @@ import { getEffects } from "./effects";
 import { type Effects, mult } from "./modifiers";
 
 /** Combat XP split: accuracy/damage/defence each get 1/3, mental 1/3 on top. */
-export function grantCombatXp(
-  skills: SaveState["skills"],
-  totalXp: number,
-): SaveState["skills"] {
+export function grantCombatXp(skills: SaveState["skills"], totalXp: number): SaveState["skills"] {
   const share = totalXp / 3;
   const next = { ...skills };
   for (const id of [STAT.accuracy, STAT.damage, STAT.defence]) {
@@ -40,8 +37,7 @@ export function simulateOffline(state: SaveState, ms: number): OfflineSummary {
 function simPlots(state: SaveState, ms: number): void {
   if (!state.plots) return;
   const tending =
-    state.active?.kind === "skill" &&
-    ACTION_MAP[state.active.actionId]?.skill === "farming";
+    state.active?.kind === "skill" && ACTION_MAP[state.active.actionId]?.skill === "farming";
   const rate = tending ? TEND_BOOST : 1;
   for (const p of state.plots) {
     if (!p.crop) continue;
@@ -51,12 +47,7 @@ function simPlots(state: SaveState, ms: number): void {
   }
 }
 
-function simPlayerSkill(
-  state: SaveState,
-  ms: number,
-  summary: OfflineSummary,
-  eff: Effects,
-): void {
+function simPlayerSkill(state: SaveState, ms: number, summary: OfflineSummary, eff: Effects): void {
   if (state.active?.kind !== "skill") return;
   const action = ACTION_MAP[state.active.actionId];
   if (!action) return;
@@ -133,27 +124,22 @@ function simPlayerCombat(
     (monster.dot ?? 0) * (killTime / 1000);
 
   const food = state.selectedFood ? ITEM_MAP[state.selectedFood] : undefined;
-  const foodCount = state.selectedFood ? state.bank[state.selectedFood] ?? 0 : 0;
+  const foodCount = state.selectedFood ? (state.bank[state.selectedFood] ?? 0) : 0;
   const heal = food?.heals ?? 0;
   const hpPool = state.playerHp + foodCount * heal;
 
   const killsByTime = Math.floor(ms / killTime);
-  const killsByHp =
-    dmgTakenPerKill > 0 ? Math.floor(hpPool / dmgTakenPerKill) : killsByTime;
+  const killsByHp = dmgTakenPerKill > 0 ? Math.floor(hpPool / dmgTakenPerKill) : killsByTime;
   const kills = Math.max(0, Math.min(killsByTime, killsByHp));
   if (kills <= 0) return;
 
   const totalDamage = kills * dmgTakenPerKill;
   let foodUsed = 0;
   if (heal > 0) {
-    foodUsed = Math.min(
-      foodCount,
-      Math.max(0, Math.ceil((totalDamage - state.playerHp) / heal)),
-    );
+    foodUsed = Math.min(foodCount, Math.max(0, Math.ceil((totalDamage - state.playerHp) / heal)));
     state.bank[state.selectedFood!] = foodCount - foodUsed;
     if (state.bank[state.selectedFood!] <= 0) delete state.bank[state.selectedFood!];
-    summary.items[state.selectedFood!] =
-      (summary.items[state.selectedFood!] ?? 0) - foodUsed;
+    summary.items[state.selectedFood!] = (summary.items[state.selectedFood!] ?? 0) - foodUsed;
   }
   let finalHp = Math.round(state.playerHp + foodUsed * heal - totalDamage);
   if (finalHp <= 0) finalHp = stats.maxHp; // died & revived
@@ -164,9 +150,7 @@ function simPlayerCombat(
   const dropMult = mult(eff, "dropRate");
   const combatXpMult = mult(eff, "xp.combat");
 
-  const goldGain = Math.floor(
-    kills * ((monster.goldMin + monster.goldMax) / 2) * goldMult,
-  );
+  const goldGain = Math.floor(kills * ((monster.goldMin + monster.goldMax) / 2) * goldMult);
   state.gold += goldGain;
   summary.gold += goldGain;
 

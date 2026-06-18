@@ -6,11 +6,10 @@ import { ACTIONS } from "./actions";
 import { MONSTERS } from "./monsters";
 import { CLASSES } from "./classes";
 import { CATEGORIES } from "./categories";
-import type { SkillCategoryDef } from "./categories";
 import { PRESTIGE_UPGRADES } from "./prestige";
 import type { PrestigeUpgrade } from "./prestige";
 
-export { ITEMS, SKILLS, ACTIONS, MONSTERS, CLASSES, CATEGORIES, PRESTIGE_UPGRADES };
+export { ITEMS, SKILLS, MONSTERS, CLASSES, CATEGORIES, PRESTIGE_UPGRADES };
 export type { SkillCategoryDef } from "./categories";
 
 /** 制作(craft)判定: 入力を消費するアクションは制作扱い（フレームワーク/料理/PC組み立て）。
@@ -18,7 +17,7 @@ export type { SkillCategoryDef } from "./categories";
 export function isCraftAction(a: GameAction): boolean {
   return !!a.inputs;
 }
-export { STAT, COMBAT_STAT_IDS, STARTING_MENTAL_LEVEL } from "./skills";
+export { STAT, COMBAT_STAT_IDS } from "./skills";
 export type { JobClass } from "./classes";
 export type { PrestigeUpgrade } from "./prestige";
 
@@ -31,21 +30,13 @@ export const PRESTIGE_MAP: Record<string, PrestigeUpgrade> = Object.fromEntries(
 );
 
 // Lookup maps for O(1) access by id.
-export const ITEM_MAP: Record<string, Item> = Object.fromEntries(
-  ITEMS.map((i) => [i.id, i]),
-);
-export const SKILL_MAP: Record<string, Skill> = Object.fromEntries(
-  SKILLS.map((s) => [s.id, s]),
-);
+export const ITEM_MAP: Record<string, Item> = Object.fromEntries(ITEMS.map((i) => [i.id, i]));
+export const SKILL_MAP: Record<string, Skill> = Object.fromEntries(SKILLS.map((s) => [s.id, s]));
 export const ACTION_MAP: Record<string, GameAction> = Object.fromEntries(
   ACTIONS.map((a) => [a.id, a]),
 );
 export const MONSTER_MAP: Record<string, Monster> = Object.fromEntries(
   MONSTERS.map((m) => [m.id, m]),
-);
-
-export const CATEGORY_MAP: Record<string, SkillCategoryDef> = Object.fromEntries(
-  CATEGORIES.map((c) => [c.id, c]),
 );
 
 /** 大分類 id → スキル一覧（サイドバーの折りたたみ用）。 */
@@ -65,9 +56,3 @@ export const ACTIONS_BY_SKILL: Record<string, GameAction[]> = ACTIONS.reduce(
   },
   {} as Record<string, GameAction[]>,
 );
-
-export function item(id: string): Item {
-  const it = ITEM_MAP[id];
-  if (!it) throw new Error(`Unknown item id: ${id}`);
-  return it;
-}

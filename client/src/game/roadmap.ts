@@ -27,9 +27,7 @@ export const AXIS_META: Record<MilestoneAxis, { icon: string; label: string }> =
 
 // ---- 判定ヘルパー ----
 const langLevels = (s: SaveState): number[] =>
-  SKILLS.filter((k) => k.tech === "language").map((k) =>
-    levelForXp(s.skills[k.id]?.xp ?? 0),
-  );
+  SKILLS.filter((k) => k.tech === "language").map((k) => levelForXp(s.skills[k.id]?.xp ?? 0));
 const maxLangLevel = (s: SaveState): number => Math.max(0, ...langLevels(s));
 const langsAtLeast = (s: SaveState, lv: number): number =>
   langLevels(s).filter((l) => l >= lv).length;
@@ -134,10 +132,7 @@ export const MILESTONES: Milestone[] = [
 ];
 
 /** 最初の未達成マイルストーン（＝今の目標）。全達成なら null。 */
-export function firstIncomplete(
-  completed: string[],
-  state: SaveState,
-): Milestone | null {
+export function firstIncomplete(completed: string[], state: SaveState): Milestone | null {
   const done = new Set(completed);
   for (const m of MILESTONES) {
     if (!done.has(m.id) && !m.check(state)) return m;

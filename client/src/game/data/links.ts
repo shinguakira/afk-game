@@ -68,7 +68,7 @@ export const TECH_URLS: Record<string, string> = {
   "Ruby on Rails": "https://rubyonrails.org/",
   Laravel: "https://laravel.com/",
   Symfony: "https://symfony.com/",
-  "LÖVE": "https://love2d.org/",
+  LÖVE: "https://love2d.org/",
   Arduino: "https://www.arduino.cc/",
   Qt: "https://www.qt.io/",
   Godot: "https://godotengine.org/",

@@ -6,7 +6,7 @@ import { type Effects, type Modifier, resolveModifiers } from "./modifiers";
  * Collect every active Modifier affecting the player:
  * job class + permanent prestige upgrades. (Later: 資格 / 施設 push here too.)
  */
-export function activeModifiers(state: SaveState): Modifier[] {
+function activeModifiers(state: SaveState): Modifier[] {
   const mods: Modifier[] = [];
   if (state.jobClass) {
     const cls = CLASS_MAP[state.jobClass];
