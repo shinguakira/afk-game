@@ -36,7 +36,7 @@ export function CombatView() {
               value={state.playerHp / stats.maxHp}
               right={`${Math.ceil(state.playerHp)}/${stats.maxHp}`}
             />
-            <div style={{ marginTop: 8 }}>
+            <div className="mt-2">
               <TimerBar periodMs={stats.weaponSpeed} running={inCombat} label="Attack" />
             </div>
           </div>
@@ -50,7 +50,7 @@ export function CombatView() {
               value={state.enemyHp / monster.hp}
               right={`${Math.max(0, Math.ceil(state.enemyHp))}/${monster.hp}`}
             />
-            <div style={{ marginTop: 8 }}>
+            <div className="mt-2">
               <TimerBar periodMs={monster.speed} running={inCombat} label="Attack" />
             </div>
           </div>
@@ -87,17 +87,12 @@ export function CombatView() {
                 </span>
               </div>
               {isActive ? (
-                <button
-                  className="border-danger text-danger"
-                  style={{ width: "100%" }}
-                  onClick={() => state.stop()}
-                >
+                <button className="w-full border-danger text-danger" onClick={() => state.stop()}>
                   中断
                 </button>
               ) : (
                 <button
-                  className="border-accent bg-accent font-semibold text-[#06101f]"
-                  style={{ width: "100%" }}
+                  className="w-full border-accent bg-accent font-semibold text-[#06101f]"
                   onClick={() => state.startCombat(m.id)}
                 >
                   着手

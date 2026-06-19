@@ -18,7 +18,7 @@ export function RoadmapView() {
         キャリアの目標を順に達成しよう。常に「次の目標」が示されます。
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 620 }}>
+      <div className="flex max-w-[620px] flex-col gap-2">
         {MILESTONES.map((m) => {
           const isDone = done.has(m.id);
           const isCurrent = current?.id === m.id;
@@ -26,27 +26,20 @@ export function RoadmapView() {
           return (
             <div
               key={m.id}
-              className={`rounded-[10px] border bg-panel2 p-3 ${isCurrent ? "border-accent2" : "border-border"}`}
-              style={{ opacity: isDone ? 0.55 : isCurrent ? 1 : 0.8, padding: "10px 12px" }}
+              className={`rounded-[10px] border bg-panel2 px-3 py-2.5 ${isCurrent ? "border-accent2" : "border-border"} ${isDone ? "opacity-[0.55]" : isCurrent ? "opacity-100" : "opacity-80"}`}
             >
               <div className="flex items-center justify-between">
-                <strong style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <strong className="flex items-center gap-2">
                   <Icon name={isDone ? "kudos" : ax.icon} size={16} />
                   {m.title}
-                  {isDone && (
-                    <span className="text-muted" style={{ fontSize: 11 }}>
-                      達成済み
-                    </span>
-                  )}
-                  {isCurrent && (
-                    <span style={{ fontSize: 11, color: "var(--accent-2)" }}>← 今ここ</span>
-                  )}
+                  {isDone && <span className="text-[11px] text-muted">達成済み</span>}
+                  {isCurrent && <span className="text-[11px] text-accent2">← 今ここ</span>}
                 </strong>
                 <span className="mr-1 my-0.5 inline-block rounded-md border border-border bg-panel px-1.5 py-px text-[11px]">
                   {ax.label}
                 </span>
               </div>
-              <div className="text-muted" style={{ fontSize: 12, marginTop: 4 }}>
+              <div className="mt-1 text-xs text-muted">
                 {m.hint}
                 {m.reward?.gold ? ` ・ 報酬 ¥${formatNumber(m.reward.gold)}` : ""}
               </div>

@@ -16,16 +16,7 @@ function LangGrid({
   multi: boolean;
 }) {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(104px, 1fr))",
-        gap: 8,
-        maxHeight: "46vh",
-        overflowY: "auto",
-        paddingRight: 4,
-      }}
-    >
+    <div className="grid max-h-[46vh] grid-cols-[repeat(auto-fill,minmax(104px,1fr))] gap-2 overflow-y-auto pr-1">
       {LANGS.map((l) => {
         const on = selected.has(l.id);
         return (
@@ -33,21 +24,11 @@ function LangGrid({
             key={l.id}
             onClick={() => onToggle(l.id)}
             aria-pressed={on}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 5,
-              padding: "10px 6px",
-              background: on ? "var(--accent-bg, #1d2b22)" : "var(--panel, #1b2129)",
-              border: `1.5px solid ${on ? "#6ee7a8" : "var(--border, #2a323c)"}`,
-              borderRadius: 8,
-              cursor: "pointer",
-            }}
+            className={`flex cursor-pointer flex-col items-center gap-[5px] rounded-lg border-[1.5px] px-1.5 py-2.5 ${on ? "border-accent2 bg-[#1d2b22]" : "border-border bg-panel"}`}
           >
             <Icon name={l.icon} size={26} />
-            <span style={{ fontSize: 12.5, fontWeight: 600 }}>{l.name}</span>
-            {multi && on && <span style={{ fontSize: 10, color: "#6ee7a8" }}>選択中</span>}
+            <span className="text-[12.5px] font-semibold">{l.name}</span>
+            {multi && on && <span className="text-[10px] text-accent2">選択中</span>}
           </button>
         );
       })}
@@ -64,18 +45,15 @@ export function OnboardingModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-      <div
-        className="w-[min(440px,92vw)] rounded-[14px] border border-border bg-panel p-6"
-        style={{ width: "min(620px, 94vw)" }}
-      >
+      <div className="w-[min(620px,94vw)] rounded-[14px] border border-border bg-panel p-6">
         {step === 0 && (
           <>
-            <h2 style={{ margin: "0 0 6px" }}>ようこそ Idle Engineer へ</h2>
-            <p className="text-muted" style={{ marginTop: 0 }}>
+            <h2 className="mb-1.5">ようこそ Idle Engineer へ</h2>
+            <p className="mt-0 text-muted">
               無名のコーダーが、技術を極め・金を稼ぎ、起業して伝説になる放置RPG。
               まずはあなたのことを教えてください。
             </p>
-            <label style={{ display: "block", fontSize: 13, marginBottom: 6 }}>エンジニア名</label>
+            <label className="mb-1.5 block text-[13px]">エンジニア名</label>
             <input
               autoFocus
               value={name}
@@ -85,17 +63,9 @@ export function OnboardingModal() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") setStep(1);
               }}
-              style={{
-                width: "100%",
-                padding: "10px 12px",
-                fontSize: 15,
-                background: "var(--panel, #1b2129)",
-                color: "inherit",
-                border: "1px solid var(--border, #2a323c)",
-                borderRadius: 8,
-              }}
+              className="w-full rounded-lg border border-border bg-panel px-3 py-2.5 text-[15px] text-inherit"
             />
-            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}>
+            <div className="mt-4 flex justify-end">
               <button
                 className="border-accent bg-accent font-semibold text-[#06101f]"
                 onClick={() => setStep(1)}
@@ -108,8 +78,8 @@ export function OnboardingModal() {
 
         {step === 1 && (
           <>
-            <h2 style={{ margin: "0 0 6px" }}>得意な言語は?</h2>
-            <p className="text-muted" style={{ marginTop: 0 }}>
+            <h2 className="mb-1.5">得意な言語は?</h2>
+            <p className="mt-0 text-muted">
               1つ選んでください。<strong>開始時にレベルが入り</strong>
               、チュートリアルもこの言語で進めます。
             </p>
@@ -118,7 +88,7 @@ export function OnboardingModal() {
               onToggle={(id) => setMain(id)}
               multi={false}
             />
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
+            <div className="mt-4 flex justify-between">
               <button onClick={() => setStep(0)}>戻る</button>
               <button
                 className="border-accent bg-accent font-semibold text-[#06101f]"
@@ -133,8 +103,8 @@ export function OnboardingModal() {
 
         {step === 2 && (
           <>
-            <h2 style={{ margin: "0 0 6px" }}>興味のある言語は?（複数可）</h2>
-            <p className="text-muted" style={{ marginTop: 0 }}>
+            <h2 className="mb-1.5">興味のある言語は?（複数可）</h2>
+            <p className="mt-0 text-muted">
               これから伸ばしたい言語を選択。少しブーストが入り、サイドバーで目印が付きます。スキップも可。
             </p>
             <LangGrid
@@ -142,7 +112,7 @@ export function OnboardingModal() {
               onToggle={(id) => setInterest((s) => toggleInSet(s, id))}
               multi
             />
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
+            <div className="mt-4 flex justify-between">
               <button onClick={() => setStep(1)}>戻る</button>
               <button
                 className="border-accent bg-accent font-semibold text-[#06101f]"

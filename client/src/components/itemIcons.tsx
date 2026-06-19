@@ -6,12 +6,7 @@ type R = (s: number) => JSX.Element;
 
 const svg = (children: JSX.Element): R => {
   return (s: number) => (
-    <svg
-      width={s}
-      height={s}
-      viewBox="0 0 24 24"
-      style={{ verticalAlign: "-0.15em", flexShrink: 0, display: "block" }}
-    >
+    <svg width={s} height={s} viewBox="0 0 24 24" className="block shrink-0 align-[-0.15em]">
       {children}
     </svg>
   );

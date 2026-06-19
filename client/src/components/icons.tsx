@@ -394,11 +394,7 @@ export function Icon({ name, size = 18, className, color, title }: IconProps) {
   if (name && ITEM_ICONS[name]) {
     const el = ITEM_ICONS[name](size);
     return (
-      <span
-        className={className}
-        title={title}
-        style={{ display: "inline-flex", verticalAlign: "-0.15em" }}
-      >
+      <span className={`inline-flex align-[-0.15em] ${className ?? ""}`} title={title}>
         {el}
       </span>
     );
@@ -408,10 +404,9 @@ export function Icon({ name, size = 18, className, color, title }: IconProps) {
   return (
     <C
       size={size}
-      className={className}
+      className={`shrink-0 align-[-0.15em] ${className ?? ""}`}
       color={color ?? brand}
       title={title}
-      style={{ verticalAlign: "-0.15em", flexShrink: 0 }}
     />
   );
 }

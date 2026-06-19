@@ -107,28 +107,25 @@ function BuyModal({ id, onClose }: { id: string; onClose: () => void }) {
         className="w-[min(440px,92vw)] rounded-[14px] border border-border bg-panel p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-          <div
-            className="relative flex aspect-square items-center justify-center rounded-lg border border-border bg-panel2 p-0 hover:border-accent"
-            style={{ width: 56, height: 56, cursor: "default" }}
-          >
+        <div className="mb-2 flex items-center gap-3">
+          <div className="flex h-14 w-14 items-center justify-center rounded-lg border border-border bg-panel2">
             <Icon name={it.icon} size={44} />
           </div>
           <div>
-            <h2 style={{ margin: 0, fontSize: 18 }}>{it.name}</h2>
-            <div className="text-muted" style={{ fontSize: 12 }}>
+            <h2>{it.name}</h2>
+            <div className="text-xs text-muted">
               単価 ¥{formatNumber(price)} ・ 所持 {owned}
               {it.heals ? ` ・ メンタル+${it.heals}` : ""}
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between" style={{ margin: "10px 0" }}>
+        <div className="my-2.5 flex items-center justify-between">
           <span className="text-muted">所持金</span>
-          <span style={{ color: "var(--gold)" }}>¥{formatNumber(state.gold)}</span>
+          <span className="text-gold">¥{formatNumber(state.gold)}</span>
         </div>
 
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        <div className="flex flex-wrap gap-2">
           {QTYS.map((q) => (
             <button
               key={q}
@@ -146,7 +143,7 @@ function BuyModal({ id, onClose }: { id: string; onClose: () => void }) {
           )}
         </div>
 
-        <button style={{ width: "100%", marginTop: 16 }} onClick={onClose}>
+        <button className="mt-4 w-full" onClick={onClose}>
           閉じる
         </button>
       </div>
@@ -164,13 +161,12 @@ export function ShopView() {
         <Icon name="shop" size={22} /> ショップ
       </h2>
       <p className="mb-4 text-[13px] text-muted">
-        所持 <span style={{ color: "var(--gold)" }}>¥{formatNumber(state.gold)}</span>。
-        アイテムを選んで購入。
+        所持 <span className="text-gold">¥{formatNumber(state.gold)}</span>。 アイテムを選んで購入。
       </p>
 
       {SECTIONS.map((sec) => (
-        <div key={sec.title} style={{ marginBottom: 18 }}>
-          <h3 style={{ display: "flex", alignItems: "center", gap: 6, margin: "0 0 8px" }}>
+        <div key={sec.title} className="mb-[18px]">
+          <h3 className="mb-2 flex items-center gap-1.5">
             <Icon name={sec.icon} size={16} /> {sec.title}
           </h3>
           <div className="grid max-w-[600px] grid-cols-[repeat(auto-fill,minmax(64px,1fr))] gap-2">

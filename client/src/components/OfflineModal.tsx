@@ -20,7 +20,7 @@ export function OfflineModal() {
         </p>
 
         {summary.gold > 0 && (
-          <div className="flex items-center justify-between" style={{ margin: "8px 0" }}>
+          <div className="my-2 flex items-center justify-between">
             <span>給料</span>
             <span className="text-accent2">+¥{formatNumber(summary.gold)}</span>
           </div>
@@ -28,10 +28,10 @@ export function OfflineModal() {
 
         {xpEntries.length > 0 && (
           <>
-            <h3 style={{ marginBottom: 4 }}>経験値</h3>
+            <h3 className="mb-1">経験値</h3>
             {xpEntries.map(([id, v]) => (
               <div className="flex items-center justify-between" key={id}>
-                <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span className="flex items-center gap-1.5">
                   <Icon name={SKILL_MAP[id]?.icon} size={14} />
                   {SKILL_MAP[id]?.name ?? id}
                 </span>
@@ -43,14 +43,14 @@ export function OfflineModal() {
 
         {itemEntries.length > 0 && (
           <>
-            <h3 style={{ marginBottom: 4 }}>獲得アイテム</h3>
+            <h3 className="mb-1">獲得アイテム</h3>
             {itemEntries.map(([id, v]) => (
               <div className="flex items-center justify-between" key={id}>
-                <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span className="flex items-center gap-1.5">
                   <Icon name={ITEM_MAP[id]?.icon} size={14} />
                   {ITEM_MAP[id]?.name ?? id}
                 </span>
-                <span className={v > 0 ? "gain" : "loss"}>
+                <span className={v > 0 ? "text-accent2" : "text-danger"}>
                   {v > 0 ? "+" : ""}
                   {formatNumber(v)}
                 </span>
@@ -64,8 +64,7 @@ export function OfflineModal() {
         )}
 
         <button
-          className="border-accent bg-accent font-semibold text-[#06101f]"
-          style={{ width: "100%", marginTop: 16 }}
+          className="mt-4 w-full border-accent bg-accent font-semibold text-[#06101f]"
           onClick={dismiss}
         >
           受け取る

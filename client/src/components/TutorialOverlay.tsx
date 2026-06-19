@@ -19,34 +19,20 @@ export function TutorialOverlay() {
   const last = step === TUTORIAL_STEPS.length - 1;
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        left: "50%",
-        bottom: 18,
-        transform: "translateX(-50%)",
-        zIndex: 2000,
-        width: "min(540px, 94vw)",
-        background: "var(--panel, #161b22)",
-        border: "1.5px solid #6ee7a8",
-        borderRadius: 12,
-        boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
-        padding: "14px 16px",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+    <div className="fixed bottom-[18px] left-1/2 z-[2000] w-[min(540px,94vw)] -translate-x-1/2 rounded-xl border-[1.5px] border-accent2 bg-panel px-4 py-3.5 shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+      <div className="mb-1.5 flex items-center gap-2">
         <Icon name="roadmap" size={18} />
-        <strong style={{ fontSize: 15 }}>{sub(s.title)}</strong>
-        <span className="text-muted" style={{ marginLeft: "auto", fontSize: 12 }}>
+        <strong className="text-[15px]">{sub(s.title)}</strong>
+        <span className="ml-auto text-xs text-muted">
           {step + 1} / {TUTORIAL_STEPS.length}
         </span>
       </div>
-      <p style={{ margin: "0 0 12px", fontSize: 13.5, lineHeight: 1.6 }}>{sub(s.body)}</p>
-      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-        <button onClick={end} style={{ fontSize: 12 }}>
+      <p className="mb-3 text-[13.5px] leading-relaxed">{sub(s.body)}</p>
+      <div className="flex items-center gap-2">
+        <button onClick={end} className="text-xs">
           スキップ
         </button>
-        <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+        <div className="ml-auto flex gap-2">
           {step > 0 && <button onClick={() => setStep(step - 1)}>戻る</button>}
           <button
             className="border-accent bg-accent font-semibold text-[#06101f]"

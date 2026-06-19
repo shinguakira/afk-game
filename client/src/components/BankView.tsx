@@ -32,29 +32,24 @@ export function BankView() {
 
       {/* 選択中アイテムの詳細＆操作 */}
       {sel && (
-        <div
-          className="rounded-[10px] border border-border bg-panel2 p-3"
-          style={{ marginBottom: 14, maxWidth: 520 }}
-        >
+        <div className="mb-3.5 max-w-[520px] rounded-[10px] border border-border bg-panel2 p-3">
           <div className="flex items-center justify-between">
-            <strong style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <strong className="flex items-center gap-2">
               <Icon name={sel.icon} size={18} /> {sel.name}
-              <span className="text-muted" style={{ fontSize: 11 }}>
-                ×{formatNumber(selQty)}
-              </span>
+              <span className="text-[11px] text-muted">×{formatNumber(selQty)}</span>
             </strong>
             <span className="mr-1 my-0.5 inline-block rounded-md border border-border bg-panel px-1.5 py-px text-[11px]">
               {TYPE_LABEL[sel.type]}
             </span>
           </div>
-          <div className="text-muted" style={{ fontSize: 12, margin: "6px 0" }}>
+          <div className="my-1.5 text-xs text-muted">
             {sel.heals ? `メンタル回復 +${sel.heals} · ` : ""}
             {sel.equip?.weapon
               ? `実装+${sel.equip.weapon.strengthBonus} 精度+${sel.equip.weapon.attackBonus} · `
               : ""}
             売値 ¥{sel.sellPrice}
           </div>
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <div className="flex flex-wrap gap-1.5">
             {sel.equip && (
               <button
                 className="border-accent bg-accent font-semibold text-[#06101f]"

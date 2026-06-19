@@ -61,7 +61,7 @@ export function EquipView() {
 
       <div className="mt-2 grid max-w-[460px] gap-2.5 [grid-template-areas:'._hair_.'_'weapon_figure_body'_'bag_figure_pc'_'avatar_figure_food'] [grid-template-columns:84px_1fr_84px] [grid-template-rows:auto_repeat(3,84px)]">
         {/* 中央の人物 */}
-        <div className="flex items-center justify-center" style={{ gridArea: "figure" }}>
+        <div className="flex items-center justify-center [grid-area:figure]">
           <svg width="120" height="180" viewBox="0 0 60 90">
             <circle cx="30" cy="16" r="11" fill="#3a4554" stroke="#5a6a7a" strokeWidth="1.5" />
             <path
@@ -113,8 +113,7 @@ export function EquipView() {
             </h2>
 
             <button
-              className="mb-1 flex w-full items-center gap-2.5 border border-transparent px-3 py-2 text-left hover:bg-panel2"
-              style={{ width: "100%", marginBottom: 8 }}
+              className="mb-2 flex w-full items-center gap-2.5 border border-transparent px-3 py-2 text-left hover:bg-panel2"
               onClick={() => {
                 doUnequip(picking);
                 setPicking(null);
@@ -123,17 +122,9 @@ export function EquipView() {
               <Icon name="stop" size={14} /> 外す
             </button>
 
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 6,
-                maxHeight: 320,
-                overflowY: "auto",
-              }}
-            >
+            <div className="flex max-h-80 flex-col gap-1.5 overflow-y-auto">
               {optionsFor(picking).length === 0 && (
-                <span className="text-muted" style={{ fontSize: 13 }}>
+                <span className="text-[13px] text-muted">
                   所持しているアイテムがありません（ショップ/制作で入手）。
                 </span>
               )}
@@ -147,17 +138,15 @@ export function EquipView() {
                   }}
                 >
                   <Icon name={it.icon} size={20} />
-                  <span style={{ flex: 1, textAlign: "left" }}>
+                  <span className="flex-1 text-left">
                     {it.name} <span className="text-muted">×{state.bank[it.id]}</span>
                   </span>
-                  <span className="text-muted" style={{ fontSize: 11 }}>
-                    {bonusText(it.id)}
-                  </span>
+                  <span className="text-[11px] text-muted">{bonusText(it.id)}</span>
                 </button>
               ))}
             </div>
 
-            <button style={{ width: "100%", marginTop: 14 }} onClick={() => setPicking(null)}>
+            <button className="mt-3.5 w-full" onClick={() => setPicking(null)}>
               閉じる
             </button>
           </div>

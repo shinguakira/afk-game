@@ -44,21 +44,11 @@ function CropPicker({
       onClick={onClose}
     >
       <div
-        className="w-[min(440px,92vw)] rounded-[14px] border border-border bg-panel p-6"
+        className="w-[min(580px,94vw)] rounded-[14px] border border-border bg-panel p-6"
         onClick={(e) => e.stopPropagation()}
-        style={{ width: "min(580px, 94vw)" }}
       >
-        <h2 style={{ margin: "0 0 10px", fontSize: 18 }}>植える作物</h2>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(116px, 1fr))",
-            gap: 8,
-            maxHeight: "58vh",
-            overflowY: "auto",
-            paddingRight: 4,
-          }}
-        >
+        <h2 className="mb-2.5">植える作物</h2>
+        <div className="grid max-h-[58vh] grid-cols-[repeat(auto-fill,minmax(116px,1fr))] gap-2 overflow-y-auto pr-1">
           {rows.map(({ c, owned, lockedLv, noSeed, plantable }) => {
             const it = ITEM_MAP[c.id];
             return (
@@ -69,42 +59,27 @@ function CropPicker({
                   plant(plotIndex, c.id);
                   onClose();
                 }}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 3,
-                  padding: "10px 6px 8px",
-                  background: "var(--panel, #1b2129)",
-                  border: `1px solid ${plantable ? "var(--border, #2a323c)" : "transparent"}`,
-                  borderRadius: 8,
-                  opacity: plantable ? 1 : 0.5,
-                  cursor: plantable ? "pointer" : "not-allowed",
-                }}
+                className="flex flex-col items-center gap-[3px] rounded-lg border border-border bg-panel px-1.5 pt-2.5 pb-2"
               >
                 <Icon name={it?.icon} size={34} />
-                <div style={{ fontWeight: 600, fontSize: 12.5, textAlign: "center" }}>
-                  {it?.name}
-                </div>
-                <div className="text-muted" style={{ fontSize: 11 }}>
+                <div className="text-center text-[12.5px] font-semibold">{it?.name}</div>
+                <div className="text-[11px] text-muted">
                   {fmtTime(c.growMs)} ・ ×{c.yield}
                 </div>
-                <div style={{ fontSize: 11, fontWeight: 600 }}>
+                <div className="text-[11px] font-semibold">
                   {lockedLv ? (
-                    <span style={{ color: "var(--danger, #e05656)" }}>Lv {c.level} 必要</span>
+                    <span className="text-danger">Lv {c.level} 必要</span>
                   ) : !c.seed ? (
-                    <span style={{ color: "#6ee7a8" }}>種不要</span>
+                    <span className="text-accent2">種不要</span>
                   ) : (
-                    <span style={{ color: noSeed ? "var(--danger, #e05656)" : "var(--muted)" }}>
-                      種 {owned}
-                    </span>
+                    <span className={noSeed ? "text-danger" : "text-muted"}>種 {owned}</span>
                   )}
                 </div>
               </button>
             );
           })}
         </div>
-        <button style={{ width: "100%", marginTop: 14 }} onClick={onClose}>
+        <button className="mt-3.5 w-full" onClick={onClose}>
           閉じる
         </button>
       </div>
@@ -132,7 +107,7 @@ export function FarmingView() {
         <strong>手入れ（能動）</strong>で farming 経験値が入り、手入れ中は全畑の成長が加速。
       </p>
 
-      <div style={{ maxWidth: 420, marginBottom: 18 }}>
+      <div className="mb-[18px] max-w-[420px]">
         <Bar
           kind="xp"
           value={levelProgress(xp)}
@@ -145,7 +120,7 @@ export function FarmingView() {
         />
       </div>
 
-      <h3 style={{ display: "flex", alignItems: "center", gap: 6, margin: "0 0 10px" }}>
+      <h3 className="mb-2.5 flex items-center gap-1.5">
         <Icon name="farming" size={16} /> 畑
         {tending && (
           <span className="mr-1 my-0.5 inline-block rounded-md border border-border bg-panel px-1.5 py-px text-[11px]">
@@ -153,18 +128,14 @@ export function FarmingView() {
           </span>
         )}
       </h3>
-      <div
-        className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3"
-        style={{ marginBottom: 22 }}
-      >
+      <div className="mb-[22px] grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
         {state.plots.map((p, i) => {
           if (!p.crop) {
             return (
               <div key={i} className="rounded-[10px] border border-border bg-panel2 p-3">
-                <h3 style={{ color: "var(--muted)" }}>空き畑</h3>
+                <h3 className="text-muted">空き畑</h3>
                 <button
-                  className="border-accent bg-accent font-semibold text-[#06101f]"
-                  style={{ width: "100%", marginTop: 8 }}
+                  className="mt-2 w-full border-accent bg-accent font-semibold text-[#06101f]"
                   onClick={() => setPlanting(i)}
                 >
                   植える
@@ -180,7 +151,7 @@ export function FarmingView() {
               key={i}
               className={`rounded-[10px] border bg-panel2 p-3 ${ready ? "border-accent2" : "border-border"}`}
             >
-              <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <h3 className="flex items-center gap-1.5">
                 <Icon name={it?.icon} size={18} /> {it?.name}
               </h3>
               <div className="mb-2 text-xs text-muted">
@@ -190,14 +161,13 @@ export function FarmingView() {
               <Bar kind="xp" value={Math.min(1, p.growth / spec.growMs)} />
               {ready ? (
                 <button
-                  className="border-accent bg-accent font-semibold text-[#06101f]"
-                  style={{ width: "100%", marginTop: 8 }}
+                  className="mt-2 w-full border-accent bg-accent font-semibold text-[#06101f]"
                   onClick={() => state.harvestPlot(i)}
                 >
                   収穫
                 </button>
               ) : (
-                <button style={{ width: "100%", marginTop: 8 }} disabled>
+                <button className="mt-2 w-full" disabled>
                   生育中…
                 </button>
               )}
@@ -206,7 +176,7 @@ export function FarmingView() {
         })}
       </div>
 
-      <h3 style={{ display: "flex", alignItems: "center", gap: 6, margin: "0 0 10px" }}>
+      <h3 className="mb-2.5 flex items-center gap-1.5">
         <Icon name="till" size={16} /> 手入れ（能動・経験値＋成長加速）
       </h3>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
@@ -218,19 +188,18 @@ export function FarmingView() {
               key={a.id}
               className={`rounded-[10px] border bg-panel2 p-3 ${!unlocked ? "opacity-50" : ""} ${isActive ? "border-accent2" : "border-border"}`}
             >
-              <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <h3 className="flex items-center gap-1.5">
                 <Icon name={a.icon} size={16} /> {a.name}
               </h3>
               <div className="mb-2 text-xs text-muted">
-                {!unlocked && <span style={{ color: "var(--danger)" }}>Lv {a.level} 必要 · </span>}
+                {!unlocked && <span className="text-danger">Lv {a.level} 必要 · </span>}
                 {(a.time / 1000).toFixed(1)}s · {a.xp} xp
               </div>
               {isActive ? (
                 <>
                   <TimerBar periodMs={a.time} running />
                   <button
-                    className="border-danger text-danger"
-                    style={{ width: "100%", marginTop: 8 }}
+                    className="mt-2 w-full border-danger text-danger"
                     onClick={() => state.stop()}
                   >
                     中断
@@ -238,8 +207,7 @@ export function FarmingView() {
                 </>
               ) : (
                 <button
-                  className="border-accent bg-accent font-semibold text-[#06101f]"
-                  style={{ width: "100%", marginTop: 8 }}
+                  className="mt-2 w-full border-accent bg-accent font-semibold text-[#06101f]"
                   disabled={!unlocked}
                   onClick={() => state.startAction(a.id)}
                 >

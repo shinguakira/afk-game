@@ -58,7 +58,7 @@ export function SkillView({ skillId }: { skillId: string }) {
       <h2 className="mb-1 flex items-center gap-2 text-lg">
         <Icon name={skill.icon} size={22} /> {skill.name}
         {skill.tech && (
-          <span className="text-muted" style={{ fontSize: 13, marginLeft: 8 }}>
+          <span className="ml-2 text-[13px] text-muted">
             {skill.tech === "language" ? "言語" : "フレームワーク"}
           </span>
         )}
@@ -68,20 +68,13 @@ export function SkillView({ skillId }: { skillId: string }) {
             target="_blank"
             rel="noopener noreferrer"
             title="公式サイトを開く"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 3,
-              marginLeft: 8,
-              fontSize: 12,
-              textDecoration: "none",
-            }}
+            className="ml-2 inline-flex items-center gap-[3px] text-xs no-underline"
           >
             <Icon name="extlink" size={14} /> 公式
           </a>
         )}
       </h2>
-      <div style={{ maxWidth: 420, marginBottom: 20 }}>
+      <div className="mb-5 max-w-[420px]">
         <Bar
           kind="xp"
           value={levelProgress(xp)}
@@ -95,9 +88,9 @@ export function SkillView({ skillId }: { skillId: string }) {
       </div>
 
       {CATEGORY_ORDER.filter((c) => byCat.has(c)).map((cat) => (
-        <div key={cat} style={{ marginBottom: 18 }}>
+        <div key={cat} className="mb-[18px]">
           {isLang && (
-            <h3 style={{ display: "flex", alignItems: "center", gap: 6, margin: "0 0 10px" }}>
+            <h3 className="mb-2.5 flex items-center gap-1.5">
               <Icon name={CATEGORY_ICON[cat]} size={16} /> {CATEGORY_LABEL[cat]}
             </h3>
           )}
@@ -114,7 +107,7 @@ export function SkillView({ skillId }: { skillId: string }) {
                   key={a.id}
                   className={`rounded-[10px] border bg-panel2 p-3 ${!unlocked ? "opacity-50" : ""} ${isActive ? "border-accent2" : "border-border"}`}
                 >
-                  <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <h3 className="flex items-center gap-1.5">
                     <Icon name={a.icon} size={16} /> {a.name}
                     {a.url && (
                       <a
@@ -123,22 +116,17 @@ export function SkillView({ skillId }: { skillId: string }) {
                         rel="noopener noreferrer"
                         title="公式サイトを開く"
                         onClick={(e) => e.stopPropagation()}
-                        style={{ display: "inline-flex", marginLeft: "auto" }}
+                        className="ml-auto inline-flex"
                       >
                         <Icon name="extlink" size={14} />
                       </a>
                     )}
                   </h3>
                   <div className="mb-2 text-xs text-muted">
-                    {!unlocked && (
-                      <span style={{ color: "var(--danger)" }}>Lv {a.level} 必要 · </span>
-                    )}
+                    {!unlocked && <span className="text-danger">Lv {a.level} 必要 · </span>}
                     {(a.time / 1000).toFixed(1)}s · {Math.round(a.xp)} xp
                     {a.xpAlso && SKILL_MAP[a.xpAlso.skill] && (
-                      <span
-                        className="mr-1 my-0.5 inline-block rounded-md border border-border bg-panel px-1.5 py-px text-[11px]"
-                        style={{ marginLeft: 6 }}
-                      >
+                      <span className="mr-1 my-0.5 ml-1.5 inline-block rounded-md border border-border bg-panel px-1.5 py-px text-[11px]">
                         <Icon name={SKILL_MAP[a.xpAlso.skill].icon} size={11} />{" "}
                         {SKILL_MAP[a.xpAlso.skill].name} +{Math.round(a.xpAlso.xp)}
                       </span>
@@ -163,8 +151,7 @@ export function SkillView({ skillId }: { skillId: string }) {
                     <>
                       <TimerBar periodMs={a.time} running />
                       <button
-                        style={{ marginTop: 8, width: "100%" }}
-                        className="border-danger text-danger"
+                        className="mt-2 w-full border-danger text-danger"
                         onClick={() => state.stop()}
                       >
                         中断
@@ -172,8 +159,7 @@ export function SkillView({ skillId }: { skillId: string }) {
                     </>
                   ) : (
                     <button
-                      className="border-accent bg-accent font-semibold text-[#06101f]"
-                      style={{ width: "100%" }}
+                      className="w-full border-accent bg-accent font-semibold text-[#06101f]"
                       disabled={!unlocked || !canCraft}
                       onClick={() => state.startAction(a.id)}
                     >
