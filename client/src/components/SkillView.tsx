@@ -1,11 +1,11 @@
-import { useGame } from "../store";
-import { ACTIONS_BY_SKILL, ITEM_MAP, SKILL_MAP } from "../constants/maps";
-import type { ActionCategory, GameAction } from "../types/skills";
-import { levelForXp, levelProgress, MAX_LEVEL, xpForLevel } from "../lib/xp";
-import { formatNumber } from "../lib/format";
-import { Bar } from "./Bar";
-import { TimerBar } from "./TimerBar";
-import { Icon } from "./icons";
+import { useGame } from "@/store";
+import { ACTIONS_BY_SKILL, ITEM_MAP, SKILL_MAP } from "@/constants/maps";
+import type { ActionCategory, GameAction } from "@/types/skills";
+import { levelForXp, levelProgress, MAX_LEVEL, xpForLevel } from "@/lib/xp";
+import { formatNumber } from "@/lib/format";
+import { Bar } from "@/components/Bar";
+import { TimerBar } from "@/components/TimerBar";
+import { Icon } from "@/components/icons";
 
 const CATEGORY_ORDER: ActionCategory[] = ["base", "concept", "library", "framework", "oss", "cert"];
 const CATEGORY_LABEL: Record<ActionCategory, string> = {

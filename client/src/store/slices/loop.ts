@@ -1,8 +1,8 @@
 import type { StateCreator } from "zustand";
-import type { GameStore, LoopSlice } from "../types";
-import { ACTION_MAP, MONSTER_MAP } from "../../constants/maps";
-import { getCombatStats } from "../../lib/combat";
-import { advancePlots, runCombatTick, runSkillTick } from "../../lib/tick";
+import type { GameStore, LoopSlice } from "@/store/types";
+import { ACTION_MAP, MONSTER_MAP } from "@/constants/maps";
+import { getCombatStats } from "@/lib/combat";
+import { advancePlots, runCombatTick, runSkillTick } from "@/lib/tick";
 
 export const createLoopSlice: StateCreator<GameStore, [], [], LoopSlice> = (set, get) => ({
   enemyHp: 0,

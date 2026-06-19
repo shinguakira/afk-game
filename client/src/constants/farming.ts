@@ -1,4 +1,4 @@
-import type { GameAction } from "../types/skills";
+import type { GameAction } from "@/types/skills";
 
 // 農業は2層:
 //  - 作物 = 放置成長。畑(plot)に植えると経過時間で育ち、収穫すると作物アイテム＋farming XP。

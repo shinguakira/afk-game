@@ -1,7 +1,7 @@
 // Generic modifier system. Job classes (and later 資格/施設/転生) emit Modifiers;
 // the engine resolves them into multipliers applied at computation sites.
 // 型は types/effects.ts。ここは集計/合成ロジックと表示ラベル。
-import type { EffectKey, Effects, Modifier } from "../types/effects";
+import type { EffectKey, Effects, Modifier } from "@/types/effects";
 
 /**
  * Sum percentages per key, then turn into a multiplier (1 + sum/100).

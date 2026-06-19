@@ -1,13 +1,13 @@
 import type { StateCreator } from "zustand";
-import type { GameStore, LifecycleSlice } from "../types";
-import type { OfflineSummary } from "../../types/offline";
-import { SKILLS } from "../../constants/skills";
-import { PLOT_COUNT } from "../../constants/farming";
-import { simulateOffline } from "../../lib/progression";
-import { deleteSave, flushSaveOnUnload, loadSave, writeSave } from "../../lib/persistence";
-import { migrateSave } from "../../lib/migrate";
-import { MAX_OFFLINE_MS, SAVE_EVERY_MS, SAVE_VERSION, TICK_MS } from "../../constants/config";
-import { makeStartingState, pickSaveState } from "../state";
+import type { GameStore, LifecycleSlice } from "@/store/types";
+import type { OfflineSummary } from "@/types/offline";
+import { SKILLS } from "@/constants/skills";
+import { PLOT_COUNT } from "@/constants/farming";
+import { simulateOffline } from "@/lib/progression";
+import { deleteSave, flushSaveOnUnload, loadSave, writeSave } from "@/lib/persistence";
+import { migrateSave } from "@/lib/migrate";
+import { MAX_OFFLINE_MS, SAVE_EVERY_MS, SAVE_VERSION, TICK_MS } from "@/constants/config";
+import { makeStartingState, pickSaveState } from "@/store/state";
 
 /** Guards against React StrictMode invoking init() (and its timers) twice in dev. */
 let loopStarted = false;

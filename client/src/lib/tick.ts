@@ -1,17 +1,17 @@
 // ゲームループの1tick処理: 生産/制作(runSkillTick)・戦闘(runCombatTick)・農業の放置成長
 // (advancePlots)。store から分離。set/get 経由で store 状態を更新する。
-import type { GameStore } from "../store/types";
-import { ACTION_MAP, ITEM_MAP, MONSTER_MAP, SKILL_MAP } from "../constants/maps";
-import { COMBAT_STAT_IDS } from "../constants/skills";
-import { FARM_CROP_MAP } from "../constants/farming";
-import { getEffects } from "./effects";
-import { mult } from "./modifiers";
-import { levelForXp } from "./xp";
-import { enemyHitChance, getCombatStats, playerHitChance } from "./combat";
-import { grantCombatXp } from "./progression";
-import { actionTiming, plotGrowthRate } from "./timing";
-import { randInt } from "./util";
-import { LOG_LIMIT } from "../constants/config";
+import type { GameStore } from "@/store/types";
+import { ACTION_MAP, ITEM_MAP, MONSTER_MAP, SKILL_MAP } from "@/constants/maps";
+import { COMBAT_STAT_IDS } from "@/constants/skills";
+import { FARM_CROP_MAP } from "@/constants/farming";
+import { getEffects } from "@/lib/effects";
+import { mult } from "@/lib/modifiers";
+import { levelForXp } from "@/lib/xp";
+import { enemyHitChance, getCombatStats, playerHitChance } from "@/lib/combat";
+import { grantCombatXp } from "@/lib/progression";
+import { actionTiming, plotGrowthRate } from "@/lib/timing";
+import { randInt } from "@/lib/util";
+import { LOG_LIMIT } from "@/constants/config";
 
 export type SetFn = (partial: Partial<GameStore>) => void;
 export type GetFn = () => GameStore;

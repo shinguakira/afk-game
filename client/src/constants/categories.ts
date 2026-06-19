@@ -1,4 +1,4 @@
-import type { SkillCategory } from "../types/skills";
+import type { SkillCategory } from "@/types/skills";
 
 export interface SkillCategoryDef {
   id: SkillCategory;

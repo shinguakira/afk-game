@@ -1,16 +1,16 @@
 // id→定義の O(1) ルックアップマップ等（コンテンツ配列から計算する派生値）。バレルではない。
-import type { GameAction, Skill } from "../types/skills";
-import type { Item } from "../types/items";
-import type { Monster } from "../types/monsters";
-import type { JobClass } from "./classes";
-import type { PrestigeUpgrade } from "./prestige";
-import { ITEMS } from "./items";
-import { SKILLS } from "./skills";
-import { ACTIONS } from "./actions";
-import { MONSTERS } from "./monsters";
-import { CLASSES } from "./classes";
-import { CATEGORIES } from "./categories";
-import { PRESTIGE_UPGRADES } from "./prestige";
+import type { GameAction, Skill } from "@/types/skills";
+import type { Item } from "@/types/items";
+import type { Monster } from "@/types/monsters";
+import type { JobClass } from "@/constants/classes";
+import type { PrestigeUpgrade } from "@/constants/prestige";
+import { ITEMS } from "@/constants/items";
+import { SKILLS } from "@/constants/skills";
+import { ACTIONS } from "@/constants/actions";
+import { MONSTERS } from "@/constants/monsters";
+import { CLASSES } from "@/constants/classes";
+import { CATEGORIES } from "@/constants/categories";
+import { PRESTIGE_UPGRADES } from "@/constants/prestige";
 
 /** 制作(craft)判定: 入力を消費するアクションは制作扱い（フレームワーク/料理/PC組み立て）。
  *  それ以外（言語の基礎/概念/ライブラリ/OSS/資格）は生産(gather)。職種等の補正分岐に使う。 */

@@ -1,4 +1,4 @@
-import type { Item } from "../types/items";
+import type { Item } from "@/types/items";
 
 export const ITEMS: Item[] = [
   // ===== 資源 =====

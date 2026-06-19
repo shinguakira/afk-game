@@ -1,6 +1,6 @@
 import type { IconType } from "react-icons";
-import { ITEM_ICONS } from "./itemIcons";
-import { BRAND_COLOR } from "./brandColors";
+import { ITEM_ICONS } from "@/components/itemIcons";
+import { BRAND_COLOR } from "@/components/brandColors";
 import {
   SiJavascript,
   SiTypescript,

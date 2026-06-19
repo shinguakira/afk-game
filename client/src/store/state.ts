@@ -1,15 +1,15 @@
 // 永続セーブ状態のファクトリ。新規開始状態の生成と、現在ストアからの SaveState 抽出。
-import type { SaveState } from "../types/save";
-import { SKILLS, STARTING_MENTAL_LEVEL, STAT } from "../constants/skills";
-import { PLOT_COUNT } from "../constants/farming";
-import { xpForLevel } from "../lib/xp";
+import type { SaveState } from "@/types/save";
+import { SKILLS, STARTING_MENTAL_LEVEL, STAT } from "@/constants/skills";
+import { PLOT_COUNT } from "@/constants/farming";
+import { xpForLevel } from "@/lib/xp";
 import {
   HP_PER_MENTAL_LEVEL,
   SAVE_VERSION,
   STARTING_BANK,
   STARTING_GOLD,
-} from "../constants/config";
-import type { GameStore } from "./types";
+} from "@/constants/config";
+import type { GameStore } from "@/store/types";
 
 export function makeStartingState(): SaveState {
   const skills: SaveState["skills"] = {};

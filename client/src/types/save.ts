@@ -7,7 +7,7 @@
 // マイグレーションが書きやすいよう、永続フィールドはこのファイルに閉じておく
 // （実行時/UIの一時状態や OfflineSummary などの非永続DTOは混ぜない）。
 // ============================================================================
-import type { EquipSlot } from "./items";
+import type { EquipSlot } from "@/types/items";
 
 /** 進行中の作業。null=待機。 */
 export type ActiveAction =

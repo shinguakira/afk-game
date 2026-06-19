@@ -1,16 +1,16 @@
 import { create } from "zustand";
-import type { GameStore } from "./types";
-import { makeStartingState } from "./state";
-import { createFeedbackSlice } from "./slices/feedback";
-import { createLifecycleSlice } from "./slices/lifecycle";
-import { createOnboardingSlice } from "./slices/onboarding";
-import { createLoopSlice } from "./slices/loop";
-import { createEconomySlice } from "./slices/economy";
-import { createCareerSlice } from "./slices/career";
-import { createFarmingSlice } from "./slices/farming";
+import type { GameStore } from "@/store/types";
+import { makeStartingState } from "@/store/state";
+import { createFeedbackSlice } from "@/store/slices/feedback";
+import { createLifecycleSlice } from "@/store/slices/lifecycle";
+import { createOnboardingSlice } from "@/store/slices/onboarding";
+import { createLoopSlice } from "@/store/slices/loop";
+import { createEconomySlice } from "@/store/slices/economy";
+import { createCareerSlice } from "@/store/slices/career";
+import { createFarmingSlice } from "@/store/slices/farming";
 
-export { shopPrice } from "../lib/economy";
-export type { GameStore } from "./types";
+export { shopPrice } from "@/lib/economy";
+export type { GameStore } from "@/store/types";
 
 export const useGame = create<GameStore>((set, get, api) => ({
   ...makeStartingState(),

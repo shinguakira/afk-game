@@ -1,4 +1,4 @@
-import type { Modifier } from "./effects";
+import type { Modifier } from "@/types/effects";
 
 export type ItemType = "resource" | "product" | "weapon" | "food" | "misc";
 

@@ -1,8 +1,8 @@
 import type { StateCreator } from "zustand";
-import type { GameStore, OnboardingSlice } from "../types";
-import { TUTORIAL_STEPS } from "../../constants/tutorial";
-import { xpForLevel } from "../../lib/xp";
-import { ONBOARD_INTEREST_LEVEL, ONBOARD_MAIN_LEVEL } from "../../constants/config";
+import type { GameStore, OnboardingSlice } from "@/store/types";
+import { TUTORIAL_STEPS } from "@/constants/tutorial";
+import { xpForLevel } from "@/lib/xp";
+import { ONBOARD_INTEREST_LEVEL, ONBOARD_MAIN_LEVEL } from "@/constants/config";
 
 export const createOnboardingSlice: StateCreator<GameStore, [], [], OnboardingSlice> = (
   set,

@@ -1,9 +1,9 @@
 // store の型定義。永続セーブ(SaveState)に責務別スライスを合成して GameStore を作る。
 // 各スライスは「自分の transient state + actions」を 1 インターフェースで宣言する。
-import type { EquipSlot } from "../types/items";
-import type { SaveState } from "../types/save";
-import type { OfflineSummary } from "../types/offline";
-import type { Toast, XpFlash } from "../types/ui";
+import type { EquipSlot } from "@/types/items";
+import type { SaveState } from "@/types/save";
+import type { OfflineSummary } from "@/types/offline";
+import type { Toast, XpFlash } from "@/types/ui";
 
 /** ログ/トースト/XPフラッシュ/おかえりモーダル等の UI フィードバック。 */
 export interface FeedbackSlice {

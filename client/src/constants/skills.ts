@@ -1,6 +1,11 @@
-import type { Skill } from "../types/skills";
-import { buildLangSkills } from "./techtree";
-import { INFRA_SKILLS, PLATFORM_SKILLS, DOMAIN_SKILLS, ELECTRONICS_SKILL } from "./sectors";
+import type { Skill } from "@/types/skills";
+import { buildLangSkills } from "@/constants/techtree";
+import {
+  INFRA_SKILLS,
+  PLATFORM_SKILLS,
+  DOMAIN_SKILLS,
+  ELECTRONICS_SKILL,
+} from "@/constants/sectors";
 
 export const SKILLS: Skill[] = [
   // 言語（techtree から生成）

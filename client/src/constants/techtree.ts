@@ -1,5 +1,5 @@
-import type { GameAction, Skill } from "../types/skills";
-import { LANG_URLS, TECH_URLS, CERT_URLS } from "./links";
+import type { GameAction, Skill } from "@/types/skills";
+import { LANG_URLS, TECH_URLS, CERT_URLS } from "@/constants/links";
 
 // 言語ごとの「傘下」コンテンツ。フレームワーク・ライブラリ・概念は
 // すべてその言語スキルのアクション(パターン)として生成される。

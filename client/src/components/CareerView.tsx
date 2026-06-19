@@ -1,9 +1,9 @@
-import { useGame } from "../store";
-import { CLASSES } from "../constants/classes";
-import { currentRank, nextRank, totalLevel, RANKS } from "../lib/rank";
-import { EFFECT_LABEL } from "../lib/modifiers";
-import { Bar } from "./Bar";
-import { Icon } from "./icons";
+import { useGame } from "@/store";
+import { CLASSES } from "@/constants/classes";
+import { currentRank, nextRank, totalLevel, RANKS } from "@/lib/rank";
+import { EFFECT_LABEL } from "@/lib/modifiers";
+import { Bar } from "@/components/Bar";
+import { Icon } from "@/components/icons";
 
 export function CareerView() {
   const state = useGame();

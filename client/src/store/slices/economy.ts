@@ -1,7 +1,7 @@
 import type { StateCreator } from "zustand";
-import type { GameStore, EconomySlice } from "../types";
-import { ITEM_MAP } from "../../constants/maps";
-import { shopPrice } from "../../lib/economy";
+import type { GameStore, EconomySlice } from "@/store/types";
+import { ITEM_MAP } from "@/constants/maps";
+import { shopPrice } from "@/lib/economy";
 
 export const createEconomySlice: StateCreator<GameStore, [], [], EconomySlice> = (set, get) => ({
   equip: (itemId) => {

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useGame, shopPrice } from "../store";
-import { ITEM_MAP } from "../constants/maps";
-import { formatNumber } from "../lib/format";
-import { Icon } from "./icons";
+import { useGame, shopPrice } from "@/store";
+import { ITEM_MAP } from "@/constants/maps";
+import { formatNumber } from "@/lib/format";
+import { Icon } from "@/components/icons";
 
 const SECTIONS: { title: string; icon: string; items: string[] }[] = [
   {

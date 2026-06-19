@@ -1,4 +1,4 @@
-import type { Modifier } from "../types/effects";
+import type { Modifier } from "@/types/effects";
 
 export interface JobClass {
   id: string;

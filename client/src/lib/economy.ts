@@ -1,4 +1,4 @@
-import { SHOP_MARKUP } from "../constants/config";
+import { SHOP_MARKUP } from "@/constants/config";
 
 /** ショップの購入価格（売値にマークアップ）。 */
 export function shopPrice(sellPrice: number): number {

@@ -1,10 +1,10 @@
-import { useGame } from "../store";
-import { getCombatStats } from "../lib/combat";
-import { ACTION_MAP, MONSTER_MAP } from "../constants/maps";
-import { currentRank } from "../lib/rank";
-import { formatNumber } from "../lib/format";
-import { Bar } from "./Bar";
-import { Icon } from "./icons";
+import { useGame } from "@/store";
+import { getCombatStats } from "@/lib/combat";
+import { ACTION_MAP, MONSTER_MAP } from "@/constants/maps";
+import { currentRank } from "@/lib/rank";
+import { formatNumber } from "@/lib/format";
+import { Bar } from "@/components/Bar";
+import { Icon } from "@/components/icons";
 
 export function TopBar() {
   const state = useGame();

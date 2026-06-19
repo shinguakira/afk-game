@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useGame } from "../store";
-import { ACTIONS_BY_SKILL, ITEM_MAP } from "../constants/maps";
-import { FARM_CROPS, FARM_CROP_MAP } from "../constants/farming";
-import { levelForXp, levelProgress, MAX_LEVEL, xpForLevel } from "../lib/xp";
-import { formatNumber } from "../lib/format";
-import { Bar } from "./Bar";
-import { TimerBar } from "./TimerBar";
-import { Icon } from "./icons";
+import { useGame } from "@/store";
+import { ACTIONS_BY_SKILL, ITEM_MAP } from "@/constants/maps";
+import { FARM_CROPS, FARM_CROP_MAP } from "@/constants/farming";
+import { levelForXp, levelProgress, MAX_LEVEL, xpForLevel } from "@/lib/xp";
+import { formatNumber } from "@/lib/format";
+import { Bar } from "@/components/Bar";
+import { TimerBar } from "@/components/TimerBar";
+import { Icon } from "@/components/icons";
 
 function fmtTime(ms: number): string {
   const sec = Math.ceil(ms / 1000);

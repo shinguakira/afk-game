@@ -1,6 +1,6 @@
 import type { StateCreator } from "zustand";
-import type { FeedbackSlice, GameStore } from "../types";
-import { LOG_LIMIT, TOAST_MS, XP_FLASH_MS } from "../../constants/config";
+import type { FeedbackSlice, GameStore } from "@/store/types";
+import { LOG_LIMIT, TOAST_MS, XP_FLASH_MS } from "@/constants/config";
 
 let toastSeq = 0;
 let xpFlashTimer: number | undefined;

@@ -1,8 +1,8 @@
 import type { StateCreator } from "zustand";
-import type { GameStore, FarmingSlice } from "../types";
-import { FARM_CROP_MAP } from "../../constants/farming";
-import { levelForXp } from "../../lib/xp";
-import { toastLevelUp } from "../../lib/tick";
+import type { GameStore, FarmingSlice } from "@/store/types";
+import { FARM_CROP_MAP } from "@/constants/farming";
+import { levelForXp } from "@/lib/xp";
+import { toastLevelUp } from "@/lib/tick";
 
 export const createFarmingSlice: StateCreator<GameStore, [], [], FarmingSlice> = (set, get) => ({
   plantCrop: (plotIndex, cropId) => {

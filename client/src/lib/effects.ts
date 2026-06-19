@@ -1,7 +1,7 @@
-import type { SaveState } from "../types/save";
-import { CLASS_MAP, ITEM_MAP, PRESTIGE_MAP } from "../constants/maps";
-import { resolveModifiers } from "./modifiers";
-import type { Effects, Modifier } from "../types/effects";
+import type { SaveState } from "@/types/save";
+import { CLASS_MAP, ITEM_MAP, PRESTIGE_MAP } from "@/constants/maps";
+import { resolveModifiers } from "@/lib/modifiers";
+import type { Effects, Modifier } from "@/types/effects";
 
 /**
  * Collect every active Modifier affecting the player:

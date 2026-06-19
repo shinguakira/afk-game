@@ -1,9 +1,9 @@
 import type { StateCreator } from "zustand";
-import type { GameStore, CareerSlice } from "../types";
-import { CLASS_MAP, PRESTIGE_MAP } from "../../constants/maps";
-import { MILESTONES } from "../../lib/roadmap";
-import { prestigeGain } from "../../lib/prestige";
-import { makeStartingState } from "../state";
+import type { GameStore, CareerSlice } from "@/store/types";
+import { CLASS_MAP, PRESTIGE_MAP } from "@/constants/maps";
+import { MILESTONES } from "@/lib/roadmap";
+import { prestigeGain } from "@/lib/prestige";
+import { makeStartingState } from "@/store/state";
 
 export const createCareerSlice: StateCreator<GameStore, [], [], CareerSlice> = (set, get) => ({
   setClass: (classId) => {

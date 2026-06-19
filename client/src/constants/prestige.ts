@@ -1,4 +1,4 @@
-import type { Modifier } from "../types/effects";
+import type { Modifier } from "@/types/effects";
 
 // 起業(プレステージ)で貯まる「ストック」で買う永続強化。リセットしても残る。
 export interface PrestigeUpgrade {

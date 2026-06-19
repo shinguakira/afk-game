@@ -1,4 +1,4 @@
-import type { SaveState } from "../types/save";
+import type { SaveState } from "@/types/save";
 
 const SLOT = "default";
 const BASE = `/api/save/${SLOT}`;

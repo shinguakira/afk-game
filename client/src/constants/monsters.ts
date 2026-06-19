@@ -1,4 +1,4 @@
-import type { Monster } from "../types/monsters";
+import type { Monster } from "@/types/monsters";
 
 // 無所属(フリーランス)で受けられる単発案件。会社固有の「課長(上司)」「新人教育」等は
 // 会社所属でないと存在しないので入れない（会社ダンジョンは所属実装後）。

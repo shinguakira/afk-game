@@ -1,10 +1,10 @@
-import type { Monster } from "../types/monsters";
-import type { SaveState } from "../types/save";
-import { ITEM_MAP } from "../constants/maps";
-import { STAT } from "../constants/skills";
-import { levelForXp } from "./xp";
-import { getEffects } from "./effects";
-import { mult } from "./modifiers";
+import type { Monster } from "@/types/monsters";
+import type { SaveState } from "@/types/save";
+import { ITEM_MAP } from "@/constants/maps";
+import { STAT } from "@/constants/skills";
+import { levelForXp } from "@/lib/xp";
+import { getEffects } from "@/lib/effects";
+import { mult } from "@/lib/modifiers";
 
 export interface CombatStats {
   attackLevel: number;

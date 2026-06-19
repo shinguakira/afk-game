@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useGame } from "../store";
-import { ITEMS } from "../constants/items";
-import { ITEM_MAP } from "../constants/maps";
-import type { EquipSlot } from "../types/items";
-import { EFFECT_LABEL } from "../lib/modifiers";
-import { Icon } from "./icons";
+import { useGame } from "@/store";
+import { ITEMS } from "@/constants/items";
+import { ITEM_MAP } from "@/constants/maps";
+import type { EquipSlot } from "@/types/items";
+import { EFFECT_LABEL } from "@/lib/modifiers";
+import { Icon } from "@/components/icons";
 
 // food は装備スロットではないが、UI上は「食事スロット」として並べる。
 type SlotKey = EquipSlot | "food";

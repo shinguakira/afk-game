@@ -1,7 +1,7 @@
-import { useGame } from "../store";
-import { ITEM_MAP, SKILL_MAP } from "../constants/maps";
-import { formatDuration, formatNumber } from "../lib/format";
-import { Icon } from "./icons";
+import { useGame } from "@/store";
+import { ITEM_MAP, SKILL_MAP } from "@/constants/maps";
+import { formatDuration, formatNumber } from "@/lib/format";
+import { Icon } from "@/components/icons";
 
 export function OfflineModal() {
   const summary = useGame((s) => s.offlineSummary);

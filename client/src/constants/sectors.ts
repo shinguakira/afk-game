@@ -1,5 +1,5 @@
-import type { GameAction, Skill } from "../types/skills";
-import { INFRA_URLS } from "./links";
+import type { GameAction, Skill } from "@/types/skills";
+import { INFRA_URLS } from "@/constants/links";
 
 // 言語以外の生産系スキル。3軸:
 //  - platform 領域・プラットフォーム(何を作るか): 技術選択で決まる。フレームワークで橋渡し獲得。

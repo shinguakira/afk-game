@@ -1,6 +1,6 @@
-import type { SaveState } from "../types/save";
-import { SKILLS } from "../constants/skills";
-import { levelForXp } from "./xp";
+import type { SaveState } from "@/types/save";
+import { SKILLS } from "@/constants/skills";
+import { levelForXp } from "@/lib/xp";
 
 export interface Rank {
   index: number;

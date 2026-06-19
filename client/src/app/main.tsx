@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import { initDesktopLinks } from "../lib/desktop";
+import App from "@/app/App";
+import { initDesktopLinks } from "@/lib/desktop";
 import "./index.css";
 
 initDesktopLinks(); // Tauri デスクトップ時のみ外部リンクをシステムブラウザへ（Webは no-op）

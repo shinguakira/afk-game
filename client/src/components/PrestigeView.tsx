@@ -1,8 +1,8 @@
-import { useGame } from "../store";
-import { PRESTIGE_UPGRADES } from "../constants/prestige";
-import { prestigeGain, isUnderPrepared } from "../lib/prestige";
-import { formatNumber } from "../lib/format";
-import { Icon } from "./icons";
+import { useGame } from "@/store";
+import { PRESTIGE_UPGRADES } from "@/constants/prestige";
+import { prestigeGain, isUnderPrepared } from "@/lib/prestige";
+import { formatNumber } from "@/lib/format";
+import { Icon } from "@/components/icons";
 
 export function PrestigeView() {
   const state = useGame();

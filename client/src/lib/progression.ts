@@ -1,13 +1,13 @@
-import type { SaveState } from "../types/save";
-import type { OfflineSummary } from "../types/offline";
-import { ACTION_MAP, ITEM_MAP, MONSTER_MAP } from "../constants/maps";
-import { STAT } from "../constants/skills";
-import { FARM_CROP_MAP } from "../constants/farming";
-import { avgEnemyDamage, avgPlayerDamage, getCombatStats } from "./combat";
-import { getEffects } from "./effects";
-import { mult } from "./modifiers";
-import type { Effects } from "../types/effects";
-import { actionTiming, plotGrowthRate } from "./timing";
+import type { SaveState } from "@/types/save";
+import type { OfflineSummary } from "@/types/offline";
+import { ACTION_MAP, ITEM_MAP, MONSTER_MAP } from "@/constants/maps";
+import { STAT } from "@/constants/skills";
+import { FARM_CROP_MAP } from "@/constants/farming";
+import { avgEnemyDamage, avgPlayerDamage, getCombatStats } from "@/lib/combat";
+import { getEffects } from "@/lib/effects";
+import { mult } from "@/lib/modifiers";
+import type { Effects } from "@/types/effects";
+import { actionTiming, plotGrowthRate } from "@/lib/timing";
 
 /** Combat XP split: accuracy/damage/defence each get 1/3, mental 1/3 on top. */
 export function grantCombatXp(skills: SaveState["skills"], totalXp: number): SaveState["skills"] {

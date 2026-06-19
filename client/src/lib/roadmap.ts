@@ -1,7 +1,7 @@
-import type { SaveState } from "../types/save";
-import { SKILLS } from "../constants/skills";
-import { levelForXp } from "./xp";
-import { currentRank } from "./rank";
+import type { SaveState } from "@/types/save";
+import { SKILLS } from "@/constants/skills";
+import { levelForXp } from "@/lib/xp";
+import { currentRank } from "@/lib/rank";
 
 // キャリア・ロードマップ＝メインクエストの背骨。常に「次の目標」を1つ提示する。
 // 達成条件は耐久的なセーブ状態（Lv/円/装備/職種/役職/起業回数）から判定する。

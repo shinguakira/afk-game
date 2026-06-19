@@ -2,8 +2,8 @@
 // 旧バージョンのセーブを順次 1世代ずつ現行 SaveState(version=SAVE_VERSION) まで変換する。
 // スキーマ(types/save.ts)を変えて SAVE_VERSION を上げたら、ここに「旧version → +1」の
 // 変換ステップを1つ足す。経路が無い古さ/未来のセーブは null（= 破棄して新規開始）。
-import type { SaveState } from "../types/save";
-import { SAVE_VERSION } from "../constants/config";
+import type { SaveState } from "@/types/save";
+import { SAVE_VERSION } from "@/constants/config";
 
 /** マイグレーション中の緩く型付けされたセーブ（フィールド形が世代で変わるため）。 */
 type RawSave = Record<string, unknown> & { version?: number };

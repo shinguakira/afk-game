@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { useGame } from "../store";
-import { CATEGORIES } from "../constants/categories";
-import { CLASS_MAP, SKILLS_BY_CATEGORY, SKILL_MAP } from "../constants/maps";
-import { COMBAT_STAT_IDS } from "../constants/skills";
-import { levelForXp } from "../lib/xp";
-import { toggleInSet } from "../lib/util";
-import { currentRank } from "../lib/rank";
-import { getCombatStats } from "../lib/combat";
-import { Icon } from "./icons";
-import { Bar } from "./Bar";
-import { formatNumber } from "../lib/format";
+import { useGame } from "@/store";
+import { CATEGORIES } from "@/constants/categories";
+import { CLASS_MAP, SKILLS_BY_CATEGORY, SKILL_MAP } from "@/constants/maps";
+import { COMBAT_STAT_IDS } from "@/constants/skills";
+import { levelForXp } from "@/lib/xp";
+import { toggleInSet } from "@/lib/util";
+import { currentRank } from "@/lib/rank";
+import { getCombatStats } from "@/lib/combat";
+import { Icon } from "@/components/icons";
+import { Bar } from "@/components/Bar";
+import { formatNumber } from "@/lib/format";
 
 export type Tab = string;
 

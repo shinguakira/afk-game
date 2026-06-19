@@ -1,7 +1,7 @@
-import type { GameAction } from "../types/skills";
-import { buildActions } from "./techtree";
-import { SECTOR_ACTIONS } from "./sectors";
-import { FARMING_TEND } from "./farming";
+import type { GameAction } from "@/types/skills";
+import { buildActions } from "@/constants/techtree";
+import { SECTOR_ACTIONS } from "@/constants/sectors";
+import { FARMING_TEND } from "@/constants/farming";
 
 // 料理: 食材を消費して飲食物(回復アイテム)を作る。
 const COOKING: GameAction[] = [
