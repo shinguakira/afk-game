@@ -1,6 +1,6 @@
 // ゲームループの1tick処理: 生産/制作(runSkillTick)・戦闘(runCombatTick)・農業の放置成長
 // (advancePlots)。store から分離。set/get 経由で store 状態を更新する。
-import type { GameStore } from "../store";
+import type { GameStore } from "../store/types";
 import { ACTION_MAP, ITEM_MAP, MONSTER_MAP, SKILL_MAP } from "../constants/maps";
 import { COMBAT_STAT_IDS } from "../constants/skills";
 import { FARM_CROP_MAP } from "../constants/farming";
