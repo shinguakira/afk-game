@@ -3,7 +3,7 @@
 このリポジトリは **1つのフロントエンド (`client/`)** を、Web と デスクトップの両方に出せる。
 
 ## 保存(セーブ)の置き場所
-`client/src/game/persistence.ts` が環境を自動判定する:
+`client/src/lib/persistence.ts` が環境を自動判定する:
 
 | 実行環境 | セーブ先 |
 |---|---|
@@ -30,7 +30,7 @@ npm run desktop:build  # 配布用バイナリ/インストーラをビルド
 
 - `src-tauri/tauri.conf.json`: `frontendDist=../client/dist`, `devUrl=http://localhost:5180`。
 - 薄いラッパー（`src-tauri/src/main.rs`）。ゲームロジックは全てフロント側。
-- 外部リンク（各技術の「公式」リンク等）は `client/src/desktop.ts` がシステムブラウザで開く（Web では no-op）。
+- 外部リンク（各技術の「公式」リンク等）は `client/src/lib/desktop.ts` がシステムブラウザで開く（Web では no-op）。
 
 ### アイコン
 `src-tauri/icons/` に暫定PNGを同梱。本番用の全プラットフォーム分（.ico/.icns 含む）は
