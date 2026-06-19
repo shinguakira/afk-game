@@ -1,5 +1,15 @@
+// ============================================================================
+// 永続セーブデータのスキーマ（これがディスク/localStorage に書き出される構造）。
+// ----------------------------------------------------------------------------
+// ここを変更したら `constants/config.ts` の SAVE_VERSION を必ず上げること。
+// バージョン不一致のセーブは現状 init() で破棄しているが、将来はこのスキーマを
+// 対象にマイグレーション（旧版 → 現行 SaveState へ変換）を書く前提。
+// マイグレーションが書きやすいよう、永続フィールドはこのファイルに閉じておく
+// （実行時/UIの一時状態や OfflineSummary などの非永続DTOは混ぜない）。
+// ============================================================================
 import type { EquipSlot } from "./items";
 
+/** 進行中の作業。null=待機。 */
 export type ActiveAction =
   | { kind: "skill"; actionId: string }
   | { kind: "combat"; monsterId: string }
@@ -12,7 +22,9 @@ export interface PlotState {
   growth: number;
 }
 
+/** ディスクに永続化されるゲーム状態。`version` でスキーマ世代を管理する。 */
 export interface SaveState {
+  /** スキーマ世代。constants/config.ts の SAVE_VERSION と一致する時のみロード（不一致は破棄/将来はマイグレーション）。 */
   version: number;
   skills: Record<string, { xp: number }>;
   bank: Record<string, number>;
@@ -45,11 +57,4 @@ export interface SaveState {
   /** Carry-over progress on the current skill action (ms). */
   actionProgress: number;
   lastSaved: number;
-}
-
-export interface OfflineSummary {
-  ms: number;
-  xp: Record<string, number>;
-  items: Record<string, number>;
-  gold: number;
 }

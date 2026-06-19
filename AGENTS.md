@@ -25,7 +25,9 @@
 - **フォルダ構成**: `src/{app,components,store,lib,constants,types}`。loose な .ts を src 直下に置かない。
   型は `types/` にドメイン別で分割（items/skills/monsters/save/effects/ui…）。1つの `index.ts` に詰めない。type と interface は同列に扱い、重複させない。
 - **絵文字をUIに使わない**。アイコンは lucide / simple-icons / 自作SVG のいずれか。
-- データ変更で**経済やアイテム集合が変わったら** `client/src/constants/config.ts` の `SAVE_VERSION` を上げる。
+- **永続セーブのスキーマは `client/src/types/save.ts`（`SaveState`）に閉じる**。実行時/UIの一時状態や `OfflineSummary` 等の非永続DTOは混ぜない。
+  これを変更したら `client/src/constants/config.ts` の `SAVE_VERSION` を上げる。将来このスキーマ世代間のマイグレーションを書く前提。
+- データ変更で**経済やアイテム集合が変わったら**も同様に `SAVE_VERSION` を上げる。
 - 変更後は必ず通す（ルートで）:
   - `cd client && npx tsc --noEmit`
   - `npm test`（vitest・`client/test/`。全 pass 必須）

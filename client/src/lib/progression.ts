@@ -1,4 +1,5 @@
-import type { OfflineSummary, SaveState } from "../types/save";
+import type { SaveState } from "../types/save";
+import type { OfflineSummary } from "../types/offline";
 import { ACTION_MAP, ITEM_MAP, MONSTER_MAP } from "../constants/maps";
 import { STAT } from "../constants/skills";
 import { FARM_CROP_MAP } from "../constants/farming";

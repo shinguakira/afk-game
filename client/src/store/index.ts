@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import type { EquipSlot } from "../types/items";
-import type { OfflineSummary, SaveState } from "../types/save";
+import type { SaveState } from "../types/save";
+import type { OfflineSummary } from "../types/offline";
 import type { Toast, XpFlash } from "../types/ui";
 import { ACTION_MAP, CLASS_MAP, ITEM_MAP, MONSTER_MAP, PRESTIGE_MAP } from "../constants/maps";
 import { SKILLS } from "../constants/skills";
