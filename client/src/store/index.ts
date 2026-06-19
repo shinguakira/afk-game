@@ -14,6 +14,7 @@ import { TUTORIAL_STEPS } from "../constants/tutorial";
 import { getCombatStats } from "../lib/combat";
 import { simulateOffline } from "../lib/progression";
 import { deleteSave, flushSaveOnUnload, loadSave, writeSave } from "../lib/persistence";
+import { migrateSave } from "../lib/migrate";
 import { advancePlots, runCombatTick, runSkillTick, toastLevelUp } from "../lib/tick";
 import {
   HP_PER_MENTAL_LEVEL,
@@ -174,10 +175,12 @@ export const useGame = create<GameStore>((set, get) => ({
 
   init: async () => {
     const raw = await loadSave();
-    // Discard incompatible saves from before a schema change.
-    const loaded = raw && raw.version === SAVE_VERSION ? raw : null;
+    // 旧バージョンは可能ならマイグレーション、無理なら破棄して新規開始。
+    const loaded = migrateSave(raw);
     if (raw && !loaded) {
-      console.warn(`[save] discarding incompatible save (v${raw.version} != v${SAVE_VERSION})`);
+      console.warn(
+        `[save] discarding unmigratable save (v${(raw as { version?: number }).version} -> v${SAVE_VERSION})`,
+      );
     }
     const base = loaded ?? makeStartingState();
     // Merge in any skills added since the save was written.
