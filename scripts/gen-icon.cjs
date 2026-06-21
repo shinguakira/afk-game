@@ -1,0 +1,20 @@
+const sharp = require("sharp");
+const { writeFileSync } = require("fs");
+
+const SIZE = 1024;
+
+const svg = `<svg width="${SIZE}" height="${SIZE}" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1024" height="1024" rx="180" fill="#0f1216"/>
+  <text x="190" y="590" font-family="'Courier New', Courier, monospace" font-size="420" font-weight="700" fill="#22c55e">&gt;</text>
+  <rect x="540" y="530" width="240" height="60" rx="8" fill="#22c55e" opacity="0.9"/>
+  <text x="810" y="920" font-family="'Courier New', Courier, monospace" font-size="100" font-weight="700" fill="#22c55e" text-anchor="end" opacity="0.5">AFK</text>
+</svg>`;
+
+writeFileSync("icon-source.svg", svg);
+
+sharp(Buffer.from(svg))
+  .resize(SIZE, SIZE)
+  .png()
+  .toFile("src-tauri/icons/icon-source.png")
+  .then(() => console.log("icon-source.png generated"))
+  .catch(console.error);
