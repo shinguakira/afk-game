@@ -3,7 +3,7 @@ import { useGame } from "@/store";
 import { CATEGORIES } from "@/constants/categories";
 import { CLASS_MAP, SKILLS_BY_CATEGORY, SKILL_MAP } from "@/constants/maps";
 import { COMBAT_STAT_IDS } from "@/constants/skills";
-import { levelForXp } from "@/lib/xp";
+import { levelForXp, langLevelCap } from "@/lib/xp";
 import { toggleInSet } from "@/lib/util";
 import { currentRank } from "@/lib/rank";
 import { getCombatStats } from "@/lib/combat";
@@ -104,7 +104,7 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
           ●
         </span>
       ) : null}
-      <span className="ml-auto text-[11px] text-muted">{levelForXp(skills[id]?.xp ?? 0)}</span>
+      <span className="ml-auto text-[11px] text-muted">{levelForXp(skills[id]?.xp ?? 0, langLevelCap(mainLang, interestLangs, id))}</span>
     </button>
   );
 
@@ -119,6 +119,19 @@ export function Sidebar({ tab, setTab }: SidebarProps) {
           <span>{label}</span>
         </button>
       ))}
+
+      {import.meta.env.DEV && (
+        <>
+          <div className={NAV_SECTION}>DEV</div>
+          <button
+            className={navItemCls(tab === "dataview")}
+            onClick={() => setTab("dataview")}
+          >
+            <Icon name="database" />
+            <span>DataViewer</span>
+          </button>
+        </>
+      )}
 
       <div className={NAV_SECTION}>スキル</div>
       {CATEGORIES.map((cat) => {

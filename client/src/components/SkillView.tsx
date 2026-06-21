@@ -1,7 +1,7 @@
 import { useGame } from "@/store";
 import { ACTIONS_BY_SKILL, ITEM_MAP, SKILL_MAP } from "@/constants/maps";
 import type { ActionCategory, GameAction } from "@/types/skills";
-import { levelForXp, levelProgress, MAX_LEVEL, xpForLevel } from "@/lib/xp";
+import { levelForXp, levelProgress, langLevelCap, xpForLevel } from "@/lib/xp";
 import { formatNumber } from "@/lib/format";
 import { Bar } from "@/components/Bar";
 import { TimerBar } from "@/components/TimerBar";
@@ -42,7 +42,8 @@ export function SkillView({ skillId }: { skillId: string }) {
   const skill = SKILL_MAP[skillId];
   const actions = ACTIONS_BY_SKILL[skillId] ?? [];
   const xp = state.skills[skillId]?.xp ?? 0;
-  const level = levelForXp(xp);
+  const cap = langLevelCap(state.mainLang, state.interestLangs, skillId);
+  const level = levelForXp(xp, cap);
 
   const isLang = skill.tech === "language";
   const byCat = new Map<ActionCategory, GameAction[]>();
@@ -77,12 +78,12 @@ export function SkillView({ skillId }: { skillId: string }) {
       <div className="mb-5 max-w-[420px]">
         <Bar
           kind="xp"
-          value={levelProgress(xp)}
+          value={levelProgress(xp, cap)}
           label={`Lv ${level}`}
           right={
-            level >= MAX_LEVEL
+            level >= cap
               ? `${formatNumber(xp)} xp (max)`
-              : `${formatNumber(xp)} / ${formatNumber(xpForLevel(level + 1))} xp`
+              : `${formatNumber(xp)} / ${formatNumber(xpForLevel(level + 1, cap))} xp`
           }
         />
       </div>

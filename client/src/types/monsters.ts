@@ -28,4 +28,8 @@ export interface Monster {
   dot?: number;
   /** 自己回復 (HP毎秒)。仕様変更など「倒しきれない」案件。 */
   regen?: number;
+  /** 特攻言語: このスキルのレベル÷100 だけ与ダメージ倍率が上昇する。 */
+  weakTo?: string;
+  /** 撃破時に追加付与する言語XP。 */
+  xpAlso?: { skill: string; xp: number };
 }

@@ -158,6 +158,8 @@ import {
   LuLayers,
   LuScale,
   LuBuilding,
+  LuPresentation,
+  LuSheet,
 } from "react-icons/lu";
 
 // Central icon registry. Data files reference these string ids (no JSX in data).
@@ -370,6 +372,7 @@ const ICONS: Record<string, IconType> = {
   bizbag: LuBriefcaseBusiness,
 
   // 案件 (monsters / freelance gigs)
+  enjou: LuFlame,
   bug_m: LuBug,
   newbie: LuBird,
   spec_change: LuFileText,
@@ -379,6 +382,19 @@ const ICONS: Record<string, IconType> = {
   lp: LuLayoutTemplate,
   feature: LuBlocks,
   webapp: LuGlobe,
+  techdebt_m: LuTriangleAlert,
+  newproject_m: LuBriefcaseBusiness,
+  perf_m: LuZap,
+  migration_m: LuLayers,
+
+  // job classes (追加)
+  tester: LuBug,
+  excel_ppt: LuSheet,
+  ml_eng: LuBrain,
+  devrel: LuUsers,
+  platform_eng: LuServer,
+  cto: LuRocket,
+  vp_eng: LuBuilding2,
 };
 
 export interface IconProps {

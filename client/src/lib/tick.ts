@@ -6,7 +6,7 @@ import { COMBAT_STAT_IDS } from "@/constants/skills";
 import { FARM_CROP_MAP } from "@/constants/farming";
 import { getEffects } from "@/lib/effects";
 import { mult } from "@/lib/modifiers";
-import { levelForXp } from "@/lib/xp";
+import { levelForXp, langXpMult, langLevelCap } from "@/lib/xp";
 import { enemyHitChance, getCombatStats, playerHitChance } from "@/lib/combat";
 import { grantCombatXp } from "@/lib/progression";
 import { actionTiming, plotGrowthRate } from "@/lib/timing";
@@ -18,8 +18,10 @@ export type GetFn = () => GameStore;
 
 /** スキルがレベルアップしていたらトーストを出す。 */
 export function toastLevelUp(get: GetFn, oldXp: number, newXp: number, skillId: string): void {
-  const before = levelForXp(oldXp);
-  const after = levelForXp(newXp);
+  const s = get();
+  const cap = langLevelCap(s.mainLang, s.interestLangs, skillId);
+  const before = levelForXp(oldXp, cap);
+  const after = levelForXp(newXp, cap);
   if (after > before) {
     const sk = SKILL_MAP[skillId];
     get().pushToast({
@@ -90,14 +92,16 @@ export function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
   // 副次XP: フレームワーク実装などは言語(主)に加えてドメイン(副)へも入る（概念は分離・獲得は同時）。
   const also = action.xpAlso;
   const xpMult = mult(eff, isCraft ? "xp.craft" : "xp.gather");
-  const alsoXp = also && completions > 0 ? completions * also.xp * xpMult : 0;
+  const langMult = langXpMult(s.mainLang, s.interestLangs, action.skill);
+  const alsoLangMult = also ? langXpMult(s.mainLang, s.interestLangs, also.skill) : 1;
+  const alsoXp = also && completions > 0 ? completions * also.xp * xpMult * alsoLangMult : 0;
 
   let skills =
     xpGained > 0
       ? {
           ...s.skills,
           [action.skill]: {
-            xp: (s.skills[action.skill]?.xp ?? 0) + xpGained,
+            xp: (s.skills[action.skill]?.xp ?? 0) + xpGained * langMult,
           },
         }
       : s.skills;
@@ -110,7 +114,7 @@ export function runSkillTick(set: SetFn, get: GetFn, dt: number): void {
 
   set({ bank, skills, actionProgress: progress, active: stopped ? null : s.active });
   if (xpGained > 0) {
-    get().flashXp(action.skill, Math.round(xpGained));
+    get().flashXp(action.skill, Math.round(xpGained * langMult));
     toastLevelUp(get, s.skills[action.skill]?.xp ?? 0, skills[action.skill]?.xp ?? 0, action.skill);
   }
   if (also && alsoXp > 0) {
@@ -134,6 +138,10 @@ export function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
   const goldMult = mult(eff, "gold");
   const dropMult = mult(eff, "dropRate");
   const combatXpMult = mult(eff, "xp.combat");
+  // 特攻補正: weakTo 言語スキルのレベル÷100 だけ与ダメージが上昇（最大99%増）。
+  const weakMult = monster.weakTo
+    ? 1 + levelForXp(s.skills[monster.weakTo]?.xp ?? 0) / 100
+    : 1;
   let combatXpGained = 0;
   let enemyHp = s.enemyHp > 0 ? s.enemyHp : monster.hp;
   let playerHp = s.playerHp > 0 ? s.playerHp : stats.maxHp;
@@ -164,7 +172,7 @@ export function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
     if (playerReady && (!enemyReady || playerLead >= enemyLead)) {
       playerTimer -= stats.weaponSpeed;
       if (Math.random() < playerHitChance(stats, monster)) {
-        enemyHp -= randInt(1, stats.maxHit);
+        enemyHp -= Math.ceil(randInt(1, stats.maxHit) * weakMult);
       }
       if (enemyHp <= 0) {
         // Kill rewards (modifier-adjusted).
@@ -177,6 +185,17 @@ export function runCombatTick(set: SetFn, get: GetFn, dt: number): void {
         }
         skills = grantCombatXp(skills, monster.xp * combatXpMult);
         combatXpGained += monster.xp * combatXpMult;
+        // 特攻言語XP: 撃破ごとに付与。
+        if (monster.xpAlso) {
+          const langXp = monster.xpAlso.xp;
+          const prevLangXp = skills[monster.xpAlso.skill]?.xp ?? 0;
+          skills = {
+            ...skills,
+            [monster.xpAlso.skill]: { xp: prevLangXp + langXp },
+          };
+          get().flashXp(monster.xpAlso.skill, Math.round(langXp));
+          toastLevelUp(get, prevLangXp, prevLangXp + langXp, monster.xpAlso.skill);
+        }
         logs.push(`${monster.name} を解決！ (+${Math.round(monster.xp * combatXpMult)} xp)`);
         enemyHp = monster.hp; // respawn next target
       }

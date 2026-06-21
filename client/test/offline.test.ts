@@ -62,7 +62,7 @@ test("framework action consumes commits -> language(main) + platform(sub) xp", (
 
 test("combat: 1h yields 実装力 xp and rewards", () => {
   const s = freshState({
-    active: { kind: "combat", monsterId: "bugfix" },
+    active: { kind: "combat", monsterId: "bugfix_javascript" },
     selectedFood: "coffee",
     bank: { coffee: 100 },
   });
@@ -107,7 +107,7 @@ test("class modifiers flow into combat stats (QA defence +40%, security HP +20%)
 test("prestige funding Lv5 = +60% gold", () => {
   const mk = (upg: Record<string, number>) =>
     freshState({
-      active: { kind: "combat", monsterId: "bugfix" },
+      active: { kind: "combat", monsterId: "bugfix_javascript" },
       selectedFood: "coffee",
       bank: { coffee: 100 },
       prestigeUpgrades: upg,

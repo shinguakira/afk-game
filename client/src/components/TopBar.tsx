@@ -5,6 +5,7 @@ import { currentRank } from "@/lib/rank";
 import { formatNumber } from "@/lib/format";
 import { Bar } from "@/components/Bar";
 import { Icon } from "@/components/icons";
+import { UpdateChecker } from "@/components/UpdateChecker";
 
 export function TopBar() {
   const state = useGame();
@@ -20,7 +21,7 @@ export function TopBar() {
   return (
     <div className="flex flex-wrap items-center gap-[18px] border-b border-border bg-panel px-4 py-2.5">
       <span className="text-base font-bold tracking-[0.5px]">
-        <Icon name="company" size={18} /> Idle Engineer
+        <Icon name="company" size={18} /> AFK Engineer
       </span>
       <span className="text-[13px]">
         {state.playerName && <strong>{state.playerName}</strong>}
@@ -47,6 +48,7 @@ export function TopBar() {
       </div>
 
       <div className="flex-1" />
+      <UpdateChecker />
 
       {state.active && (
         <button className="border-danger text-danger" onClick={() => state.stop()}>

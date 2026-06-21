@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Idle Engineer",
-  "version": "0.1.0",
-  "identifier": "com.idleengineer.desktop",
+  "productName": "AFK Engineer",
+  "version": "1.0.0",
+  "identifier": "com.afkengineer.desktop",
   "build": {
     "frontendDist": "../client/dist",
     "devUrl": "http://localhost:5180",
@@ -14,7 +14,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Idle Engineer",
+        "title": "AFK Engineer",
         "width": 1180,
         "height": 800,
         "minWidth": 900,
@@ -37,6 +37,22 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "windows": {
+      "nsis": {
+        "installMode": "perMachine"
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://github.com/shinguakira/afk-game/releases/latest/download/latest.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEEzM0Y3NzIyRjJFQkNDQTkKUldTcHpPdnlJbmMvbzV1UUJPcjhBU3RLdnNBeXlwc2pRZUNRZmpkR0ZmSWc4bHk0VHdlVkdlclMK",
+      "windows": {
+        "installMode": "passive"
+      }
+    }
   }
 }

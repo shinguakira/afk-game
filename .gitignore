@@ -9,3 +9,6 @@ server/data/
 # Tauri (Rust build artifacts / generated bindings)
 src-tauri/target/
 src-tauri/gen/
+
+# Tauri signing key (never commit the private key)
+tauri-signing.key

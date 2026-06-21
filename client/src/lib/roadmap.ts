@@ -1,6 +1,6 @@
 import type { SaveState } from "@/types/save";
 import { SKILLS } from "@/constants/skills";
-import { levelForXp } from "@/lib/xp";
+import { levelForXp, langLevelCap } from "@/lib/xp";
 import { currentRank } from "@/lib/rank";
 
 // キャリア・ロードマップ＝メインクエストの背骨。常に「次の目標」を1つ提示する。
@@ -27,7 +27,7 @@ export const AXIS_META: Record<MilestoneAxis, { icon: string; label: string }> =
 
 // ---- 判定ヘルパー ----
 const langLevels = (s: SaveState): number[] =>
-  SKILLS.filter((k) => k.tech === "language").map((k) => levelForXp(s.skills[k.id]?.xp ?? 0));
+  SKILLS.filter((k) => k.tech === "language").map((k) => levelForXp(s.skills[k.id]?.xp ?? 0, langLevelCap(s.mainLang, s.interestLangs, k.id)));
 const maxLangLevel = (s: SaveState): number => Math.max(0, ...langLevels(s));
 const langsAtLeast = (s: SaveState, lv: number): number =>
   langLevels(s).filter((l) => l >= lv).length;

@@ -1,6 +1,6 @@
 {
   "name": "afk-game",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Melvor-Idle-style AFK/idle RPG. Vite+React client, tiny Express+TS save server (no DB).",
   "workspaces": [

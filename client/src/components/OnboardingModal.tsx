@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useGame } from "@/store";
 import { SKILLS_BY_CATEGORY } from "@/constants/maps";
-import { toggleInSet } from "@/lib/util";
 import { Icon } from "@/components/icons";
 
 const LANGS = SKILLS_BY_CATEGORY["language"] ?? [];
@@ -48,7 +47,7 @@ export function OnboardingModal() {
       <div className="w-[min(620px,94vw)] rounded-[14px] border border-border bg-panel p-6">
         {step === 0 && (
           <>
-            <h2 className="mb-1.5">ようこそ Idle Engineer へ</h2>
+            <h2 className="mb-1.5">ようこそ AFK Engineer へ</h2>
             <p className="mt-0 text-muted">
               無名のコーダーが、技術を極め・金を稼ぎ、起業して伝説になる放置RPG。
               まずはあなたのことを教えてください。
@@ -103,13 +102,30 @@ export function OnboardingModal() {
 
         {step === 2 && (
           <>
-            <h2 className="mb-1.5">興味のある言語は?（複数可）</h2>
+            <h2 className="mb-1.5">
+              興味のある言語は?
+              <span className="ml-2 text-sm font-normal text-muted">
+                {interest.size}/3
+              </span>
+            </h2>
             <p className="mt-0 text-muted">
-              これから伸ばしたい言語を選択。少しブーストが入り、サイドバーで目印が付きます。スキップも可。
+              最大3つ選択。XP +10% ブーストが入り、サイドバーで目印が付きます。スキップも可。
             </p>
             <LangGrid
               selected={interest}
-              onToggle={(id) => setInterest((s) => toggleInSet(s, id))}
+              onToggle={(id) =>
+                setInterest((prev) => {
+                  if (prev.has(id)) {
+                    const n = new Set(prev);
+                    n.delete(id);
+                    return n;
+                  }
+                  if (prev.size >= 3) return prev;
+                  const n = new Set(prev);
+                  n.add(id);
+                  return n;
+                })
+              }
               multi
             />
             <div className="mt-4 flex justify-between">

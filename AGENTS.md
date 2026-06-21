@@ -12,6 +12,55 @@
 - ブランドのある技術（言語/フレームワーク/クラウド/DB/OSS）は **simple-icons の正式ロゴ＋ブランド色**を使う。近似しない。
 - 迷ったら自問: **「これは本当にその物に見えるか?」** 見えないなら自作SVGを描く。
 
+## モンスターテスト（義務）
+
+`client/src/constants/monsters.ts` にモンスターを追加・変更したら、
+**必ず** `client/test/combat-threshold.test.ts` に以下を追加する。
+
+### 1. 最低均衡レベルの登録
+
+ファイル冒頭の `expected` テーブルに、新モンスターの最低均衡レベルを追加する。
+
+```ts
+const expected: Record<string, number> = {
+  // 既存…
+  new_monster: XX, // ← findMinBalancedLevel("new_monster") で導出した値
+};
+```
+
+`findMinBalancedLevel` は debug = impl = robust = lv、mental = max(lv, 10) で
+Lv1 から総当たりし、`survives=true` になる最小レベルを返す。
+まず値を確認してから登録すること（値が違うとテストが失敗する）。
+
+### 2. モンスター固有の `describe` ブロック
+
+モンスターごとに **最低 3〜4 個** のテストを含む `describe` ブロックを追加する。
+
+```ts
+describe("モンスター名 (hp:XX def:XX atk:XX maxHit:XX spd:XXXXms [regen:X.X] [dot:X.X/s])", () => {
+  // ① 最低レベル境界: minLv-1 では生存不可、minLv では生存
+  test("Lv(minLv-1): cannot survive", () => { ... });
+  test("Lv(minLv): survives", () => { ... });
+
+  // ② そのモンスター固有のメカニクスを検証 (2つ以上)
+  //   regen 持ち → DPS がリジェネを超えられない境界を確認
+  //   dot 持ち   → impl を上げると dot 被弾時間が短縮することを確認
+  //   高防御      → debug vs impl の DPS 優位性を確認
+  //   など
+});
+```
+
+必須テストのチェックリスト:
+
+- [ ] `minLv - 1` で `survives=false` を確認するテスト
+- [ ] `minLv` で `survives=true` を確認するテスト
+- [ ] モンスター固有のギミック（`regen`/`dot`/高防御）に関するテスト 1〜2 個
+- [ ] ステータスの貢献分析（どのスキルが最も効くか）を示すテスト 1 個（任意だが推奨）
+
+> **なぜ必要か**: combat.ts の数式が変わったとき、どのモンスターの
+> 挙動が崩れたかをテストが即座に教える。また「このモンスターに最低
+> どのレベルが必要か」が読み手に伝わる唯一のドキュメントになる。
+
 ## その他の確立済み規約
 
 - **バレルファイル禁止**。再エクスポートだけの `index.ts`（`export * from "./x"` 等）を作らない。
@@ -40,3 +89,63 @@
 - 設計判断・仕様変更は `docs/SPEC.md` に記録する。
 - スキル知識の4軸（言語 / 領域・プラットフォーム / インフラ・基盤 / 業界ドメイン）と
   「知的活動が生むのは commit のみ・アイテムを生むのは物理制作のみ」の原則を崩さない（詳細は SPEC §0-11b〜e）。
+
+## バージョン管理（厳守）
+
+**ユーザーから「バージョンを上げて」「リリースして」と明示的に指示されない限り、バージョン番号を変更してはならない。**
+
+変更箇所は必ず4箇所セット:
+- `package.json`（ルート）
+- `client/package.json`
+- `src-tauri/Cargo.toml`
+- `src-tauri/tauri.conf.json`
+
+4箇所を同一バージョンに揃えること。一部だけ変更するのは禁止。
+
+## リリース手順
+
+### 1. バージョン番号を更新（指示があった場合のみ）
+
+上記4箇所を新バージョンに更新する。
+
+### 2. ビルド確認
+
+```powershell
+npm test          # テスト全 pass 確認
+npm run build     # フロントエンドビルド確認
+```
+
+### 3. commit & push
+
+```powershell
+git add -A
+git commit -m "release: vX.X.X"
+git push origin master
+```
+
+### 4. タグを打つ → GitHub Actions が自動でリリース作成
+
+```powershell
+git tag vX.X.X
+git push origin vX.X.X
+```
+
+GitHub Actions（`.github/workflows/release.yml`）が起動し、以下を自動で行う:
+- Tauri デスクトップアプリのビルド（Windows）
+- 署名キー（`TAURI_SIGNING_PRIVATE_KEY`）でインストーラーに署名
+- GitHub Release を Draft で作成（タイトル: `AFK Engineer vX.X.X`）
+- アセットをアップロード:
+  - `AFK Engineer_X.X.X_x64-setup.exe`（NSIS インストーラー）
+  - `AFK Engineer_X.X.X_x64_en-US.msi`（MSI）
+  - `latest.json`（アップデーター用バージョン情報）
+
+### 5. Draft を公開
+
+GitHub の Releases ページでリリースノートを書いて「Publish release」する。
+公開後、既存ユーザーのアプリ起動時に「vX.X.X に更新」ボタンが自動表示される。
+
+### 署名キーの場所
+
+- 秘密鍵: `tauri-signing.key`（gitignore 済み・絶対に commit しない）
+- 公開鍵: `tauri-signing.key.pub`（commit 済み・`tauri.conf.json` の `pubkey` に反映済み）
+- GitHub Secrets に設定済み: `TAURI_SIGNING_PRIVATE_KEY`, `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`

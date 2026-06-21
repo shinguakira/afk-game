@@ -1,7 +1,7 @@
 [package]
-name = "idle-engineer"
-version = "0.1.0"
-description = "Idle Engineer — desktop wrapper"
+name = "afk-engineer"
+version = "1.0.0"
+description = "AFK Engineer — desktop wrapper"
 edition = "2021"
 rust-version = "1.77"
 
@@ -11,6 +11,8 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
+tauri-plugin-updater = "2"
+tauri-plugin-process = "2"
 
 [profile.release]
 opt-level = "s"

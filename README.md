@@ -1,4 +1,4 @@
-# Idle Engineer
+# AFK Engineer
 
 無名のコーダーが技術を極め、金を稼ぎ、起業して伝説になる **放置 / インクリメンタル RPG**。
 **Vite + React + TypeScript**。セーブは小さな **Express + TS** サーバが JSON ファイルに書く（DB なし。Web / デスクトップでは localStorage で動く）。

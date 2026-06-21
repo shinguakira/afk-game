@@ -13,6 +13,7 @@ import { PrestigeView } from "@/components/PrestigeView";
 import { EquipView } from "@/components/EquipView";
 import { RoadmapView } from "@/components/RoadmapView";
 import { ToastHost } from "@/components/ToastHost";
+import { DebugView } from "@/components/DebugView";
 import { LogPanel } from "@/components/LogPanel";
 import { OfflineModal } from "@/components/OfflineModal";
 import { OnboardingModal } from "@/components/OnboardingModal";
@@ -44,6 +45,10 @@ export default function App() {
         <div className="text-muted">セーブを読み込み中…</div>
       </div>
     );
+  }
+
+  if (import.meta.env.DEV && tab === "dataview") {
+    return <DebugView onClose={() => setTab("combat")} />;
   }
 
   let main;

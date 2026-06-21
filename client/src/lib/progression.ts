@@ -8,6 +8,7 @@ import { getEffects } from "@/lib/effects";
 import { mult } from "@/lib/modifiers";
 import type { Effects } from "@/types/effects";
 import { actionTiming, plotGrowthRate } from "@/lib/timing";
+import { langXpMult } from "@/lib/xp";
 
 /** Combat XP split: accuracy/damage/defence each get 1/3, mental 1/3 on top. */
 export function grantCombatXp(skills: SaveState["skills"], totalXp: number): SaveState["skills"] {
@@ -83,7 +84,8 @@ function simPlayerSkill(state: SaveState, ms: number, summary: OfflineSummary, e
     state.bank[id] = (state.bank[id] ?? 0) + (q as number) * completions;
     summary.items[id] = (summary.items[id] ?? 0) + (q as number) * completions;
   }
-  const xp = xpPer * completions;
+  const langMult = langXpMult(state.mainLang, state.interestLangs, action.skill);
+  const xp = xpPer * completions * langMult;
   state.skills[action.skill] = {
     xp: (state.skills[action.skill]?.xp ?? 0) + xp,
   };
@@ -92,7 +94,8 @@ function simPlayerSkill(state: SaveState, ms: number, summary: OfflineSummary, e
   // 副次XP（フレームワーク実装→領域など）。live(runSkillTick)と同じ計算で同時付与。
   const also = action.xpAlso;
   if (also) {
-    const alsoXp = also.xp * mult(eff, isCraft ? "xp.craft" : "xp.gather") * completions;
+    const alsoLangMult = langXpMult(state.mainLang, state.interestLangs, also.skill);
+    const alsoXp = also.xp * mult(eff, isCraft ? "xp.craft" : "xp.gather") * completions * alsoLangMult;
     state.skills[also.skill] = {
       xp: (state.skills[also.skill]?.xp ?? 0) + alsoXp,
     };

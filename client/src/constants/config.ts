@@ -2,7 +2,7 @@
 
 // ---- セーブ / ループ ----
 /** セーブ構造を非互換に変えたら上げる。不一致なら旧セーブを破棄して新規開始。 */
-export const SAVE_VERSION = 19;
+export const SAVE_VERSION = 20;
 /** ゲームループのtick間隔(ms)。 */
 export const TICK_MS = 100;
 /** 自動セーブ間隔(ms)。 */
@@ -22,7 +22,7 @@ export const XP_FLASH_MS = 3500;
 /** ショップ購入価格 = 売値 × このマークアップ。 */
 export const SHOP_MARKUP = 2;
 /** 開始時の所持金。 */
-export const STARTING_GOLD = 25;
+export const STARTING_GOLD = 10_000;
 /** 開始時の所持アイテム。 */
 export const STARTING_BANK: Record<string, number> = { coffee: 10 };
 /** メンタルLv1あたりの最大HP。 */

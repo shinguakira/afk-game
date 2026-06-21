@@ -1,6 +1,6 @@
 import type { SaveState } from "@/types/save";
 import { SKILLS } from "@/constants/skills";
-import { levelForXp } from "@/lib/xp";
+import { levelForXp, langLevelCap } from "@/lib/xp";
 
 export interface Rank {
   index: number;
@@ -23,7 +23,10 @@ export const RANKS: Rank[] = [
 /** 全スキルレベルの合計。 */
 export function totalLevel(state: SaveState): number {
   let sum = 0;
-  for (const s of SKILLS) sum += levelForXp(state.skills[s.id]?.xp ?? 0);
+  for (const s of SKILLS) {
+    const cap = langLevelCap(state.mainLang, state.interestLangs, s.id);
+    sum += levelForXp(state.skills[s.id]?.xp ?? 0, cap);
+  }
   return sum;
 }
 
