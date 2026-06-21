@@ -17,8 +17,8 @@ export function UpdateChecker() {
             version: update.version,
             download: async () => {
               await update.downloadAndInstall();
-              const { relaunch } = await import("@tauri-apps/plugin-process");
-              await relaunch();
+              const { restart } = await import("@tauri-apps/plugin-process");
+              await restart();
             },
           });
         }

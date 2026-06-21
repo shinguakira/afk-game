@@ -8,6 +8,6 @@
     "opener:default",
     "opener:allow-open-url",
     "updater:default",
-    "process:allow-relaunch"
+    "process:allow-restart"
   ]
 }
