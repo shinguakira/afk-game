@@ -12,3 +12,6 @@ src-tauri/gen/
 
 # Tauri signing key (never commit the private key)
 tauri-signing.key
+
+# Stray npm prefix artifacts
+workspacegameafk-game/
